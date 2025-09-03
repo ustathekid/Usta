@@ -1,0 +1,934 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings - Schemini Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-secondary">
+            <div class="card-header">
+                <h2 class="card-title mb-0">
+                    <i class="bi bi-person-circle me-2"></i>
+                    Account Settings
+                </h2>
+                <p class="card-text mt-2 mb-0">Manage your account settings and preferences</p>
+            </div>
+            <div class="card-body">
+                <!-- Main Navigation Tabs -->
+                <ul class="nav nav-tabs nav-fill mb-4" id="mainTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="my-account-tab" data-bs-toggle="tab" data-bs-target="#my-account" type="button" role="tab">
+                            <i class="bi bi-person-badge me-2"></i>
+                            My Account
+                        </button>
+                    </li>
+                    {% if session.role == 'admin' %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
+                            <i class="bi bi-people me-2"></i>
+                            Users
+                        </button>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="schemini-settings-tab" data-bs-toggle="tab" data-bs-target="#schemini-settings" type="button" role="tab">
+                            <i class="bi bi-gear-fill me-2"></i>
+                            Schemini Settings
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Main Tab Content -->
+                <div class="tab-content" id="mainTabContent">
+                    <!-- My Account Tab -->
+                    <div class="tab-pane fade show active" id="my-account" role="tabpanel">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card bg-dark h-100">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-person-badge me-2"></i>
+                                            Account Information
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Username (Read-only) -->
+                                        <div class="mb-4">
+                                            <label for="accountUsername" class="form-label fw-bold">Username</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-secondary border-secondary">
+                                                    <i class="bi bi-person-circle"></i>
+                                                </span>
+                                                <input type="text" class="form-control" id="accountUsername" value="{{ session.username }}" readonly>
+                                            </div>
+                                            <small class="text-muted">Username cannot be changed</small>
+                                        </div>
+                                        
+                                        <!-- Email (Read-only) -->
+                                        <div class="mb-4">
+                                            <label for="accountEmail" class="form-label fw-bold">Email Address</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-secondary border-secondary">
+                                                    <i class="bi bi-envelope"></i>
+                                                </span>
+                                                <input type="email" class="form-control" id="accountEmail" value="" readonly>
+                                            </div>
+                                            <small class="text-muted">Email cannot be changed</small>
+                                        </div>
+                                        
+                                        <!-- Change Password -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Change Password</label>
+                                            <form id="changePasswordForm">
+                                                <div class="mb-3">
+                                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                                    <input type="password" class="form-control" id="currentPassword" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="changeNewPassword" class="form-label">New Password</label>
+                                                    <input type="password" class="form-control" id="changeNewPassword" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="bi bi-shield-lock me-2"></i>
+                                                    Update Password
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card bg-dark h-100">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-info-circle me-2"></i>
+                                            Account Details
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <strong>Role:</strong> 
+                                            <span class="badge {% if session.role == 'admin' %}bg-danger{% else %}bg-primary{% endif %} ms-2">
+                                                {% if session.role == 'admin' %}Administrator{% else %}User{% endif %}
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="alert alert-info border-0" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
+                                            <div class="d-flex align-items-start">
+                                                <i class="bi bi-info-circle-fill me-2 mt-1" style="color: #0dcaf0;"></i>
+                                                <div>
+                                                    <strong>Account Information:</strong>
+                                                    <ul class="mb-0 mt-2 small">
+                                                        {% if session.role == 'admin' %}
+                                                        <li>You have administrator privileges</li>
+                                                        <li>You can manage users and global settings</li>
+                                                        <li>You have access to all system features</li>
+                                                        {% else %}
+                                                        <li>You have standard user privileges</li>
+                                                        <li>You can manage your personal settings</li>
+                                                        <li>You can set your reference folder</li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Tab (Admin Only) -->
+                    {% if session.role == 'admin' %}
+                    <div class="tab-pane fade" id="users" role="tabpanel">
+                        <div class="card bg-dark">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-people me-2"></i>
+                                    User Management
+                                </h5>
+                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                    <i class="bi bi-plus-circle me-1"></i> Add New User
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="userList">
+                                            <!-- User list will be populated by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Schemini Settings Tab -->
+                    <div class="tab-pane fade" id="schemini-settings" role="tabpanel">
+                        {% if session.role == 'admin' %}
+                        <!-- Admin can see and modify global settings -->
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card bg-dark">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-globe me-2"></i>
+                                            Global Schemini Folder
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted mb-4">This is the main Schemini folder for all users. Only administrators can change this setting.</p>
+                                        
+                                        <!-- Current Global Folder Display -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Current Global Folder</label>
+                                            <div class="alert alert-warning border-0 mb-3" style="background: rgba(255, 193, 7, 0.1); color: #212529;">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-globe me-2" style="color: #ffc107;"></i>
+                                                    <div>
+                                                        <strong>Active Global Folder:</strong>
+                                                        <span class="ms-2 font-monospace text-warning" id="currentGlobalFolderDisplay">{{ config.schemini_klasoru or 'Not set' }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text bg-secondary border-secondary">
+                                                <i class="bi bi-folder2"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="globalScheminiFolder" value="{{ config.schemini_klasoru }}" readonly>
+                                            <button class="btn btn-outline-warning" type="button" id="selectGlobalScheminiFolder">
+                                                <i class="bi bi-search me-1"></i>
+                                                Browse
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-warning w-100" id="saveGlobalScheminiFolder">
+                                            <i class="bi bi-save me-2"></i>
+                                            Save Global Folder
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card bg-dark">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-search me-2"></i>
+                                            Search Index Management
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted mb-4">Build or rebuild the search index when the Schemini folder content changes.</p>
+                                        
+                                        <!-- Last Completed Index Display -->
+                                        <div class="mb-3" id="lastIndexInfo" style="display: none;">
+                                            <div class="alert border-0 mb-3" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-check-circle-fill me-2" style="color: #28a745;"></i>
+                                                    <div class="flex-grow-1">
+                                                        <strong>Last Completed Index:</strong>
+                                                        <div class="mt-1">
+                                                            <span id="lastIndexDate">Never</span>
+                                                            <small class="text-muted d-block" id="lastIndexFiles"></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex gap-2 mb-3">
+                                            <button class="btn btn-primary flex-fill" id="buildIndexBtn">
+                                                <i class="bi bi-arrow-clockwise me-2"></i>
+                                                Build/Rebuild Index
+                                            </button>
+                                            <button class="btn btn-outline-danger" id="cancelIndexBtn" style="display: none;">
+                                                <i class="bi bi-x-circle me-1"></i>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Enhanced Progress Container -->
+                                        <div id="indexProgressContainer" style="display: none;">
+                                            <div class="progress mb-3" style="height: 25px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                     id="indexProgressBar" 
+                                                     role="progressbar" 
+                                                     style="width: 0%; background: linear-gradient(45deg, #17a2b8, #20c997);">
+                                                    <span id="indexProgressText" class="fw-bold">0%</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Progress Details -->
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-md-6">
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-info-circle me-1"></i>
+                                                        <span id="indexProgressStatus">Ready...</span>
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-6 text-md-end">
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-files me-1"></i>
+                                                        <span id="indexProgressFiles">0 files</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Time Information -->
+                                            <div class="row g-2">
+                                                <div class="col-md-6">
+                                                    <small class="text-primary">
+                                                        <i class="bi bi-clock me-1"></i>
+                                                        Elapsed: <span id="indexElapsedTime">0s</span>
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-6 text-md-end">
+                                                    <small class="text-warning">
+                                                        <i class="bi bi-hourglass-split me-1"></i>
+                                                        ETA: <span id="indexEstimatedTime">Calculating...</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Regular users can only set their reference folder -->
+                        <div class="row g-4">
+                            <div class="col-md-8 mx-auto">
+                                <div class="card bg-dark">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-folder-fill me-2"></i>
+                                            My Reference Folder
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted mb-4">Set your personal default reference folder for all file operations (File Comparison, Smart Update, File Integration).</p>
+                                        
+                                        <!-- Current Reference Folder Display -->
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold">Current Reference Folder</label>
+                                            <div class="alert alert-secondary border-0 mb-3" style="background: rgba(108, 117, 125, 0.1);">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-folder-check me-2" style="color: #6c757d;"></i>
+                                                    <div>
+                                                        <strong>Active Folder:</strong>
+                                                        <span class="ms-2 font-monospace text-primary" id="currentReferenceFolderDisplay">{{ config.default_reference_folder or 'Not set' }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Reference Folder Selection -->
+                                        <div class="mb-4">
+                                            <label for="referenceFolder" class="form-label fw-bold">Reference Folder Path</label>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text bg-secondary border-secondary">
+                                                    <i class="bi bi-folder2"></i>
+                                                </span>
+                                                <input type="text" class="form-control" id="referenceFolder" value="{{ config.default_reference_folder }}" readonly>
+                                                <button class="btn btn-outline-primary" type="button" id="selectReferenceFolder">
+                                                    <i class="bi bi-search me-1"></i>
+                                                    Browse
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-success w-100" id="saveReferenceFolder">
+                                                <i class="bi bi-check-circle me-2"></i>
+                                                Save Reference Folder
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Info Box -->
+                                        <div class="alert alert-info border-0" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
+                                            <div class="d-flex align-items-start">
+                                                <i class="bi bi-info-circle-fill me-2 mt-1" style="color: #0dcaf0;"></i>
+                                                <div>
+                                                    <strong>How Your Reference Folder Is Used:</strong>
+                                                    <ul class="mb-0 mt-2 small">
+                                                        <li><strong>File Comparison:</strong> Used as the default folder in comparison operations</li>
+                                                        <li><strong>Smart Update:</strong> Serves as the reference for updating files</li>
+                                                        <li><strong>File Integration:</strong> Contains your main document collection for MIX code operations</li>
+                                                        <li><strong>Personal Setting:</strong> This folder is specific to your account only</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New User</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="mb-3">
+                        <label for="newUsername" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="newUsername" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="newEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newRole" class="form-label">Role</label>
+                        <select class="form-select" id="newRole">
+                            <option value="user" selected>User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+/* Index status styling */
+#lastIndexInfo .alert {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    position: relative;
+}
+
+#lastIndexInfo .alert.status-success {
+    border-left-color: #28a745;
+}
+
+#lastIndexInfo .alert.status-warning {
+    border-left-color: #ffc107;
+}
+
+#lastIndexInfo .alert.status-info {
+    border-left-color: #17a2b8;
+}
+
+#lastIndexInfo .alert.status-error {
+    border-left-color: #dc3545;
+}
+
+/* Enhanced progress bar styling */
+#indexProgressContainer .progress {
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    border-radius: 0.375rem;
+}
+
+#indexProgressContainer .progress-bar {
+    transition: width 0.3s ease;
+}
+
+/* Index status animation */
+#lastIndexInfo .alert {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const isAdmin = "{{ session.role }}" === 'admin';
+
+    // Load user email from API
+    async function loadUserEmail() {
+        try {
+            const data = await ScheminiManager.apiCall('/api/user/profile', 'GET');
+            if (data.success && data.user.email) {
+                document.getElementById('accountEmail').value = data.user.email;
+            }
+        } catch (error) {
+            console.log('Could not load user email');
+        }
+    }
+
+    // Load user email on page load
+    loadUserEmail();
+
+    // --- My Settings ---
+    const changePasswordForm = document.getElementById('changePasswordForm');
+        changePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('changeNewPassword').value;
+            const data = { current_password: currentPassword, new_password: newPassword };
+        
+            try {
+                const result = await ScheminiManager.apiCall('/api/user/password', 'POST', data);
+                if (result.success) {
+                    ScheminiManager.showNotification('Password updated successfully!', 'success');
+                    changePasswordForm.reset();
+                } else {
+                    ScheminiManager.showNotification(result.message || 'Failed to update password.', 'error');
+                }
+            } catch (error) {
+                ScheminiManager.showNotification('An error occurred.', 'error');
+            }
+        });
+
+    // Reference folder handling (in Schemini Settings tab)
+    const referenceFolderInput = document.getElementById('referenceFolder');
+    const selectReferenceFolderBtn = document.getElementById('selectReferenceFolder');
+    const saveReferenceFolderBtn = document.getElementById('saveReferenceFolder');
+    
+    if (referenceFolderInput && selectReferenceFolderBtn && saveReferenceFolderBtn) {
+        selectReferenceFolderBtn.addEventListener('click', async () => {
+            console.log('Browse button clicked');
+            try {
+                if (typeof ScheminiManager === 'undefined') {
+                    console.error('ScheminiManager is not defined');
+                    alert('ScheminiManager not loaded. Please refresh the page.');
+                    return;
+                }
+                
+                if (typeof ScheminiManager.selectFolder !== 'function') {
+                    console.error('ScheminiManager.selectFolder is not a function');
+                    ScheminiManager.showNotification('Folder selection function not available.', 'error');
+                    return;
+                }
+                
+                console.log('Calling ScheminiManager.selectFolder()');
+                const folderPath = await ScheminiManager.selectFolder();
+                console.log('Selected folder path:', folderPath);
+                
+                if (folderPath) {
+                    referenceFolderInput.value = folderPath;
+                    console.log('Updated input field with path:', folderPath);
+                } else {
+                    console.log('No folder selected');
+                }
+            } catch (error) {
+                console.error('Error in selectFolder:', error);
+                ScheminiManager.showNotification('Error selecting folder: ' + error.message, 'error');
+            }
+        });
+
+        saveReferenceFolderBtn.addEventListener('click', async () => {
+            const folderPath = referenceFolderInput.value;
+            try {
+                const result = await ScheminiManager.apiCall('/api/user/reference-folder', 'POST', { folder_path: folderPath });
+                if (result.success) {
+                    ScheminiManager.showNotification('Reference folder saved!', 'success');
+                    // Update the current reference folder display
+                    const currentDisplay = document.getElementById('currentReferenceFolderDisplay');
+                    if (currentDisplay) {
+                        currentDisplay.textContent = folderPath || 'Not set';
+                    }
+                } else {
+                    ScheminiManager.showNotification(result.message || 'Failed to save.', 'error');
+                }
+            } catch (error) {
+                ScheminiManager.showNotification('An error occurred.', 'error');
+            }
+        });
+    }
+
+    // --- Admin Only Features ---
+    if (isAdmin) {
+        const userList = document.getElementById('userList');
+        const addUserForm = document.getElementById('addUserForm');
+        const addUserModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+
+        async function loadUsers() {
+            try {
+                const data = await ScheminiManager.apiCall('/api/users', 'GET');
+                if (data.success) {
+                    userList.innerHTML = '';
+                    data.users.forEach(user => {
+                        const row = `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.role}</td>
+                                <td>
+                                    ${user.username !== 'admin' ? `<button class="btn btn-sm btn-danger delete-user-btn" data-username="${user.username}">Delete</button>` : ''}
+                                </td>
+                            </tr>
+                        `;
+                        userList.insertAdjacentHTML('beforeend', row);
+                    });
+                }
+            } catch (error) {
+                ScheminiManager.showNotification('Failed to load users.', 'error');
+            }
+        }
+
+        addUserForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('newUsername').value;
+            const email = document.getElementById('newEmail').value;
+            const password = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+            const data = { username, email, password, role };
+
+            try {
+                const result = await ScheminiManager.apiCall('/api/users', 'POST', data);
+                if (result.success) {
+                    ScheminiManager.showNotification('User added successfully!', 'success');
+                    addUserForm.reset();
+                    addUserModal.hide();
+                    loadUsers();
+                } else {
+                    ScheminiManager.showNotification(result.message || 'Failed to add user.', 'error');
+                }
+            } catch (error) {
+                ScheminiManager.showNotification('An error occurred.', 'error');
+            }
+        });
+
+        userList.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('delete-user-btn')) {
+                const username = e.target.dataset.username;
+                if (confirm(`Are you sure you want to delete user "${username}"?`)) {
+                    try {
+                        const result = await ScheminiManager.apiCall(`/api/users/${username}`, 'DELETE');
+                        if (result.success) {
+                            ScheminiManager.showNotification('User deleted!', 'success');
+                            loadUsers();
+                        } else {
+                            ScheminiManager.showNotification(result.message || 'Failed to delete user.', 'error');
+                        }
+                    } catch (error) {
+                        ScheminiManager.showNotification('An error occurred.', 'error');
+                    }
+                }
+            }
+        });
+        
+        // Global Schemini folder handling (admin only)
+        const globalScheminiFolderInput = document.getElementById('globalScheminiFolder');
+        const selectGlobalScheminiFolderBtn = document.getElementById('selectGlobalScheminiFolder');
+        const saveGlobalScheminiFolderBtn = document.getElementById('saveGlobalScheminiFolder');
+        
+        if (globalScheminiFolderInput && selectGlobalScheminiFolderBtn && saveGlobalScheminiFolderBtn) {
+            selectGlobalScheminiFolderBtn.addEventListener('click', async () => {
+                const folderPath = await ScheminiManager.selectFolder();
+                if (folderPath) {
+                    globalScheminiFolderInput.value = folderPath;
+                }
+            });
+
+            saveGlobalScheminiFolderBtn.addEventListener('click', async () => {
+                const folderPath = globalScheminiFolderInput.value;
+                try {
+                    const result = await ScheminiManager.apiCall('/api/settings', 'POST', { schemini_klasoru: folderPath });
+                    if (result.success) {
+                        ScheminiManager.showNotification('Global Schemini folder saved!', 'success');
+                        // Update the current global folder display
+                        const currentGlobalDisplay = document.getElementById('currentGlobalFolderDisplay');
+                        if (currentGlobalDisplay) {
+                            currentGlobalDisplay.textContent = folderPath || 'Not set';
+                        }
+                    } else {
+                        ScheminiManager.showNotification(result.message || 'Failed to save.', 'error');
+                    }
+                } catch (error) {
+                    ScheminiManager.showNotification('An error occurred.', 'error');
+                }
+            });
+        }
+
+        // Index Management
+        const buildIndexBtn = document.getElementById('buildIndexBtn');
+        const cancelIndexBtn = document.getElementById('cancelIndexBtn');
+        const indexProgressContainer = document.getElementById('indexProgressContainer');
+        const indexProgressBar = document.getElementById('indexProgressBar');
+        const indexProgressText = document.getElementById('indexProgressText');
+        const indexProgressStatus = document.getElementById('indexProgressStatus');
+        const indexProgressFiles = document.getElementById('indexProgressFiles');
+        const indexElapsedTime = document.getElementById('indexElapsedTime');
+        const indexEstimatedTime = document.getElementById('indexEstimatedTime');
+        const lastIndexInfo = document.getElementById('lastIndexInfo');
+        const lastIndexDate = document.getElementById('lastIndexDate');
+        const lastIndexFiles = document.getElementById('lastIndexFiles');
+        
+        let indexPollingInterval = null;
+        
+        // Load and display last index information
+        async function loadLastIndexInfo() {
+            try {
+                const data = await ScheminiManager.apiCall('/api/index-progress', 'GET');
+                
+                // Check if we have a completed index build
+                if (data.success && data.progress.last_completed) {
+                    // Has completed build - show success info
+                    const lastCompleted = new Date(data.progress.last_completed * 1000);
+                    lastIndexDate.textContent = lastCompleted.toLocaleString();
+                    
+                    // Show file count from last completed build
+                    if (data.progress.last_completed_files > 0) {
+                        lastIndexFiles.textContent = `(${data.progress.last_completed_files.toLocaleString()} files indexed successfully)`;
+                    } else {
+                        lastIndexFiles.textContent = '(File count unknown)';
+                    }
+                    
+                    // Set success styling
+                    updateIndexInfoDisplay('success', 'Last Completed Index:', 'bi-check-circle-fill', '#28a745', 'rgba(13, 202, 240, 0.1)');
+                    
+                } else {
+                    // No completed index - check if index file exists at all
+                    const hasAnyIndex = data.progress.last_updated;
+                    
+                    if (!hasAnyIndex) {
+                        // Never built any index
+                        lastIndexDate.textContent = 'No index has been built yet';
+                        lastIndexFiles.textContent = '(Click "Build/Rebuild Index" to create your first index)';
+                        updateIndexInfoDisplay('warning', 'Index Status:', 'bi-info-circle', '#17a2b8', 'rgba(23, 162, 184, 0.1)');
+                    } else {
+                        // Has partial/incomplete index
+                        lastIndexDate.textContent = 'No completed index found';
+                        lastIndexFiles.textContent = '(Previous build was incomplete - rebuild recommended)';
+                        updateIndexInfoDisplay('warning', 'Index Status:', 'bi-exclamation-triangle', '#ffc107', 'rgba(255, 193, 7, 0.1)');
+                    }
+                }
+                
+                lastIndexInfo.style.display = 'block';
+                
+            } catch (error) {
+                // Error loading index info
+                lastIndexDate.textContent = 'Unable to load index information';
+                lastIndexFiles.textContent = '(Connection error)';
+                updateIndexInfoDisplay('error', 'Index Status:', 'bi-x-circle', '#dc3545', 'rgba(220, 53, 69, 0.1)');
+                lastIndexInfo.style.display = 'block';
+            }
+        }
+        
+        function updateIndexInfoDisplay(type, title, iconClass, iconColor, backgroundColor) {
+            const alert = lastIndexInfo.querySelector('.alert');
+            const icon = lastIndexInfo.querySelector('i');
+            const titleElement = lastIndexInfo.querySelector('strong');
+            
+            // Remove existing status classes
+            if (alert) {
+                alert.classList.remove('status-success', 'status-warning', 'status-info', 'status-error');
+                alert.style.background = backgroundColor;
+                alert.classList.add(`status-${type}`);
+            }
+            
+            if (icon) {
+                icon.className = iconClass + ' me-2';
+                icon.style.color = iconColor;
+            }
+            if (titleElement) titleElement.textContent = title;
+        }
+        
+        function formatTime(seconds) {
+            if (seconds < 60) {
+                return `${seconds}s`;
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes}m ${remainingSeconds}s`;
+            } else {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                return `${hours}h ${minutes}m`;
+            }
+        }
+        
+        buildIndexBtn.addEventListener('click', async () => {
+            const confirmText = 'This operation will scan all files in the Schemini folder and may take several minutes for large folders. The operation will continue even if you close the browser. Continue?';
+            if (confirm(confirmText)) {
+                try {
+                    const data = await ScheminiManager.apiCall('/api/build-index', 'POST');
+                    if (data.success) {
+                        ScheminiManager.showNotification('Index build started. You can close the browser - the operation will continue on the server.', 'info');
+                        startIndexPolling();
+                    } else {
+                        ScheminiManager.showNotification(data.message || 'Failed to start build.', 'error');
+                    }
+                } catch (error) {
+                    ScheminiManager.showNotification('Error starting build.', 'error');
+                }
+            }
+        });
+        
+        cancelIndexBtn.addEventListener('click', async () => {
+            if (confirm('Are you sure you want to cancel the index build operation?')) {
+                try {
+                    const data = await ScheminiManager.apiCall('/api/cancel-index', 'POST');
+                    if (data.success) {
+                        ScheminiManager.showNotification('Index build cancelled.', 'info');
+                        stopIndexPolling();
+                    } else {
+                        ScheminiManager.showNotification(data.message || 'Failed to cancel.', 'error');
+                    }
+                } catch (error) {
+                    ScheminiManager.showNotification('Error cancelling operation.', 'error');
+                }
+            }
+        });
+
+        function startIndexPolling() {
+            // Stop any existing polling
+            if (indexPollingInterval) {
+                clearInterval(indexPollingInterval);
+            }
+            
+            // Show progress container and hide build button
+            indexProgressContainer.style.display = 'block';
+            buildIndexBtn.style.display = 'none';
+            cancelIndexBtn.style.display = 'inline-block';
+            
+            indexPollingInterval = setInterval(async () => {
+                try {
+                    const data = await ScheminiManager.apiCall('/api/index-progress', 'GET');
+                    if (data.success) {
+                        const progress = data.progress;
+                        
+                        // Update progress bar
+                        const percentage = Math.max(0, Math.min(100, progress.percentage || 0));
+                        indexProgressBar.style.width = `${percentage}%`;
+                        indexProgressText.textContent = `${percentage}%`;
+                        
+                        // Update status
+                        indexProgressStatus.textContent = progress.status || 'Processing...';
+                        
+                        // Update file count
+                        if (progress.current_phase === 'scanning') {
+                            indexProgressFiles.textContent = `Scanning directories...`;
+                        } else if (progress.total_files_found > 0) {
+                            const processed = progress.files_processed || 0;
+                            const total = progress.total_files_found;
+                            indexProgressFiles.textContent = `${processed.toLocaleString()}/${total.toLocaleString()} files`;
+                        } else {
+                            indexProgressFiles.textContent = '0 files';
+                        }
+                        
+                        // Update time information
+                        if (progress.elapsed_time) {
+                            indexElapsedTime.textContent = formatTime(progress.elapsed_time);
+                        }
+                        
+                        if (progress.estimated_total_time && progress.elapsed_time) {
+                            const remaining = Math.max(0, progress.estimated_total_time - progress.elapsed_time);
+                            if (remaining > 0) {
+                                indexEstimatedTime.textContent = formatTime(remaining);
+                            } else {
+                                indexEstimatedTime.textContent = 'Almost done...';
+                            }
+                        } else {
+                            indexEstimatedTime.textContent = 'Calculating...';
+                        }
+                        
+                        // Handle completion or error
+                        if (!progress.running) {
+                            stopIndexPolling();
+                            
+                            if (progress.error) {
+                                ScheminiManager.showNotification(`Index Error: ${progress.error}`, 'error');
+                                indexProgressBar.classList.remove('progress-bar-animated');
+                                indexProgressBar.style.background = '#dc3545';
+                            } else if (progress.current_phase === 'cancelled') {
+                                ScheminiManager.showNotification('Index build was cancelled.', 'warning');
+                                indexProgressBar.classList.remove('progress-bar-animated');
+                                indexProgressBar.style.background = '#ffc107';
+                                // Don't update last index info for cancelled operations
+                            } else if (progress.current_phase === 'complete' && progress.percentage >= 100) {
+                                ScheminiManager.showNotification('Index build completed successfully!', 'success');
+                                indexProgressBar.classList.remove('progress-bar-animated');
+                                indexProgressBar.style.background = '#28a745';
+                                
+                                // Only update last index info for 100% completed builds
+                                setTimeout(loadLastIndexInfo, 1000);
+                            }
+                        }
+                    } else {
+                        stopIndexPolling();
+                        ScheminiManager.showNotification('Failed to get progress information.', 'error');
+                    }
+                } catch (error) {
+                    stopIndexPolling();
+                    ScheminiManager.showNotification('Error polling progress.', 'error');
+                }
+            }, 1000); // Poll every second for responsive updates
+        }
+        
+        function stopIndexPolling() {
+            if (indexPollingInterval) {
+                clearInterval(indexPollingInterval);
+                indexPollingInterval = null;
+            }
+            
+            // Show build button and hide cancel button
+            buildIndexBtn.style.display = 'block';
+            cancelIndexBtn.style.display = 'none';
+            
+            // Keep progress container visible for a few seconds then hide
+            setTimeout(() => {
+                if (!indexPollingInterval) { // Only hide if not polling again
+                    indexProgressContainer.style.display = 'none';
+                    // Reset progress bar
+                    indexProgressBar.style.width = '0%';
+                    indexProgressText.textContent = '0%';
+                    indexProgressBar.classList.add('progress-bar-animated');
+                    indexProgressBar.style.background = 'linear-gradient(45deg, #17a2b8, #20c997)';
+                }
+            }, 5000);
+        }
+        
+        // Check if indexing is already running on page load
+        async function checkIndexStatus() {
+            try {
+                const data = await ScheminiManager.apiCall('/api/index-progress', 'GET');
+                if (data.success && data.progress.running) {
+                    startIndexPolling();
+                }
+            } catch (error) {
+                // Silent error handling
+            }
+        }
+
+        // Initial load for admin
+        loadUsers();
+        
+        // Load last index info and check if indexing is running
+        loadLastIndexInfo();
+        checkIndexStatus();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1557 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Update - Schemini Manager{% endblock %}
+
+{% block content %}
+<style>
+.detail-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 3px solid rgba(23, 162, 184, 0.8);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.detail-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-left-color: #17a2b8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detail-item strong {
+    color: #212529;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.detail-item .text-muted {
+    color: #495057 !important;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    word-break: break-all;
+    font-weight: 500;
+}
+
+#operationDetailsSection .card {
+    border: 2px solid rgba(23, 162, 184, 0.5);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: rgba(248, 249, 250, 0.95);
+}
+
+#operationDetailsSection .card-header {
+    background: rgba(23, 162, 184, 0.15);
+    border-bottom: 1px solid rgba(23, 162, 184, 0.4);
+}
+
+#operationDetailsSection .card-title {
+    color: #212529;
+    font-weight: 700;
+}
+
+.operation-actions {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-text {
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.confirmation-text .highlight {
+    color: #17a2b8;
+    font-weight: 700;
+}
+
+#downloadReportBtn {
+    border: 1px solid #17a2b8;
+    color: #17a2b8;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+#downloadReportBtn:hover {
+    background-color: #17a2b8;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Step Cards Styling */
+.step-card {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.step-card.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.step-card.disabled .card-body {
+    background: rgba(108, 117, 125, 0.1);
+}
+
+.step-card.active {
+    border-color: #17a2b8 !important;
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+.step-card.completed {
+    border-color: #28a745 !important;
+}
+
+.step-card.completed .step-number .badge {
+    background-color: #28a745 !important;
+}
+
+.step-number {
+    min-width: 50px;
+}
+
+/* Updated step number styling */
+.step-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #17a2b8;
+    line-height: 1;
+}
+
+.step-card.completed .step-num {
+    color: #28a745;
+}
+
+.step-card.active .step-num {
+    color: #ffc107;
+}
+
+.step-card.disabled .step-num {
+    color: #6c757d;
+}
+
+.step-status {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.step-status.completed {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.step-status.active {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+#sectionsPlaceholder {
+    display: block;
+}
+
+.step-card:not(.disabled) #sectionsPlaceholder {
+    display: none !important;
+}
+
+/* Enhanced Update Folder Button Styling */
+#btnPickUpdateFiles {
+    border-radius: 10px 0 0 10px;
+    transition: all 0.3s ease;
+}
+
+#btnPickUpdateFiles:hover:not(:disabled) {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+}
+
+/* Change Reference Folder Button consistent styling */
+#changeReferenceFolder {
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+
+#changeReferenceFolder:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+}
+
+/* Responsive adjustments for step cards */
+@media (max-width: 767.98px) {
+    .step-card .card-header .d-flex {
+        flex-wrap: wrap;
+    }
+    
+    .step-card .card-title {
+        font-size: 1rem;
+    }
+    
+    .step-card .text-muted {
+        font-size: 0.8rem;
+    }
+    
+    .step-status {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .step-num {
+        font-size: 1.5rem;
+    }
+    
+    .detail-item {
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+    }
+    
+    .operation-actions {
+        padding: 1rem;
+    }
+    
+    .operation-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    #downloadReportBtn {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .progress-container {
+        margin: 0 -0.5rem;
+    }
+    
+    #progressText {
+        font-size: 1.1rem !important;
+    }
+}
+</style>
+<div class="container-fluid px-0">
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="card bg-secondary page-full-card page-flex">
+                <div class="card-header">
+                    <h2 class="card-title mb-0">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        Smart Update
+                    </h2>
+                    <p class="card-text mt-2 mb-0">Update files in reference folder with newer versions</p>
+                </div>
+                <div class="card-body content-area">
+                    <!-- File Update Form -->
+                    <form id="updateForm" class="mb-3">
+                        <!-- Steps 1 & 2: Reference and Update Folder Selection -->
+                        <div class="row g-3 mb-3">
+                            <!-- Step 1: Reference Folder Selection -->
+                            <div class="col-12 col-md-6">
+                                <div class="card bg-dark border-primary step-card" id="step1Card">
+                                    <div class="card-header py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">1</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="bi bi-folder me-2"></i>
+                                                    Reference Folder
+                                                </h5>
+                                                <small class="text-muted">Destination folder</small>
+                                            </div>
+                                            <div>
+                                                <span id="step1Status" class="step-status"><i class="bi bi-clock me-1"></i>Pending</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="referenceFolder" value="{{ default_reference_folder }}" placeholder="Select a reference folder..." readonly>
+                                            <button class="btn btn-outline-light" type="button" id="changeReferenceFolder">Change</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Update Folder Selection -->
+                            <div class="col-12 col-md-6">
+                                <div class="card bg-dark border-secondary step-card disabled" id="step2Card">
+                                    <div class="card-header py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">2</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="bi bi-folder2-open me-2"></i>
+                                                    Update Folder
+                                                </h5>
+                                                <small class="text-muted">Files to update with</small>
+                                            </div>
+                                            <div>
+                                                <span id="step2Status" class="step-status"><i class="bi bi-pause-circle me-1"></i>Waiting</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <input type="file" id="updateFiles" webkitdirectory directory multiple style="display:none;">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-outline-light" id="btnPickUpdateFiles" disabled>
+                                                <i class="bi bi-folder2-open me-1"></i>
+                                                Choose Folder
+                                            </button>
+                                            <input type="text" class="form-control" id="updateFilesDisplay" placeholder="Complete Step 1 first" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Sections Selection -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-12">
+                                <div class="card bg-dark border-secondary step-card disabled" id="step3Card">
+                                    <div class="card-header py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">3</span>
+                                            </div>
+                                            <div>
+                                                <h5 class="card-title mb-0">
+                                                    <i class="bi bi-diagram-3 me-2"></i>
+                                                    Select Sections (<span id="updSectionsCount">0</span> selected)
+                                                </h5>
+                                                <small class="text-muted">Choose which sections to update</small>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <span id="step3Status" class="step-status"><i class="bi bi-pause-circle me-1"></i>Waiting</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pane-body py-2">
+                                        <div id="updSectionsList" class="sections-wrap"></div>
+                                        <div id="sectionsPlaceholder" class="text-center text-muted py-3">
+                                            <i class="bi bi-arrow-up me-2"></i>
+                                            Complete previous steps to select sections
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Step 4: Operation Details Section -->
+                    <div id="operationDetailsSection" class="mb-3" style="display: none;">
+                        <div class="card bg-dark border-primary">
+                            <div class="card-header py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="step-number me-3">
+                                        <span class="step-num">4</span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-info-circle me-2"></i>
+                                            <span id="operationDetailsTitle">Operation Details</span>
+                                        </h5>
+                                        <small class="text-muted">Review details and confirm operation</small>
+                                    </div>
+                                    <div>
+                                        <span class="step-status completed"><i class="bi bi-check-circle-fill me-1"></i>Ready</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="operationDetailsContent">
+                                    <!-- Pre-operation content -->
+                                    <div id="preOperationDetails">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="bi bi-folder text-primary me-2"></i>
+                                                    <strong>Reference Folder:</strong>
+                                                    <div class="ms-4 text-muted" id="detailReferenceFolder">-</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="bi bi-folder2-open text-info me-2"></i>
+                                                    <strong>Update Folder:</strong>
+                                                    <div class="ms-4 text-muted" id="detailUpdateFolder">-</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="bi bi-files text-warning me-2"></i>
+                                                    <strong>Files to Update:</strong>
+                                                    <div class="ms-4 text-muted" id="detailFileCount">0 files</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="bi bi-diagram-3 text-success me-2"></i>
+                                                    <strong>Selected Sections:</strong>
+                                                    <div class="ms-4 text-muted" id="detailSections">None selected</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Confirmation and Action Buttons -->
+                                        <div class="operation-actions">
+                                            <div class="confirmation-text">
+                                                <i class="bi bi-question-circle me-2"></i>
+                                                Do you <span class="highlight">confirm</span> the operation details above?
+                                            </div>
+                                            <div class="d-flex justify-content-center gap-3">
+                                                <button type="submit" class="btn btn-success btn-lg px-4" id="confirmStartBtn">
+                                                    <i class="bi bi-check-circle me-2"></i>
+                                                    Confirm & Start
+                                                </button>
+                                                <button type="button" class="btn btn-secondary btn-lg px-4" id="cancelOperationBtn">
+                                                    <i class="bi bi-x-circle me-2"></i>
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Post-operation content -->
+                                    <div id="postOperationDetails" style="display: none;">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="alert alert-info border-0" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-info-circle-fill me-2 fs-5" style="color: #0dcaf0;"></i>
+                                                        <div>
+                                                            <strong>Update Summary:</strong>
+                                                            <div class="mt-1 small">
+                                                                The update operation has been completed. View the detailed results below.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div id="operationResultsSummary" class="summary-bar"></div>
+                                            </div>
+                                            <div class="col-md-4 text-end">
+                                                <button type="button" class="btn btn-outline-primary btn-lg" id="downloadReportBtn">
+                                                    <i class="bi bi-download me-2"></i>
+                                                    Download Report
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Section -->
+                    <div id="progressSection" class="mb-4" style="display: none;">
+                        <div class="progress-container">
+                            <div class="progress" style="height: 48px; border-radius: 15px; background-color: rgba(255,255,255,0.2); border: 4px solid rgba(23, 162, 184, 0.6); box-shadow: inset 0 3px 6px rgba(0,0,0,0.15), 0 0 12px rgba(23, 162, 184, 0.3); position: relative;">
+                                <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%; border-radius: 11px; background: linear-gradient(45deg, #28a745, #20c997, #17a2b8); box-shadow: 0 3px 12px rgba(40, 167, 69, 0.4); position: relative;">
+                                </div>
+                                <!-- Centered Percentage Text -->
+                                <div class="progress-text-center">
+                                    <span id="progressText" class="fw-bold text-white" style="font-size: 1.5rem; text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; letter-spacing: 1px;">0%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <small id="progressStatus" class="text-truncate fw-semibold" style="color: #17a2b8; font-size: 1rem;">Ready...</small>
+                                <small id="progressCount" class="fw-bold px-3 py-2 rounded" style="color: #ffffff; background-color: #28a745; font-size: 1rem; border-radius: 8px; box-shadow: 0 3px 6px rgba(40, 167, 69, 0.4);">0/0</small>
+                            </div>
+                            
+                            <!-- Centered Cancel Button -->
+                            <div class="text-center mt-3">
+                                <button type="button" class="btn btn-danger btn-lg px-4" id="cancelUpdate" title="Cancel Operation" style="border-radius: 12px; font-weight: 600; box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);">
+                                    <i class="bi bi-x-circle-fill me-2"></i>
+                                    Cancel Operation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section (Compact Summary Bar) -->
+                    <div id="resultsSection" style="display: none;">
+                        <div class="card bg-dark">
+                            <div class="card-body py-3">
+                                <div id="updateResults" class="summary-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Information Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Update Operation Information
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <h6><i class="bi bi-lightbulb me-2"></i>How Smart Update Works:</h6>
+                    <ul class="mb-0">
+                        <li>Compares files in update folder with reference folder</li>
+                        <li>Updates only files that have newer timestamps</li>
+                        <li>Supports both normal and I-prefixed file matching</li>
+                        <li>Generates detailed operation reports</li>
+                    </ul>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <h6><i class="bi bi-exclamation-triangle me-2"></i>Important Notes:</h6>
+                    <ul class="mb-0">
+                        <li>Operation cannot be undone automatically</li>
+                        <li>Ensure you have sufficient disk space</li>
+                        <li>Check log files for detailed operation results</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.detail-item {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 3px solid rgba(23, 162, 184, 0.8);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.detail-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-left-color: #17a2b8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detail-item strong {
+    color: #212529;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.detail-item .text-muted {
+    color: #495057 !important;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    word-break: break-all;
+    font-weight: 500;
+}
+
+#operationDetailsSection .card {
+    border: 2px solid rgba(23, 162, 184, 0.5);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: rgba(248, 249, 250, 0.95);
+}
+
+#operationDetailsSection .card-header {
+    background: rgba(23, 162, 184, 0.15);
+    border-bottom: 1px solid rgba(23, 162, 184, 0.4);
+}
+
+#operationDetailsSection .card-title {
+    color: #212529;
+    font-weight: 700;
+}
+
+.operation-actions {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-text {
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.confirmation-text .highlight {
+    color: #17a2b8;
+    font-weight: 700;
+}
+
+#downloadReportBtn {
+    border: 1px solid #17a2b8;
+    color: #17a2b8;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+#downloadReportBtn:hover {
+    background-color: #17a2b8;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Enhanced Summary Chips for ZIP Downloads */
+.summary-chip {
+    position: relative;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.summary-chip.clickable {
+    cursor: pointer;
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-chip.clickable:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.summary-chip.clickable:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ZIP Download Loading State */
+.summary-chip.loading {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+}
+
+.summary-chip.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+.info-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Enhanced Progress Bar Styling */
+.progress-container {
+    position: relative;
+}
+
+.progress {
+    position: relative;
+    overflow: visible;
+}
+
+.progress-text-center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#progressBar {
+    transition: width 0.3s ease;
+}
+
+#cancelUpdate {
+    transition: all 0.3s ease;
+}
+
+#cancelUpdate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4) !important;
+}
+
+.progress-container {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+}
+.btn-cancel {
+    background: none !important;
+    border: none !important;
+    color: #dc3545 !important; /* Bootstrap danger color */
+    font-size: 1.5rem;
+    padding: 0;
+    line-height: 1;
+    box-shadow: none !important;
+}
+.btn-cancel:hover {
+    color: #ff0000 !important;
+}
+.spin { animation: none; }
+@keyframes spin { from { transform: none; } to { transform: none; } }
+
+.log-entry {
+    margin-bottom: 0.2rem;
+}
+
+.bg-black {
+    background-color: #000 !important;
+}
+
+.info-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Professional Result Circles */
+.result-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: none;
+}
+
+.result-circle:hover { transform: none; box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
+
+.result-content {
+    text-align: center;
+    color: white;
+}
+
+.result-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.result-label {
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .result-circle {
+        width: 100px;
+        height: 100px;
+    }
+    .result-number {
+        font-size: 1.5rem;
+    }
+    .result-label {
+        font-size: 0.8rem;
+    }
+    
+    .detail-item {
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+    }
+    
+    .operation-actions {
+        padding: 1rem;
+    }
+    
+    .operation-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    #downloadReportBtn {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .progress-container {
+        margin: 0 -0.5rem;
+    }
+    
+    #progressText {
+        font-size: 1.1rem !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let isUpdating = false;
+let updateInterval = null;
+let progressAnimationInterval = null;
+let currentVisualProgress = 0;
+let targetProgress = 0;
+let selectedFiles = [];
+let availableUpdSections = [];
+let selectedUpdSections = [];
+
+// Global functions
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    // displaySelectedFiles(); // Removed since UI changed to step-based
+    checkFormValidity();
+}
+
+function displaySelectedFiles() { 
+    /* Selected files UI removed intentionally */ 
+}
+
+function checkFormValidity() {
+    const referenceFolderInput = document.getElementById('referenceFolder');
+    const confirmStartBtn = document.getElementById('confirmStartBtn');
+    const hasMain = referenceFolderInput.value.trim();
+    const hasSections = selectedUpdSections.length > 0;
+    const ready = selectedFiles.length > 0;
+    const isValid = hasMain && hasSections && ready;
+    
+    // Update step states
+    updateStepStates(hasMain, ready, hasSections, isValid);
+    
+    // Enable/disable confirm button
+    if (confirmStartBtn) {
+        confirmStartBtn.disabled = !isValid || isUpdating;
+    }
+    
+    // Show/hide operation details based on form validity
+    const operationDetailsSection = document.getElementById('operationDetailsSection');
+    if (isValid && !isUpdating) {
+        updateOperationDetails();
+        operationDetailsSection.style.display = 'block';
+    } else {
+        operationDetailsSection.style.display = 'none';
+    }
+}
+
+function updateStepStates(hasMain, ready, hasSections, isValid) {
+    // Step 1: Reference Folder
+    const step1Card = document.getElementById('step1Card');
+    const step1Status = document.getElementById('step1Status');
+    const step2Card = document.getElementById('step2Card');
+    const step2Status = document.getElementById('step2Status');
+    const btnPickUpdateFiles = document.getElementById('btnPickUpdateFiles');
+    const updateFilesDisplay = document.getElementById('updateFilesDisplay');
+    const step3Card = document.getElementById('step3Card');
+    const step3Status = document.getElementById('step3Status');
+    
+    if (hasMain) {
+        step1Card.classList.remove('disabled');
+        step1Card.classList.add('completed');
+        step1Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step1Status.classList.add('completed');
+        
+        // Enable Step 2
+        step2Card.classList.remove('disabled');
+        step2Card.classList.add('active');
+        step2Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select folder';
+        step2Status.classList.add('active');
+        btnPickUpdateFiles.disabled = false;
+        updateFilesDisplay.placeholder = 'Click "Choose Folder" to select';
+    } else {
+        step1Card.classList.remove('completed', 'active');
+        step1Card.classList.add('disabled');
+        step1Status.innerHTML = '<i class="bi bi-clock me-1"></i>Pending';
+        step1Status.classList.remove('completed', 'active');
+        
+        // Disable subsequent steps
+        step2Card.classList.add('disabled');
+        step2Card.classList.remove('active', 'completed');
+        step2Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+        step2Status.classList.remove('completed', 'active');
+        btnPickUpdateFiles.disabled = true;
+        updateFilesDisplay.placeholder = 'Complete Step 1 first';
+    }
+    
+    if (ready && hasMain) {
+        step2Card.classList.remove('active');
+        step2Card.classList.add('completed');
+        step2Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step2Status.classList.remove('active');
+        step2Status.classList.add('completed');
+        
+        // Enable Step 3
+        step3Card.classList.remove('disabled');
+        step3Card.classList.add('active');
+        step3Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select sections';
+        step3Status.classList.add('active');
+    } else if (hasMain) {
+        step3Card.classList.add('disabled');
+        step3Card.classList.remove('active', 'completed');
+        step3Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+        step3Status.classList.remove('completed', 'active');
+    }
+    
+    if (hasSections && ready && hasMain) {
+        step3Card.classList.remove('active');
+        step3Card.classList.add('completed');
+        step3Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step3Status.classList.remove('active');
+        step3Status.classList.add('completed');
+    }
+}
+
+function updateOperationDetails() {
+    // Update pre-operation details
+    document.getElementById('detailReferenceFolder').textContent = 
+        document.getElementById('referenceFolder').value || 'Not selected';
+    
+    // Get folder name from selected files
+    let folderName = 'No folder selected';
+    if (selectedFiles.length > 0) {
+        const firstFile = selectedFiles[0];
+        folderName = firstFile.webkitRelativePath.split('/')[0];
+    }
+    document.getElementById('detailUpdateFolder').textContent = folderName;
+    document.getElementById('detailFileCount').textContent = `${selectedFiles.length} files`;
+    
+    // Update selected sections
+    if (selectedUpdSections.length > 0) {
+        const sectionNames = selectedUpdSections.map(path => {
+            const section = availableUpdSections.find(s => s.path === path);
+            return section ? section.name : path;
+        });
+        document.getElementById('detailSections').textContent = sectionNames.join(', ');
+    } else {
+        document.getElementById('detailSections').textContent = 'None selected';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Selected files UI removed
+    const updateForm = document.getElementById('updateForm');
+    const confirmStartBtn = document.getElementById('confirmStartBtn');
+    const cancelOperationBtn = document.getElementById('cancelOperationBtn');
+    const cancelUpdateBtn = document.getElementById('cancelUpdate');
+    const referenceFolderInput = document.getElementById('referenceFolder');
+    const updateFilesInput = document.getElementById('updateFiles');
+    const btnPickUpdateFiles = document.getElementById('btnPickUpdateFiles');
+    const updateFilesDisplay = document.getElementById('updateFilesDisplay');
+    const progressSection = document.getElementById('progressSection');
+    const resultsSection = document.getElementById('resultsSection');
+
+    // Add info button
+    const cardHeader = document.querySelector('.card-header');
+    const infoButton = document.createElement('button');
+    infoButton.className = 'btn btn-outline-light btn-sm info-button';
+    infoButton.innerHTML = '<i class="bi bi-info-circle"></i>';
+    infoButton.setAttribute('data-bs-toggle', 'modal');
+    infoButton.setAttribute('data-bs-target', '#infoModal');
+    cardHeader.style.position = 'relative';
+    cardHeader.appendChild(infoButton);
+
+    // File selection
+    updateFilesInput.addEventListener('change', function() {
+        selectedFiles = Array.from(this.files || []);
+        displaySelectedFiles();
+        // Update display text
+        if (updateFilesDisplay) {
+            if (selectedFiles.length > 0) {
+                const firstFile = selectedFiles[0];
+                const folderName = firstFile.webkitRelativePath.split('/')[0];
+                updateFilesDisplay.value = `${folderName} (${selectedFiles.length} files)`;
+            } else {
+                updateFilesDisplay.value = '';
+                updateFilesDisplay.placeholder = 'No folder selected';
+            }
+        }
+        checkFormValidity();
+    });
+
+    // Button triggers hidden files input
+    btnPickUpdateFiles.addEventListener('click', function() {
+        try { updateFilesInput.click(); } catch (_) {}
+    });
+
+    // Change reference folder
+    document.getElementById('changeReferenceFolder').addEventListener('click', async function() {
+        const newPath = await ScheminiManager.selectFolder('referenceFolder', 'Select New Reference Folder');
+        if (newPath) {
+            referenceFolderInput.value = newPath;
+            await ScheminiManager.updateUserReferenceFolder(newPath);
+            await loadUpdateSections(); // Reload sections for the new folder
+            checkFormValidity();
+        }
+    });
+
+    // Initialize with Schemini folder if available
+    async function initializeFolders() {
+        // Prioritize the value rendered from the server
+        if (referenceFolderInput.value) {
+            await loadUpdateSections();
+            checkFormValidity();
+            return;
+        }
+
+        // Fallback to old IP-based method if server-rendered value is not present
+        try {
+            const response = await fetch('/api/user-folder');
+            const userFolder = await response.json();
+            
+            if (userFolder.success && userFolder.folder) {
+                referenceFolderInput.value = userFolder.folder;
+                await loadUpdateSections();
+                checkFormValidity();
+            } else {
+                referenceFolderInput.placeholder = "Reference folder not configured in settings";
+            }
+        } catch (error) {
+            console.log('Could not load user folder:', error);
+            referenceFolderInput.placeholder = "Failed to load reference folder";
+        }
+    }
+
+    async function loadUpdateSections() {
+        try {
+            const base = referenceFolderInput.value || '';
+            const url = base ? `/api/file-add/sections?base=${encodeURIComponent(base)}` : '/api/file-add/sections';
+            const resp = await fetch(url);
+            const json = await resp.json();
+            if (json.success) {
+                availableUpdSections = json.data || [];
+                renderUpdSections();
+            }
+        } catch (e) {
+            // Silent error handling
+        }
+    }
+
+    function renderUpdSections() {
+        const list = document.getElementById('updSectionsList');
+        const countSpan = document.getElementById('updSectionsCount');
+        list.innerHTML = '';
+        selectedUpdSections = [];
+        availableUpdSections.forEach(sec => {
+            const id = `updsec_${btoa(unescape(encodeURIComponent(sec.path))).replace(/=/g,'')}`;
+            const chip = document.createElement('label');
+            chip.className = 'section-chip';
+            chip.setAttribute('for', id);
+            chip.innerHTML = `
+                <input class="section-checkbox upd-section-checkbox" type="checkbox" value="${sec.path}" id="${id}">
+                <i class="bi bi-folder2-open"></i>
+                <span class="name">${sec.name}</span>
+            `;
+            list.appendChild(chip);
+        });
+        document.querySelectorAll('.upd-section-checkbox').forEach(cb => {
+            const parent = cb.closest('.section-chip');
+            const syncActive = () => { if (cb.checked) parent.classList.add('active'); else parent.classList.remove('active'); };
+            parent.addEventListener('click', (e) => {
+                if (e.target.tagName.toLowerCase() !== 'input') {
+                    cb.checked = !cb.checked;
+                    cb.dispatchEvent(new Event('change'));
+                    e.preventDefault();
+                }
+            });
+            cb.addEventListener('change', () => {
+                selectedUpdSections = Array.from(document.querySelectorAll('.upd-section-checkbox:checked')).map(x => x.value);
+                if (countSpan) countSpan.textContent = selectedUpdSections.length;
+                syncActive();
+                checkFormValidity();
+            });
+            syncActive();
+        });
+        if (countSpan) countSpan.textContent = selectedUpdSections.length;
+    }
+
+    // Start update
+    updateForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        startUpdateOperation();
+    });
+    
+    // Confirm & Start button click
+    if (confirmStartBtn) {
+        confirmStartBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            startUpdateOperation();
+        });
+    }
+    
+    // Cancel button click - reset everything
+    if (cancelOperationBtn) {
+        cancelOperationBtn.addEventListener('click', function() {
+            resetFormAndSelections();
+        });
+    }
+    
+    function startUpdateOperation() {
+        if (isUpdating) return;
+
+        // Reset progress bar and animation state
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressStatus = document.getElementById('progressStatus');
+        const progressCount = document.getElementById('progressCount');
+        
+        if (progressBar) progressBar.style.width = '0%';
+        if (progressText) progressText.textContent = '0%';
+        
+        // Immediately show starting status
+        if (progressStatus) progressStatus.textContent = 'Initializing update operation...';
+        if (progressCount) {
+            progressCount.textContent = `0/${selectedFiles.length}`;
+            progressCount.style.backgroundColor = '#28a745';
+            progressCount.style.transform = 'scale(1.05)';
+        }
+        
+        currentVisualProgress = 0;
+        targetProgress = 0;
+        if (progressAnimationInterval) clearInterval(progressAnimationInterval);
+
+        isUpdating = true;
+        if (confirmStartBtn) confirmStartBtn.disabled = true;
+        
+        // Hide operation details and show progress
+        document.getElementById('operationDetailsSection').style.display = 'none';
+        progressSection.style.display = 'block';
+        resultsSection.style.display = 'none';
+
+        // Update status to show preparation
+        setTimeout(() => {
+            if (progressStatus) progressStatus.textContent = 'Preparing files for update...';
+        }, 100);
+
+        const formData = new FormData();
+        formData.append('reference_folder', document.getElementById('referenceFolder').value.trim());
+        if (selectedUpdSections.length > 0) {
+            formData.append('selected_sections', JSON.stringify(selectedUpdSections));
+        }
+        selectedFiles.forEach(file => {
+            formData.append('update_files', file, file.name);
+        });
+
+        // Show uploading status
+        setTimeout(() => {
+            if (progressStatus) progressStatus.textContent = 'Uploading files and starting update...';
+        }, 200);
+
+        fetch('/api/update-files', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(handleUpdateStartResponse)
+        .catch(handleUpdateStartError);
+    }
+    
+    function resetFormAndSelections() {
+        // Reset all form inputs
+        updateFilesInput.value = '';
+        selectedFiles = [];
+        selectedUpdSections = [];
+        
+        // Reset display
+        if (updateFilesDisplay) {
+            updateFilesDisplay.value = '';
+            updateFilesDisplay.placeholder = 'No folder selected';
+        }
+        
+        // Reset sections
+        renderUpdSections();
+        
+        // Hide sections
+        progressSection.style.display = 'none';
+        resultsSection.style.display = 'none';
+        
+        // Reset operation details section
+        const operationDetailsSection = document.getElementById('operationDetailsSection');
+        const operationDetailsTitle = document.getElementById('operationDetailsTitle');
+        const preOperationDetails = document.getElementById('preOperationDetails');
+        const postOperationDetails = document.getElementById('postOperationDetails');
+        
+        operationDetailsSection.style.display = 'none';
+        operationDetailsTitle.innerHTML = '<i class="bi bi-info-circle me-2"></i>Operation Details';
+        preOperationDetails.style.display = 'block';
+        postOperationDetails.style.display = 'none';
+        
+        // Re-check form validity (this will update step states)
+        checkFormValidity();
+        
+        window.ScheminiManager.showNotification('Operation cancelled and form reset', 'info');
+    }
+
+    cancelUpdateBtn.addEventListener('click', function() {
+        if (!isUpdating) return;
+        fetch('/api/cancel-operation/update', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                // Silent handling
+            })
+            .catch(err => {
+                // Silent error handling
+            })
+            .finally(() => {
+                stopUpdating(true); // Force stop UI
+            });
+    });
+
+    function handleUpdateStartResponse(result) {
+        if (result.success) {
+            const progressStatus = document.getElementById('progressStatus');
+            if (progressStatus) {
+                progressStatus.textContent = 'Update started successfully! Beginning file processing...';
+            }
+            startProgressPolling();
+        } else {
+            const progressStatus = document.getElementById('progressStatus');
+            if (progressStatus) {
+                progressStatus.textContent = 'Failed to start update operation';
+            }
+            stopUpdating();
+        }
+    }
+    
+    function handleUpdateStartError(error) {
+        const progressStatus = document.getElementById('progressStatus');
+        if (progressStatus) {
+            progressStatus.textContent = 'Error starting update operation';
+        }
+        stopUpdating();
+    }
+
+
+
+    function startProgressPolling() {
+        updateInterval = setInterval(function() {
+            fetch('/api/get-progress/update')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateProgress(data.progress);
+                        
+                        if (data.progress.completed || data.progress.error) {
+                            stopProgressPolling();
+                            showResults(data.progress);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Progress polling error:', error);
+                    stopProgressPolling(); // Stop polling on error
+                });
+        }, 500); // Match scan page polling interval
+    }
+
+    function stopProgressPolling() {
+        if (updateInterval) {
+            clearInterval(updateInterval);
+            updateInterval = null;
+        }
+    }
+
+    function updateProgress(progress) {
+        const progressStatus = document.getElementById('progressStatus');
+        const progressCount = document.getElementById('progressCount');
+
+        targetProgress = isFinite(progress.percentage) ? Math.round(progress.percentage) : 0;
+        
+        // Update status with clear indication of what's happening
+        const status = progress.status || 'Processing...';
+        progressStatus.textContent = status;
+        
+        // Enhanced X/Y counter display - X is current completed, Y is total
+        const current = progress.current || 0;  // Files processed so far
+        const total = progress.total || 0;      // Total files to process
+        progressCount.textContent = `${current}/${total}`;
+        
+        // Add visual feedback for the counter
+        if (current > 0 && total > 0) {
+            progressCount.style.backgroundColor = '#28a745'; // Green when active
+            progressCount.style.transform = 'scale(1.05)';
+        } else {
+            progressCount.style.backgroundColor = '#6c757d'; // Gray when inactive
+            progressCount.style.transform = 'scale(1)';
+        }
+
+        if (!progressAnimationInterval) {
+            progressAnimationInterval = setInterval(() => {
+                const progressBar = document.getElementById('progressBar');
+                const progressText = document.getElementById('progressText');
+                
+                if (currentVisualProgress < targetProgress) {
+                    currentVisualProgress = Math.min(currentVisualProgress + 2, targetProgress);
+                } else if (currentVisualProgress > targetProgress) {
+                    currentVisualProgress = targetProgress; // Snap down if target decreases
+                }
+
+                if (progressBar) {
+                    progressBar.style.width = currentVisualProgress + '%';
+                }
+                
+                if (progressText) {
+                    progressText.textContent = currentVisualProgress + '%';
+                }
+
+                if (currentVisualProgress >= 100 || (currentVisualProgress >= targetProgress && targetProgress > 0)) {
+                    clearInterval(progressAnimationInterval);
+                    progressAnimationInterval = null;
+                }
+            }, 30);
+        }
+
+        // No logs update needed
+    }
+
+    function showResults(progress) {
+        stopProgressPolling(); // First stop polling
+        stopUpdating(); // Then update UI state
+        
+        // Transform operation details section to show results
+        const operationDetailsSection = document.getElementById('operationDetailsSection');
+        const operationDetailsTitle = document.getElementById('operationDetailsTitle');
+        const preOperationDetails = document.getElementById('preOperationDetails');
+        const postOperationDetails = document.getElementById('postOperationDetails');
+        const operationResultsSummary = document.getElementById('operationResultsSummary');
+        
+        // Update title and show results
+        operationDetailsTitle.innerHTML = '<i class="bi bi-check-circle me-2"></i>Operation Results';
+        preOperationDetails.style.display = 'none';
+        postOperationDetails.style.display = 'block';
+        operationDetailsSection.style.display = 'block';
+        
+        if (progress.error) {
+            operationResultsSummary.innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    ${progress.error}
+                </div>
+            `;
+        } else {
+            const processedFiles = progress.files_processed ?? progress.total ?? 0;
+            const updatedFiles = progress.files_updated ?? 0;  // Individual files updated
+            const uniqueMatched = progress.unique_matched ?? 0;  // Unique files matched
+            const notFoundFiles = progress.not_found_count ?? 0;
+            const errorFiles = progress.error_count ?? 0;
+            const successRate = progress.success_rate_percentage ?? 0;
+            
+            // Format matched display as unique (total) when different
+            const matchedDisplay = updatedFiles > uniqueMatched ? 
+                `${uniqueMatched} (${updatedFiles})` : 
+                `${uniqueMatched}`;
+            
+            // Determine if we have data for display purposes (no clickable functionality for update page)
+            const hasMatchedFiles = uniqueMatched > 0;
+            const hasErrors = errorFiles > 0;
+            
+            operationResultsSummary.innerHTML = `
+                <span class="summary-chip bg-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Total files processed from update folder"><i class="bi bi-collection"></i> Processed <span class="value">${processedFiles}</span></span>
+                <span class="summary-chip bg-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Files successfully matched and updated in reference folder">
+                    <i class="bi bi-arrow-clockwise"></i> Matched <span class="value">${matchedDisplay}</span>
+                </span>
+                <span class="summary-chip bg-warning text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Files not found in reference folder">
+                    <i class="bi bi-question-circle"></i> Not Found <span class="value">${notFoundFiles}</span>
+                </span>
+                ${errorFiles > 0 ? `<span class="summary-chip bg-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Files that encountered errors during update"><i class="bi bi-exclamation-triangle"></i> Errors <span class="value">${errorFiles}</span></span>` : ''}
+                <span class="summary-chip bg-primary text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Percentage of files successfully matched and updated"><i class="bi bi-speedometer2"></i> Success Rate <span class="value">${successRate}%</span></span>
+            `;
+            
+            // Initialize Bootstrap tooltips for the new elements
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+        
+        // Hide old results section since we're using the operation details section now
+        resultsSection.style.display = 'none';
+        
+        ScheminiManager.showNotification(
+            progress.error ? 'Update operation failed' : 'Update operation completed successfully!',
+            progress.error ? 'error' : 'success'
+        );
+    }
+
+    function stopUpdating(wasCancelled = false) {
+        isUpdating = false;
+        const confirmBtn = document.getElementById('confirmStartBtn');
+        if (confirmBtn) confirmBtn.disabled = false;
+        
+        const progressSection = document.getElementById('progressSection');
+        if (progressSection) progressSection.style.display = 'none';
+        
+        stopProgressPolling();
+        if (progressAnimationInterval) {
+            clearInterval(progressAnimationInterval);
+            progressAnimationInterval = null;
+        }
+        
+        checkFormValidity(); // This will show operation details if form is valid
+        
+        if (wasCancelled) {
+            // Reset operation details to pre-operation state
+            const operationDetailsTitle = document.getElementById('operationDetailsTitle');
+            const preOperationDetails = document.getElementById('preOperationDetails');
+            const postOperationDetails = document.getElementById('postOperationDetails');
+            
+            if (operationDetailsTitle) operationDetailsTitle.innerHTML = '<i class="bi bi-info-circle me-2"></i>Operation Details';
+            if (preOperationDetails) preOperationDetails.style.display = 'block';
+            if (postOperationDetails) postOperationDetails.style.display = 'none';
+            
+            resultsSection.style.display = 'none';
+        }
+    }
+
+    // Simplified logging functions
+    function clearLog() {
+        console.log('[UPDATE] Log cleared');
+    }
+
+    function addLogEntry(message) {
+        console.log('[UPDATE]', message);
+    }
+
+    // Initialize form state
+    initializeFolders();
+    checkFormValidity();
+    
+    // Add page close handling for automatic operation cancellation
+    let isPageUnloading = false;
+    
+    function handlePageClose() {
+        if (isUpdating && !isPageUnloading) {
+            isPageUnloading = true;
+            
+            // Stop progress polling immediately
+            stopProgressPolling();
+            
+            // Send cancellation request to backend
+            navigator.sendBeacon('/api/cancel-operation/update');
+            
+            // Log the cancellation attempt
+            console.log('Page closing - Update operation cancelled automatically');
+        }
+    }
+    
+    // Enhanced page close detection
+    window.addEventListener('beforeunload', function(e) {
+        if (isUpdating) {
+            handlePageClose();
+            // Show confirmation dialog for user awareness
+            e.preventDefault();
+            e.returnValue = 'Update operation is running. Closing will cancel the operation.';
+            return e.returnValue;
+        }
+    });
+    
+    // Handle tab visibility changes (tab switch, minimize, etc.)
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && isUpdating) {
+            // If tab becomes hidden during operation, cancel it
+            handlePageClose();
+        }
+    });
+    
+    // Handle page navigation away
+    window.addEventListener('pagehide', function() {
+        if (isUpdating) {
+            handlePageClose();
+        }
+    });
+    
+    // Add download report functionality
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'downloadReportBtn' || e.target.closest('#downloadReportBtn')) {
+            downloadOperationReport();
+        }
+    });
+    
+    function downloadOperationReport() {
+        window.ScheminiManager.showNotification('📄 Preparing operation report...', 'info');
+        
+        fetch('/api/download-operation-log/update', {
+            method: 'GET'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Get filename from response header if available
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'update_operation_report.txt';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="(.+)"/i);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+                
+                // Convert response to blob and trigger download
+                return response.blob().then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    window.ScheminiManager.showNotification('✅ Operation report downloaded successfully!', 'success');
+                });
+            } else {
+                return response.json().then(result => {
+                    const errorMsg = result.message || 'Failed to generate report';
+                    window.ScheminiManager.showNotification('Report Error: ' + errorMsg, 'error');
+                });
+            }
+        })
+        .catch(error => {
+            const errorMsg = error.message || 'Network error';
+            window.ScheminiManager.showNotification('Error downloading report: ' + errorMsg, 'error');
+        });
+    }
+    
+});
+</script>
+{% endblock %}

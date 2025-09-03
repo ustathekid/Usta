@@ -1,0 +1,639 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Schemini Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Enhanced full-screen search interface -->
+    <div class="search-container" id="searchPanel">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                    <div class="text-center mb-5">
+                        <h1 class="display-4 fw-bold text-white mb-3">
+                            <i class="bi bi-compass me-3 float-icon" style="color: #ffd700;"></i>
+                            Search by 9.x's
+                        </h1>
+                        <p class="lead text-white-50 mb-0 fs-5">Professional Document Search System</p>
+                        <div class="mt-3 d-none d-md-block">
+                            <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+                                <i class="bi bi-lightning-fill text-warning me-1"></i>
+                                Lightning Fast Search
+                            </span>
+                            <span class="badge bg-light text-dark px-3 py-2 rounded-pill ms-2">
+                                <i class="bi bi-shield-check text-success me-1"></i>
+                                Secure & Reliable
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile-Optimized Search Box -->
+                    <div class="search-box">
+                        <div class="mobile-search-wrapper d-flex flex-column flex-md-row gap-3">
+                            <input type="text" 
+                                   id="codeSearchInput" 
+                                   class="form-control form-control-lg search-input" 
+                                   placeholder="Enter code (e.g. 9.MX231.01.0)" 
+                                   autofocus />
+                            <button class="btn btn-primary btn-lg" id="btnSearchCode">
+                                <i class="bi bi-search me-2"></i>
+                                <span class="search-btn-text">Search</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Desktop-only helper text -->
+                        <div class="text-center mt-3 d-none d-md-block">
+                            <small class="text-muted">
+                                <i class="bi bi-keyboard me-1"></i> Press Enter to search
+                            </small>
+                        </div>
+
+                        <!-- Quick search examples for desktop -->
+                        <div class="mt-4 text-center d-none d-md-block">
+                            <p class="small text-muted mb-2">Quick examples:</p>
+                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                <button class="btn btn-outline-light btn-sm rounded-pill quick-search" data-code="9.AN055.21.0">
+                                    9.AN055.21.0
+                                </button>
+                                <button class="btn btn-outline-light btn-sm rounded-pill quick-search" data-code="I9.GR673.15.2">
+                                    I9.GR673.15.2
+                                </button>
+                                <button class="btn btn-outline-light btn-sm rounded-pill quick-search" data-code="9.T5783.10.0">
+                                    9.T5783.10.0
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating background elements -->
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1; pointer-events: none;">
+            <div class="position-absolute" style="top: 20%; left: 10%; width: 100px; height: 100px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
+            <div class="position-absolute" style="top: 60%; right: 15%; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.08); border-radius: 50%; animation: float 8s ease-in-out infinite reverse;"></div>
+            <div class="position-absolute" style="bottom: 20%; left: 20%; width: 60px; height: 60px; background: rgba(255, 255, 255, 0.06); border-radius: 50%; animation: float 10s ease-in-out infinite;"></div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Results panel placeholder (appears after search) -->
+        <div class="col-12" id="searchSummaryCol" style="display:none;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ScheminiManager utility object
+const ScheminiManager = {
+    showNotification: function(message, type = 'info') {
+        // Simple notification system
+        const alertClass = {
+            'info': 'alert-info',
+            'warning': 'alert-warning', 
+            'error': 'alert-danger',
+            'success': 'alert-success'
+        }[type] || 'alert-info';
+        
+        // Remove existing notifications
+        const existing = document.querySelectorAll('.notification-alert');
+        existing.forEach(el => el.remove());
+        
+        // Create notification
+        const notification = document.createElement('div');
+        notification.className = `alert ${alertClass} notification-alert position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <span>${message}</span>
+                <button type="button" class="btn-close" onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+    },
+    
+    setLoadingState: function(button, loading) {
+        if (loading) {
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+        } else {
+            button.disabled = false;
+            button.innerHTML = '<i class="bi bi-search me-1"></i>Search';
+        }
+    },
+    
+    apiCall: async function(url, method = 'GET', data = null) {
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        
+        if (data) {
+            options.body = JSON.stringify(data);
+        }
+        
+        const response = await fetch(url, options);
+        return await response.json();
+    }
+};
+
+// Wait for Bootstrap to load
+function waitForBootstrap() {
+    return new Promise((resolve) => {
+        const checkBootstrap = () => {
+            if (window.bootstrap) {
+                resolve();
+            } else {
+                setTimeout(checkBootstrap, 100);
+            }
+        };
+        checkBootstrap();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    // Wait for Bootstrap to be available
+    await waitForBootstrap();
+    console.log('Bootstrap loaded:', !!window.bootstrap);
+    
+    const input = document.getElementById('codeSearchInput');
+    const btn = document.getElementById('btnSearchCode');
+    const rightCol = document.getElementById('searchSummaryCol');
+
+    function validate(code) {
+        const c = (code || '').trim();
+        if (c.length < 8) return false;
+        if (!c.includes('.')) return false;
+        const first = c.split('.')[0];
+        return first === '9' || first === 'I9' || first.startsWith('9') || first.startsWith('I9');
+    }
+
+    async function search() {
+        const code = input.value.trim();
+        if (!validate(code)) {
+            ScheminiManager.showNotification('Invalid code format', 'warning');
+            return;
+        }
+        ScheminiManager.setLoadingState(btn, true);
+        try {
+            const res = await ScheminiManager.apiCall('/api/search-code', 'POST', { code });
+            if (!res.success) throw new Error(res.message || 'Search failed');
+            buildResults(code, res);
+            rightCol.style.display = '';
+        } catch (e) {
+            ScheminiManager.showNotification(e.message, 'error');
+        } finally {
+            ScheminiManager.setLoadingState(btn, false);
+        }
+    }
+
+    function encodeRel(base64Token) { return base64Token; }
+
+    // Global utility functions
+    function toToken(fullPath) {
+        try { return btoa(unescape(encodeURIComponent(fullPath))); } catch { return ''; }
+    }
+    
+    function toGroupToken(pages) {
+        try { return btoa(JSON.stringify(pages)); } catch { return ''; }
+    }
+
+    // Global state variables
+    let selectedMix = null;
+    let currentDocIndex = 0;
+    let currentMixDocs = [];
+    let currentDocument = null;
+    let documentsByMix = {};
+
+    function updateNavigation() {
+        // Navigation controls removed - no action needed
+        return;
+    }
+
+    function selectMix(mixCode) {
+        // Update visual selection
+        document.querySelectorAll('.mix-box').forEach(box => {
+            box.classList.remove('active');
+        });
+        
+        const selectedBox = document.querySelector(`[data-mix="${mixCode}"]`);
+        if (selectedBox) {
+            selectedBox.classList.add('active');
+        }
+        
+        selectedMix = mixCode;
+        currentMixDocs = documentsByMix[mixCode] || [];
+        currentDocIndex = 0;
+        currentDocument = currentMixDocs[0] || null;
+        
+        // Load first document (merged if multiple pages)
+        if (currentDocument) {
+            loadDocument(currentDocument);
+            showDocumentInfo();
+        }
+        
+        updateNavigation();
+    }
+
+    function loadPdfPage(fullPath) {
+        const frame = document.getElementById('pdfFrame');
+        if (frame) {
+            frame.src = `/api/pdf-file?f=${encodeURIComponent(toToken(fullPath))}#view=Fit&zoom=75&toolbar=0`;
+        }
+    }
+    
+    function loadDocument(pdfDoc) {
+        const frame = document.getElementById('pdfFrame');
+        if (frame && pdfDoc && pdfDoc.pages && pdfDoc.pages.length > 0) {
+            if (pdfDoc.pages.length === 1) {
+                // Single page - load directly with fit parameters and hidden toolbar
+                frame.src = `/api/pdf-file?f=${encodeURIComponent(toToken(pdfDoc.pages[0]))}#view=Fit&zoom=75&toolbar=0`;
+            } else {
+                // Multiple pages - load as merged PDF with fit parameters and hidden toolbar
+                frame.src = `/api/merged-pdf?g=${encodeURIComponent(toGroupToken(pdfDoc.pages))}#view=Fit&zoom=75&toolbar=0`;
+            }
+        }
+    }
+    
+    function showDocumentInfo() {
+        const pathDisplay = document.getElementById('currentFilePath');
+        const pathText = document.getElementById('filePathText');
+        if (pathDisplay && pathText && currentDocument) {
+            const firstPage = (currentDocument.pages && currentDocument.pages[0]) ? currentDocument.pages[0] : '';
+            let folderOnly = '';
+            if (firstPage) {
+                const lastBack = firstPage.lastIndexOf('\\');
+                const lastFwd = firstPage.lastIndexOf('/');
+                const cut = Math.max(lastBack, lastFwd);
+                if (cut >= 0) folderOnly = firstPage.substring(0, cut + 1);
+            }
+            pathText.textContent = folderOnly || '—';
+            pathDisplay.style.display = 'block';
+        }
+    }
+    
+    function navigateDocument(direction) {
+        // Document navigation controls removed - only mix selection available
+        return;
+    }
+
+    // Professional PDF Viewer Modal Function
+    function openProfessionalPdfViewer(data, mixCounts, mixNames) {
+        try {
+            // Remove any existing modal
+            const existingModal = document.getElementById('professionalPdfViewerModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Create the professional PDF viewer modal
+            const modal = document.createElement('div');
+            modal.className = 'modal fade pdf-viewer-modal';
+            modal.id = 'professionalPdfViewerModal';
+            modal.setAttribute('tabindex', '-1');
+            modal.setAttribute('aria-labelledby', 'pdfViewerModalLabel');
+            modal.setAttribute('aria-hidden', 'true');
+            
+            const firstDoc = (data.pdf_documents || [])[0] || null;
+            const hasDocuments = firstDoc && firstDoc.pages && firstDoc.pages.length > 0;
+            
+            modal.innerHTML = `
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="pdfViewerModalLabel">
+                                <i class="bi bi-file-earmark-pdf"></i>
+                                Professional PDF Viewer
+                                <span id="modalDocumentTitle" class="ms-2 text-muted"></span>
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="pdf-viewer-container">
+                                <div class="pdf-display-area">
+                                    ${hasDocuments ? 
+                                        '<iframe class="pdf-viewer-frame" id="professionalPdfFrame"></iframe>' :
+                                        '<div class="pdf-loading"><div class="spinner-border"></div><span>No PDF available</span></div>'
+                                    }
+                                </div>
+                                
+                                <div class="mix-selection-panel">
+                                    <div class="mix-section-title">
+                                        <i class="bi bi-grid-3x3-gap"></i>
+                                        Available Mixes
+                                    </div>
+                                    
+                                    <div class="mix-grid-compact" id="modalMixGrid">
+                                        ${Object.keys(mixCounts).length ? 
+                                            Object.keys(mixCounts).sort().map(k => {
+                                                const label = k === 'UNKNOWN' ? 'MIX?' : k;
+                                                return `
+                                                    <div class="mix-item-compact" data-mix="${k}" title="${mixNames[k] || ''}">
+                                                        <div class="mix-code-compact">${label}</div>
+                                                        <div class="mix-count-compact">${mixCounts[k]} Doc${mixCounts[k] > 1 ? 's' : ''}</div>
+                                                    </div>
+                                                `;
+                                            }).join('') :
+                                            '<div class="text-muted">No mixes found</div>'
+                                        }
+                                    </div>
+                                    
+                                    <div class="document-info-panel" id="documentInfoPanel" style="display: none;">
+                                        <div class="document-info-title">
+                                            <i class="bi bi-info-circle"></i>
+                                            Document Info
+                                        </div>
+                                        <div class="document-info-content" id="documentInfoContent"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Initialize the modal
+            const bsModal = new bootstrap.Modal(modal);
+            
+            // Set up event handlers for the professional PDF viewer
+            setupProfessionalPdfViewerHandlers(bsModal, hasDocuments);
+            
+            // Auto-select first mix if available
+            const sortedMixes = Object.keys(mixCounts).sort();
+            if (sortedMixes.length > 0) {
+                selectMixInModal(sortedMixes[0]);
+            }
+            
+            // Show the modal
+            bsModal.show();
+            
+            // Add responsive resize handler for mobile optimization
+            window.addEventListener('resize', () => {
+                if (currentDocument) {
+                    // Reload document with appropriate parameters after resize
+                    setTimeout(() => {
+                        loadDocumentInModal(currentDocument);
+                    }, 300);
+                }
+            });
+            
+            // Clean up when modal is hidden
+            modal.addEventListener('hidden.bs.modal', () => {
+                // Reset search interface
+                const searchPanel = document.getElementById('searchPanel');
+                if (searchPanel) {
+                    searchPanel.style.display = 'flex';
+                }
+                
+                // Reset page layout
+                document.body.classList.remove('search-results-mode');
+                document.body.style.minHeight = '';
+                document.querySelector('main').style.minHeight = '';
+                
+                // Clean up any existing results
+                const resultsPanel = document.getElementById('resultsPanel');
+                if (resultsPanel) resultsPanel.remove();
+                const topBar = document.getElementById('mixTopBar');
+                if (topBar && topBar.parentElement && topBar.parentElement.parentElement) {
+                    topBar.parentElement.parentElement.remove();
+                } else if (topBar) {
+                    topBar.remove();
+                }
+                
+                // Clear search input and focus
+                input.value = '';
+                input.focus();
+                
+                // Remove modal from DOM
+                modal.remove();
+            });
+            
+        } catch (error) {
+            console.error('Error creating professional PDF viewer:', error);
+            ScheminiManager.showNotification('Failed to open PDF viewer: ' + error.message, 'error');
+        }
+    }
+    // Professional PDF Viewer Handler Functions
+    function setupProfessionalPdfViewerHandlers(bsModal, hasDocuments) {
+        // Mix selection handlers
+        document.querySelectorAll('#modalMixGrid .mix-item-compact').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const mixCode = e.currentTarget.dataset.mix;
+                selectMixInModal(mixCode);
+            });
+        });
+        
+        // Note: All PDF viewer controls (navigation, zoom, fit, actions) have been removed
+        // PDF always opens in Fit Page mode by default
+    }
+    
+    // Modal-specific mix selection
+    function selectMixInModal(mixCode) {
+        // Update visual selection
+        document.querySelectorAll('#modalMixGrid .mix-item-compact').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        const selectedItem = document.querySelector(`[data-mix="${mixCode}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('active');
+        }
+        
+        selectedMix = mixCode;
+        currentMixDocs = documentsByMix[mixCode] || [];
+        currentDocIndex = 0;
+        currentDocument = currentMixDocs[0] || null;
+        
+        // Load first document
+        if (currentDocument) {
+            loadDocumentInModal(currentDocument);
+            showDocumentInfoInModal();
+        }
+        
+        // Note: Navigation controls removed - no updateModalNavigation() needed
+    }
+    
+    // Modal-specific document loading (controls removed - clean PDF viewing)
+    function loadDocumentInModal(pdfDoc) {
+        const frame = document.getElementById('professionalPdfFrame');
+        if (frame && pdfDoc && pdfDoc.pages && pdfDoc.pages.length > 0) {
+            let pdfUrl;
+            
+            // Always use Fit Page mode (no user controls)
+            const viewMode = 'Fit'; // Always Fit Page
+            const zoomLevel = '75'; // Fixed zoom for Fit Page
+            const toolbar = '0'; // Hide toolbar for cleaner view
+            
+            if (pdfDoc.pages.length === 1) {
+                // Single page - always Fit Page mode
+                pdfUrl = `/api/pdf-file?f=${encodeURIComponent(toToken(pdfDoc.pages[0]))}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+            } else {
+                // Multiple pages - always Fit Page mode
+                pdfUrl = `/api/merged-pdf?g=${encodeURIComponent(toGroupToken(pdfDoc.pages))}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+            }
+            frame.src = pdfUrl;
+            
+            // Update modal title
+            const modalTitle = document.getElementById('modalDocumentTitle');
+            if (modalTitle) {
+                modalTitle.textContent = pdfDoc.base_name || 'Document';
+            }
+        }
+    }
+    
+    // Modal-specific document info display
+    function showDocumentInfoInModal() {
+        const infoPanel = document.getElementById('documentInfoPanel');
+        const infoContent = document.getElementById('documentInfoContent');
+        
+        if (infoPanel && infoContent && currentDocument) {
+            const firstPage = (currentDocument.pages && currentDocument.pages[0]) ? currentDocument.pages[0] : '';
+            let folderPath = '';
+            if (firstPage) {
+                const lastBack = firstPage.lastIndexOf('\\');
+                const lastFwd = firstPage.lastIndexOf('/');
+                const cut = Math.max(lastBack, lastFwd);
+                if (cut >= 0) folderPath = firstPage.substring(0, cut + 1);
+            }
+            
+            infoContent.innerHTML = `
+                <div><strong>Document:</strong> ${currentDocument.base_name || 'Unknown'}</div>
+                <div><strong>Mix:</strong> ${currentDocument.mix_code || 'Unknown'}</div>
+                <div><strong>Pages:</strong> ${currentDocument.pages ? currentDocument.pages.length : 0}</div>
+                ${folderPath ? `<div class="document-path">${folderPath}</div>` : ''}
+            `;
+            
+            infoPanel.style.display = 'block';
+        }
+    }
+
+    function buildResults(code, data) {
+        // Hide search panel and enter search results mode
+        const searchPanel = document.getElementById('searchPanel');
+        if (searchPanel) {
+            searchPanel.style.display = 'none';
+        }
+        document.body.classList.add('search-results-mode');
+        
+        // Extend page height to fit full PDF viewer
+        document.body.style.minHeight = '100vh';
+        document.querySelector('main').style.minHeight = 'calc(100vh - 60px)';
+        
+        // Build Search Summary with mix selection boxes
+        const variantList = Array.isArray(data.variants_found) ? data.variants_found : [];
+        const showVariants = variantList.some(v => typeof v === 'string' && v.startsWith('I9.'));
+
+        // Compute mix counts and organize PDF documents by mix
+        const mixCounts = {};
+        const mixNames = {};
+        documentsByMix = {}; // Use global variable
+        
+        (data.pdf_documents || []).forEach(doc => {
+            if (!doc) return;
+            const code = doc.mix_code || 'UNKNOWN';
+            mixCounts[code] = (mixCounts[code] || 0) + 1;  // Count documents, not individual PDFs
+            if (doc.mix_name) mixNames[code] = doc.mix_name;
+            if (!documentsByMix[code]) documentsByMix[code] = [];
+            documentsByMix[code].push(doc);
+        });
+        
+        // Show the professional PDF viewer modal
+        openProfessionalPdfViewer(data, mixCounts, mixNames);
+    }
+
+    // Top search box interactions
+    btn.addEventListener('click', search);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') search(); });
+
+    const btnClear = document.getElementById('btnClear');
+    if (btnClear) {
+        btnClear.addEventListener('click', () => { 
+            input.value = ''; 
+            input.focus(); 
+            // Add clear animation
+            input.style.transform = 'scale(0.95)';
+            setTimeout(() => { input.style.transform = 'scale(1)'; }, 150);
+        });
+    }
+    
+    // Quick search functionality
+    document.querySelectorAll('.quick-search').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const code = e.target.dataset.code;
+            input.value = code;
+            search();
+        });
+    });
+    
+    // Enhanced search function
+    async function enhancedSearch() {
+        const code = input.value.trim();
+        if (!validate(code)) {
+            ScheminiManager.showNotification('Invalid code format', 'warning');
+            return;
+        }
+        
+        // Add search animation
+        input.style.transform = 'scale(1.05)';
+        setTimeout(() => { input.style.transform = 'scale(1)'; }, 200);
+        
+        await search();
+    }
+    
+    const btnPaste = document.getElementById('btnPasteCode');
+    if (btnPaste && navigator.clipboard) {
+        btnPaste.addEventListener('click', async () => {
+            try { input.value = (await navigator.clipboard.readText() || '').trim(); input.focus(); } catch {}
+        });
+    }
+
+    // First-time setup banner: prompt user to select Schemini folder (per IP)
+    (async () => {
+        try {
+            const u = await ScheminiManager.apiCall('/api/user-folder', 'GET');
+            if (u.success && u.needs_setup) {
+                const container = document.querySelector('main.container-fluid') || document.querySelector('main') || document.body;
+                const banner = document.createElement('div');
+                banner.className = 'alert alert-warning d-flex justify-content-between align-items-center';
+                banner.innerHTML = `
+                    <div><i class="bi bi-folder me-2"></i> Please select your Schemini main folder to enable code search.</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary" id="btnPickSchemini"><i class="bi bi-folder2-open me-1"></i>Select Folder</button>
+                    </div>`;
+                container.prepend(banner);
+                document.getElementById('btnPickSchemini').addEventListener('click', async () => {
+                    const chosen = await ScheminiManager.selectFolder(null, 'Select Schemini Main Folder');
+                    if (chosen) {
+                        try {
+                            const res = await ScheminiManager.apiCall('/api/user-folder', 'POST', { folder: chosen });
+                            if (res.success) {
+                                ScheminiManager.showNotification('Schemini folder saved for this device', 'success');
+                                banner.remove();
+                            } else {
+                                ScheminiManager.showNotification(res.message || 'Failed to save folder', 'error');
+                            }
+                        } catch (e) {
+                            ScheminiManager.showNotification(e.message, 'error');
+                        }
+                    }
+                });
+            }
+        } catch (e) {
+            // ignore
+        }
+    })();
+});
+</script>
+{% endblock %}

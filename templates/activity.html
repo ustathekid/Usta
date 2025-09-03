@@ -1,0 +1,616 @@
+{% extends "base.html" %}
+
+{% block title %}Recent Activity - Schemini Manager{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-clock-history me-3 text-primary"></i>
+                        Recent Activity
+                    </h1>
+                    <p class="text-muted mb-0">Track recent changes and operations in your Schemini folder</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Statistics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card bg-secondary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1">Total Operations</h5>
+                            <h2 class="mb-0" id="totalOperations">-</h2>
+                        </div>
+                        <i class="bi bi-hdd-stack fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-secondary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1">Today's Operations</h5>
+                            <h2 class="mb-0" id="todayOperations">-</h2>
+                        </div>
+                        <i class="bi bi-calendar-event fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1">Successful Operations</h5>
+                            <h2 class="mb-0" id="successfulOperations">-</h2>
+                        </div>
+                        <i class="bi bi-check2-circle fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1">Unsuccessful Operations</h5>
+                            <h2 class="mb-0" id="unsuccessfulOperations">-</h2>
+                        </div>
+                        <i class="bi bi-x-circle fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-filter me-2"></i>Activity Filters
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="filterOperation" class="form-label">Operation Type</label>
+                            <select class="form-select" id="filterOperation">
+                                <option value="">All Operations</option>
+                                <option value="scan">COMPARISON</option>
+                                <option value="update">UPDATE</option>
+                                <option value="integration">ADD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterUser" class="form-label">User</label>
+                            <select class="form-select" id="filterUser">
+                                <option value="">All Users</option>
+                                <!-- Users will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterDate" class="form-label">Date Range</label>
+                            <select class="form-select" id="filterDate">
+                                <option value="">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="yesterday">Yesterday</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterStatus" class="form-label">Status</label>
+                            <select class="form-select" id="filterStatus">
+                                <option value="">All Statuses</option>
+                                <option value="SUCCESSFUL">Successful</option>
+                                <option value="UNSUCCESSFUL">Unsuccessful</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-outline-secondary ms-2" id="btnClearFilter">
+                                <i class="bi bi-x-circle me-2"></i>Clear Filter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-ul me-2"></i>Activity Timeline
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Loading state -->
+                    <div id="activityLoading" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Loading recent activity...</p>
+                    </div>
+
+                    <!-- Activity list -->
+                    <div id="activityTimeline" style="display: none;">
+                        <!-- Activity items will be populated here -->
+                    </div>
+                    <div id="showMoreContainer" class="text-center mt-3" style="display: none;">
+                        <button class="btn btn-outline-primary" id="btnShowMore">Show More</button>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div id="activityEmpty" class="text-center py-5" style="display: none;">
+                        <i class="bi bi-inbox display-1 text-muted"></i>
+                        <h4 class="mt-3">No Activity Found</h4>
+                        <p class="text-muted">No recent operations match your current filters.</p>
+                        <button class="btn btn-primary" id="btnClearFilterEmpty">
+                            <i class="bi bi-funnel-fill me-2"></i>Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activity Detail Modal -->
+<div class="modal fade" id="activityDetailModal" tabindex="-1" aria-labelledby="activityDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="activityDetailModalLabel">Operation Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="activityDetailContent">
+                <!-- Details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDownloadLog">
+                    <i class="bi bi-download me-2"></i>Download Log
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentActivities = [];
+    let filteredActivities = [];
+    let showAllActivities = false;
+
+    // Initialize page
+    loadActivityData();
+    setupEventListeners();
+
+    function setupEventListeners() {
+        // Filter buttons
+        document.getElementById('btnClearFilter').addEventListener('click', clearFilters);
+        document.getElementById('btnClearFilterEmpty').addEventListener('click', clearFilters);
+        document.getElementById('btnShowMore').addEventListener('click', () => {
+            showAllActivities = true;
+            renderActivityTimeline();
+        });
+
+        // Filter change handlers
+        ['filterOperation', 'filterUser', 'filterDate', 'filterStatus'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                showAllActivities = false; // Reset on filter change
+                applyFilters();
+            });
+        });
+    }
+
+    async function loadActivityData() {
+        try {
+            showLoading(true);
+            
+            // Load activity data and stats in parallel
+            const [activityResponse, statsResponse] = await Promise.all([
+                fetch('/api/activity/recent'),
+                fetch('/api/activity/stats')
+            ]);
+            
+            const activityData = await activityResponse.json();
+            const statsData = await statsResponse.json();
+
+            if (activityData.success) {
+                currentActivities = activityData.activities || [];
+                applyFilters();
+            } else {
+                throw new Error(activityData.error || 'Failed to load activity data');
+            }
+            
+            if (statsData.success) {
+                updateStatistics(statsData.stats || {});
+            }
+            
+            // Update user filter with unique users from activities
+            const users = [...new Set(currentActivities.map(a => a.user))].filter(Boolean);
+            updateUserFilter(users);
+            
+        } catch (error) {
+            console.error('Error loading activity:', error);
+            showError('Failed to load activity data: ' + error.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    function updateStatistics(stats) {
+        document.getElementById('totalOperations').textContent = stats.total_operations || 0;
+        document.getElementById('todayOperations').textContent = stats.operations_today || 0;
+        document.getElementById('successfulOperations').textContent = stats.successful_operations || 0;
+        document.getElementById('unsuccessfulOperations').textContent = stats.unsuccessful_operations || 0;
+    }
+
+    function updateUserFilter(users) {
+        const filterUser = document.getElementById('filterUser');
+        const currentValue = filterUser.value;
+        
+        // Clear existing options except "All Users"
+        while (filterUser.children.length > 1) {
+            filterUser.removeChild(filterUser.lastChild);
+        }
+        
+        // Add user options
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user;
+            option.textContent = user;
+            filterUser.appendChild(option);
+        });
+        
+        // Restore selection
+        filterUser.value = currentValue;
+    }
+
+    function applyFilters() {
+        const filters = {
+            operation: document.getElementById('filterOperation').value,
+            user: document.getElementById('filterUser').value,
+            date: document.getElementById('filterDate').value,
+            status: document.getElementById('filterStatus').value
+        };
+
+        filteredActivities = currentActivities.filter(activity => {
+            // Operation filter
+            if (filters.operation && activity.type !== filters.operation) {
+                return false;
+            }
+
+            // User filter
+            if (filters.user && activity.user !== filters.user) {
+                return false;
+            }
+
+            // Date filter
+            if (filters.date) {
+                const activityDate = new Date(activity.timestamp);
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                switch (filters.date) {
+                    case 'today':
+                        if (activityDate < today) return false;
+                        break;
+                    case 'yesterday':
+                        const yesterday = new Date(today);
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        if (activityDate < yesterday || activityDate >= today) return false;
+                        break;
+                    case 'week':
+                        const weekStart = new Date(today);
+                        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+                        if (activityDate < weekStart) return false;
+                        break;
+                    case 'month':
+                        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                        if (activityDate < monthStart) return false;
+                        break;
+                }
+            }
+
+            // Status filter
+            if (filters.status && activity.status !== filters.status) {
+                return false;
+            }
+
+            return true;
+        });
+
+        renderActivityTimeline();
+    }
+
+    function clearFilters() {
+        document.getElementById('filterOperation').value = '';
+        document.getElementById('filterUser').value = '';
+        document.getElementById('filterDate').value = '';
+        document.getElementById('filterStatus').value = '';
+        showAllActivities = false; // Reset on clear
+        applyFilters();
+    }
+
+    function renderActivityTimeline() {
+        const timeline = document.getElementById('activityTimeline');
+        const empty = document.getElementById('activityEmpty');
+        const showMoreContainer = document.getElementById('showMoreContainer');
+
+        if (filteredActivities.length === 0) {
+            timeline.style.display = 'none';
+            showMoreContainer.style.display = 'none';
+            empty.style.display = 'block';
+            return;
+        }
+
+        empty.style.display = 'none';
+        timeline.style.display = 'block';
+
+        const now = new Date();
+        const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+
+        const recentActivities = filteredActivities.filter(a => new Date(a.timestamp) >= twentyFourHoursAgo);
+        const olderActivities = filteredActivities.filter(a => new Date(a.timestamp) < twentyFourHoursAgo);
+
+        let activitiesToRender = recentActivities;
+        if (showAllActivities) {
+            activitiesToRender = activitiesToRender.concat(olderActivities);
+        }
+
+        timeline.innerHTML = activitiesToRender.map(activity => {
+            const statusIcon = getStatusIcon(activity.status);
+            const operationIcon = getOperationIcon(activity.type);
+            const timeAgo = getTimeAgo(activity.timestamp);
+
+            return `
+                <div class="activity-item-compact d-flex align-items-center p-2 border-bottom">
+                    <div class="flex-shrink-0 me-3">
+                        <span class="fs-4 text-${getStatusColor(activity.status)}"><i class="bi bi-${statusIcon}"></i></span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="mb-0">
+                                <i class="bi bi-${operationIcon} me-2"></i>
+                                ${getOperationTitle(activity.type)}
+                            </h6>
+                            <small class="text-muted" title="${new Date(activity.timestamp).toLocaleString('tr-TR')}">
+                                ${new Date(activity.timestamp).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })} ${new Date(activity.timestamp).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} (${timeAgo})
+                            </small>
+                        </div>
+                        <p class="mb-0 small text-muted">${activity.user || 'Unknown User'}</p>
+                    </div>
+                    <div class="flex-shrink-0 ms-3">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="showActivityDetail('${activity.id}')">
+                            <i class="bi bi-file-text"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        if (olderActivities.length > 0 && !showAllActivities) {
+            showMoreContainer.style.display = 'block';
+        } else {
+            showMoreContainer.style.display = 'none';
+        }
+    }
+
+    function getStatusIcon(status) {
+        switch (status) {
+            case 'SUCCESSFUL': return 'check-circle-fill';
+            case 'UNSUCCESSFUL': return 'x-circle-fill';
+            default: return 'question-circle-fill';
+        }
+    }
+
+    function getStatusColor(status) {
+        switch (status) {
+            case 'SUCCESSFUL': return 'success';
+            case 'UNSUCCESSFUL': return 'danger';
+            default: return 'secondary';
+        }
+    }
+
+    function getOperationIcon(operation) {
+        switch (operation) {
+            case 'scan': return 'search';
+            case 'update': return 'arrow-clockwise';
+            case 'integration': return 'folder-plus';
+            case 'exact_update': return 'arrow-up-circle';
+            default: return 'gear';
+        }
+    }
+
+    function getFileCountLabel(operationType) {
+        switch (operationType) {
+            case 'scan': return 'matched';
+            case 'update': return 'updated';
+            case 'integration': return 'added';
+            default: return 'files';
+        }
+    }
+
+    function getOperationTitle(operation) {
+        switch (operation) {
+            case 'scan': return 'Comparison';
+            case 'update': return 'Update';
+            case 'integration': return 'Add';
+            default: return 'Operation';
+        }
+    }
+
+    function getTimeAgo(timestamp) {
+        const now = new Date();
+        const time = new Date(timestamp);
+        const diff = now - time;
+        
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+        
+        if (minutes < 1) return 'Just now';
+        if (minutes < 60) return `${minutes} min ago`;
+        if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        return `${days} day${days > 1 ? 's' : ''} ago`;
+    }
+
+    function showLoading(show) {
+        const loading = document.getElementById('activityLoading');
+        const timeline = document.getElementById('activityTimeline');
+        const empty = document.getElementById('activityEmpty');
+        
+        if (show) {
+            loading.style.display = 'block';
+            timeline.style.display = 'none';
+            empty.style.display = 'none';
+        } else {
+            loading.style.display = 'none';
+        }
+    }
+
+    function showError(message) {
+        // You can implement a proper error display here
+        console.error(message);
+        alert(message);
+    }
+
+    // Global function for activity detail modal
+    window.showActivityDetail = async function(activityId) {
+        const activity = currentActivities.find(a => a.id === activityId);
+        if (!activity) return;
+
+        const modal = new bootstrap.Modal(document.getElementById('activityDetailModal'));
+        const content = document.getElementById('activityDetailContent');
+        
+        // Show loading state
+        content.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading operation details...</p>
+            </div>
+        `;
+        
+        // Parse user information from the user field (format: "username (computername)")
+        const userMatch = activity.user.match(/^(.+?)\s*\((.+?)\)$/);
+        const username = userMatch ? userMatch[1] : activity.user;
+        const computerName = userMatch ? userMatch[2] : 'Unknown';
+        
+        try {
+            // Fetch detailed information from API
+            const response = await fetch(`/api/activity/detail/${activity.id}`);
+            const detailData = await response.json();
+            
+            let logPreview = 'No log content available';
+            if (detailData.success && detailData.detail.log_content) {
+                // Show first 20 lines of log content
+                const logLines = detailData.detail.log_content.split('\n');
+                logPreview = logLines.slice(0, 20).join('\n');
+                if (logLines.length > 20) {
+                    logPreview += '\n\n... (truncated, download full log for complete content)';
+                }
+            }
+            
+            content.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-gear me-2"></i>Operation Information</h6>
+                        <table class="table table-sm">
+                            <tr><td><strong>Type:</strong></td><td><i class="bi bi-${getOperationIcon(activity.type)} me-2"></i>${activity.operation}</td></tr>
+                            <tr><td><strong>Status:</strong></td><td><span class="badge bg-${getStatusColor(activity.status)}">${activity.status.toUpperCase()}</span></td></tr>
+                            <tr><td><strong>Time:</strong></td><td>${new Date(activity.timestamp).toLocaleString('tr-TR')}</td></tr>
+                            <tr><td><strong>Files Processed:</strong></td><td>${activity.file_count || 'N/A'}</td></tr>
+                            <tr><td><strong>Log Size:</strong></td><td>${activity.size || 'N/A'}</td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-person me-2"></i>Requester Information</h6>
+                        <table class="table table-sm">
+                            <tr><td><strong>Computer:</strong></td><td><i class="bi bi-pc-display me-2"></i>${computerName}</td></tr>
+                            <tr><td><strong>User:</strong></td><td><i class="bi bi-person-circle me-2"></i>${username}</td></tr>
+                            <tr><td><strong>Operation ID:</strong></td><td><code>${activity.id}</code></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6><i class="bi bi-terminal me-2"></i>Log Preview</h6>
+                        <div class="bg-dark text-light p-3 rounded" style="max-height: 300px; overflow-y: auto;">
+                            <pre class="mb-0 small text-light">${logPreview}</pre>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+            console.error('Error loading detail:', error);
+            content.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-gear me-2"></i>Operation Information</h6>
+                        <table class="table table-sm">
+                            <tr><td><strong>Type:</strong></td><td><i class="bi bi-${getOperationIcon(activity.type)} me-2"></i>${activity.operation}</td></tr>
+                            <tr><td><strong>Status:</strong></td><td><span class="badge bg-${getStatusColor(activity.status)}">${activity.status.toUpperCase()}</span></td></tr>
+                            <tr><td><strong>Time:</strong></td><td>${new Date(activity.timestamp).toLocaleString('tr-TR')}</td></tr>
+                            <tr><td><strong>Files Processed:</strong></td><td>${activity.file_count || 'N/A'}</td></tr>
+                            <tr><td><strong>Log Size:</strong></td><td>${activity.size || 'N/A'}</td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-person me-2"></i>Requester Information</h6>
+                        <table class="table table-sm">
+                            <tr><td><strong>Computer:</strong></td><td><i class="bi bi-pc-display me-2"></i>${computerName}</td></tr>
+                            <tr><td><strong>User:</strong></td><td><i class="bi bi-person-circle me-2"></i>${username}</td></tr>
+                            <tr><td><strong>Operation ID:</strong></td><td><code>${activity.id}</code></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Could not load detailed log information. You can still download the full log file.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Set up download log button
+        const downloadBtn = document.getElementById('btnDownloadLog');
+        downloadBtn.onclick = () => {
+            if (activity.id) {
+                window.open(`/api/activity/download/${activity.id}`, '_blank');
+            } else {
+                alert('No log file available for this operation');
+            }
+        };
+        
+        modal.show();
+    };
+});
+</script>
+{% endblock %}

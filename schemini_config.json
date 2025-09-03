@@ -1,0 +1,40 @@
+{
+  "schemini_klasoru": "\\\\172.25.104.3\\Schemini",
+  "schemini_by_ip": {},
+  "app_settings": {
+    "theme": "dark",
+    "language": "en",
+    "auto_backup": true,
+    "log_level": "info"
+  },
+  "reference_folder_by_user": {
+    "admin": "C:\\Users\\cafer.usta\\Desktop\\SCHEMINI_1808 - 6",
+    "cafer.usta": "C:\\Users\\cafer.usta\\Desktop\\SCHEMINI_1808 - 6"
+  },
+  "users": [
+    {
+      "username": "admin",
+      "password_hash": "scrypt:32768:8:1$YeQ0Zo8XEkGwDOZn$2ba3859ba045ad8d655d186271ed8630fdfbbf274682fac8b3312b62953c5d65623de5306ca8dfdf7e494f1b4814a980f6253e541152353cdc2c0af35f805df3",
+      "email": "admin@example.com",
+      "role": "admin"
+    },
+    {
+      "username": "marco.sansone",
+      "password_hash": "scrypt:32768:8:1$7SBPnDHBgebYGmHy$a75db6374153fc1eb1a2011f30e7e039f2d8e5825e2d3d143e31385e6d09c5fa1648be4b718691d64b31bc8b67500d914198bc7fa240346a4a9555ec058a0d6f",
+      "email": "marco.sansone@sdfgroup.com",
+      "role": "user"
+    },
+    {
+      "username": "cafer.usta",
+      "password_hash": "scrypt:32768:8:1$3OWSDL3XWxoQ2gEP$defeb57e5dd46fb975d93c7db95e6bd73a3b790204de22e6709072165479d91d2e9737484d05d3da49aecb8660d19bc3a4537b6798c4959d38889af84794ce53",
+      "email": "cafer.usta@sdfgroup.com",
+      "role": "admin"
+    },
+    {
+      "username": "kevser.haciosmanoglu",
+      "password_hash": "pbkdf2:sha256:600000$IxMpohW4aVxs40FB$9ac057c450bf8344575b3e0a3529e59c82522348f2c80f7ba6c13ee4735fd65d",
+      "email": "kevser.haciosmanoglu@sdfgroup.com",
+      "role": "user"
+    }
+  ]
+}

@@ -1,0 +1,1774 @@
+{% extends "base.html" %}
+
+{% block title %}File Integration - Schemini Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+    <div class="card bg-secondary page-full-card page-flex">
+            <div class="card-header">
+                <h2 class="card-title mb-0">
+                    <i class="bi bi-folder-plus me-2"></i>
+                    File Integration
+                </h2>
+                <p class="card-text mt-2 mb-0">Add files based on MIX codes and Excel imports</p>
+            </div>
+            <div class="card-body content-area">
+                <!-- File Integration Form -->
+                <form id="fileAddForm" class="mb-3">
+                    <!-- Steps 1 & 2: Reference and Files Selection -->
+                    <div class="row g-3 mb-3">
+                        <!-- Step 1: Reference Folder Selection -->
+                        <div class="col-12 col-md-6">
+                            <div class="card bg-dark border-primary step-card" id="step1Card">
+                                <div class="card-header py-2">
+                                    <div class="d-flex align-items-center">
+                                        <div class="step-number me-3">
+                                            <span class="step-num">1</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h5 class="card-title mb-0">
+                                                <i class="bi bi-folder me-2"></i>
+                                                Reference Folder
+                                            </h5>
+                                            <small class="text-muted">Destination folder</small>
+                                        </div>
+                                        <div>
+                                            <span id="step1Status" class="step-status"><i class="bi bi-clock me-1"></i>Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body py-2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="referenceFolder" value="{{ default_reference_folder }}" placeholder="Select a reference folder..." readonly>
+                                        <button class="btn btn-outline-light" type="button" id="changeReferenceFolder">Change</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Folder Selection -->
+                        <div class="col-12 col-md-6">
+                            <div class="card bg-dark border-secondary step-card disabled" id="step2Card">
+                                <div class="card-header py-2">
+                                    <div class="d-flex align-items-center">
+                                        <div class="step-number me-3">
+                                            <span class="step-num">2</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h5 class="card-title mb-0">
+                                                <i class="bi bi-folder2-open me-2"></i>
+                                                Folder to Add
+                                            </h5>
+                                            <small class="text-muted">Files to integrate</small>
+                                        </div>
+                                        <div>
+                                            <span id="step2Status" class="step-status"><i class="bi bi-pause-circle me-1"></i>Waiting</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body py-2">
+                                    <input type="file" id="addFiles" webkitdirectory directory multiple style="display:none;">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-outline-light" id="btnPickAddFiles" disabled>
+                                            <i class="bi bi-folder2-open me-1"></i>
+                                            Choose Folder
+                                        </button>
+                                        <input type="text" class="form-control" id="addFilesDisplay" placeholder="Complete Step 1 first" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Sections Selection -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <div class="card bg-dark border-secondary step-card disabled" id="step3Card">
+                                <div class="card-header py-2">
+                                    <div class="d-flex align-items-center">
+                                        <div class="step-number me-3">
+                                            <span class="step-num">3</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="card-title mb-0">
+                                                <i class="bi bi-diagram-3 me-2"></i>
+                                                Select Sections (<span id="sectionsCount">0</span> selected)
+                                            </h5>
+                                            <small class="text-muted">Choose which sections to process</small>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <span id="step3Status" class="step-status"><i class="bi bi-pause-circle me-1"></i>Waiting</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body pane-body py-2">
+                                    <div id="sectionsList" class="sections-wrap"></div>
+                                    <div id="sectionsPlaceholder" class="text-center text-muted py-3">
+                                        <i class="bi bi-arrow-up me-2"></i>
+                                        Complete previous steps to select sections
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Mix Selection -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <div class="card bg-dark border-secondary step-card disabled" id="step4Card">
+                                <div class="card-header py-2" id="step4Header" role="button" style="cursor: pointer;">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center flex-grow-1">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">4</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="bi bi-list-check me-2"></i>
+                                                    Select MIX Codes (<span id="selectedMixCount">0</span> selected)
+                                                </h5>
+                                                <small class="text-muted">Choose MIX codes for integration</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center" style="min-width: 200px; justify-content: flex-end;">
+                                            <button type="button" class="btn btn-outline-info me-2" id="importExcel" title="Import from Excel" disabled style="min-width: 44px;">
+                                                <img src="{{ url_for('static', filename='img/excel-import.svg') }}" alt="Excel" width="30" height="30">
+                                            </button>
+                                            <span id="step4Status" class="step-status me-2" style="min-width: 90px; text-align: center;"><i class="bi bi-pause-circle me-1"></i>Waiting</span>
+                                            <i id="step4Chevron" class="bi bi-chevron-down"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="step4Body" class="collapse">
+                                    <div class="card-body pane-body py-2">
+                                        <div id="mixCodesList" class="sections-wrap custom-scrollbar">
+                                            <!-- MIX codes will be populated here -->
+                                        </div>
+                                        <div class="d-flex justify-content-end mt-2">
+                                            <button type="button" class="btn btn-outline-light btn-sm me-2" id="selectAllMixCodes" disabled>Select All</button>
+                                            <button type="button" class="btn btn-outline-light btn-sm" id="deselectAllMixCodes" disabled>Clear All</button>
+                                        </div>
+                                        <div id="mixPlaceholder" class="text-center text-muted py-3">
+                                            <i class="bi bi-arrow-up me-2"></i>
+                                            Complete previous steps to select MIX codes
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Step 5: Operation Details Section -->
+                <div id="operationDetailsSection" class="mb-3" style="display: none;">
+                    <div class="card bg-dark border-primary">
+                        <div class="card-header py-2">
+                            <div class="d-flex align-items-center">
+                                <div class="step-number me-3">
+                                    <span class="step-num">5</span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-0">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        <span id="operationDetailsTitle">Operation Details</span>
+                                    </h5>
+                                    <small class="text-muted">Review details and confirm operation</small>
+                                </div>
+                                <div>
+                                    <span class="step-status completed"><i class="bi bi-check-circle-fill me-1"></i>Ready</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="operationDetailsContent">
+                                <!-- Pre-operation content -->
+                                <div id="preOperationDetails">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <i class="bi bi-folder text-primary me-2"></i>
+                                                <strong>Reference Folder:</strong>
+                                                <div class="ms-4 text-muted" id="detailReferenceFolder">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <i class="bi bi-folder2-open text-info me-2"></i>
+                                                <strong>Folder to Add:</strong>
+                                                <div class="ms-4 text-muted" id="detailFileCount">0 files</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <i class="bi bi-diagram-3 text-success me-2"></i>
+                                                <strong>Selected Sections:</strong>
+                                                <div class="ms-4 text-muted" id="detailSections">None selected</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <i class="bi bi-list-check text-info me-2"></i>
+                                                <strong>MIX Codes:</strong>
+                                                <div class="ms-4 text-muted" id="detailMixCodes">None selected</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Confirmation and Action Buttons -->
+                                    <div class="operation-actions">
+                                        <div class="confirmation-text">
+                                            <i class="bi bi-question-circle me-2"></i>
+                                            Do you <span class="highlight">confirm</span> the operation details above?
+                                        </div>
+                                        <div class="d-flex justify-content-center gap-3">
+                                            <button type="submit" class="btn btn-success btn-lg px-4" id="confirmStartBtn">
+                                                <i class="bi bi-check-circle me-2"></i>
+                                                Confirm & Start
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-lg px-4" id="cancelOperationBtn">
+                                                <i class="bi bi-x-circle me-2"></i>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Post-operation content -->
+                                <div id="postOperationDetails" style="display: none;">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="alert alert-info border-0" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-info-circle-fill me-2 fs-5" style="color: #0dcaf0;"></i>
+                                                    <div>
+                                                        <strong>Integration Summary:</strong>
+                                                        <div class="mt-1 small">
+                                                            The file integration operation has been completed. View the detailed results below.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="operationResultsSummary" class="summary-bar"></div>
+                                        </div>
+                                        <div class="col-md-4 text-end">
+                                            <button type="button" class="btn btn-outline-primary btn-lg" id="downloadReportBtn">
+                                                <i class="bi bi-download me-2"></i>
+                                                Download Report
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div id="progressSection" class="mb-4" style="display: none;">
+                    <div class="progress-container">
+                        <div class="progress" style="height: 48px; border-radius: 15px; background-color: rgba(255,255,255,0.2); border: 4px solid rgba(23, 162, 184, 0.6); box-shadow: inset 0 3px 6px rgba(0,0,0,0.15), 0 0 12px rgba(23, 162, 184, 0.3); position: relative;">
+                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%; border-radius: 11px; background: linear-gradient(45deg, #28a745, #20c997, #17a2b8); box-shadow: 0 3px 12px rgba(40, 167, 69, 0.4); position: relative;">
+                            </div>
+                            <!-- Centered Percentage Text -->
+                            <div class="progress-text-center">
+                                <span id="progressText" class="fw-bold text-white" style="font-size: 1.5rem; text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; letter-spacing: 1px;">0%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <small id="progressStatus" class="text-truncate fw-semibold" style="color: #17a2b8; font-size: 1rem;">Ready...</small>
+                            <small id="progressCount" class="fw-bold px-3 py-2 rounded" style="color: #ffffff; background-color: #28a745; font-size: 1rem; border-radius: 8px; box-shadow: 0 3px 6px rgba(40, 167, 69, 0.4);">0/0</small>
+                        </div>
+                        
+                        <!-- Centered Cancel Button -->
+                        <div class="text-center mt-3">
+                            <button type="button" class="btn btn-danger btn-lg px-4" id="cancelFileAdd" title="Cancel Operation" style="border-radius: 12px; font-weight: 600; box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);">
+                                <i class="bi bi-x-circle-fill me-2"></i>
+                                Cancel Operation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section (Compact Summary Bar) -->
+                <div id="resultsSection" style="display: none;">
+                    <div class="card bg-dark">
+                        <div class="card-body py-3">
+                            <div id="fileAddResults" class="summary-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Excel Import Modal kept inside content block but outside cards to avoid stacking issues -->
+            <div class="modal fade" id="excelImportModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="bi bi-file-earmark-excel me-2"></i>
+                                Excel Import
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="excelFile" class="form-label">Select Excel File</label>
+                                <input type="file" class="form-control" id="excelFile" accept=".xlsx,.xls">
+                                <small class="text-muted mt-1 d-block">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Format: Part codes (column 1), Folder names (column 2), MIX codes (column 3)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-info" id="processExcel">
+                                <i class="bi bi-upload me-1"></i>
+                                Import
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+
+{% block extra_css %}
+<style>
+.detail-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 3px solid rgba(23, 162, 184, 0.8);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.detail-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-left-color: #17a2b8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detail-item strong {
+    color: #212529;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.detail-item .text-muted {
+    color: #495057 !important;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    word-break: break-all;
+    font-weight: 500;
+}
+
+#operationDetailsSection .card {
+    border: 2px solid rgba(23, 162, 184, 0.5);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: rgba(248, 249, 250, 0.95);
+}
+
+#operationDetailsSection .card-header {
+    background: rgba(23, 162, 184, 0.15);
+    border-bottom: 1px solid rgba(23, 162, 184, 0.4);
+}
+
+#operationDetailsSection .card-title {
+    color: #212529;
+    font-weight: 700;
+}
+
+.operation-actions {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-text {
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.confirmation-text .highlight {
+    color: #17a2b8;
+    font-weight: 700;
+}
+
+#downloadReportBtn {
+    border: 1px solid #17a2b8;
+    color: #17a2b8;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+#downloadReportBtn:hover {
+    background-color: #17a2b8;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Step Cards Styling */
+.step-card {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.step-card.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.step-card.disabled .card-body {
+    background: rgba(108, 117, 125, 0.1);
+}
+
+.step-card.active {
+    border-color: #17a2b8 !important;
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+.step-card.completed {
+    border-color: #28a745 !important;
+}
+
+.step-card.completed .step-number .badge {
+    background-color: #28a745 !important;
+}
+
+.step-number {
+    min-width: 50px;
+}
+
+/* Updated step number styling */
+.step-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #17a2b8;
+    line-height: 1;
+}
+
+.step-card.completed .step-num {
+    color: #28a745;
+}
+
+.step-card.active .step-num {
+    color: #ffc107;
+}
+
+.step-card.disabled .step-num {
+    color: #6c757d;
+}
+
+.step-status {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.step-status.completed {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.step-status.active {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+#sectionsPlaceholder, #mixPlaceholder {
+    display: block;
+}
+
+.step-card:not(.disabled) #sectionsPlaceholder,
+.step-card:not(.disabled) #mixPlaceholder {
+    display: none !important;
+}
+
+/* Enhanced Folder Selection Button Styling */
+#btnPickAddFiles {
+    border-radius: 10px 0 0 10px;
+    transition: all 0.3s ease;
+}
+
+#btnPickAddFiles:hover:not(:disabled) {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+}
+
+/* Change Reference Folder Button consistent styling */
+#changeReferenceFolder {
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+
+#changeReferenceFolder:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+}
+
+/* Enhanced Progress Bar Styling */
+.progress-container {
+    position: relative;
+}
+
+.progress {
+    position: relative;
+    overflow: visible;
+}
+
+.progress-text-center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#progressBar {
+    transition: width 0.3s ease;
+}
+
+#cancelFileAdd {
+    transition: all 0.3s ease;
+}
+
+#cancelFileAdd:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4) !important;
+}
+
+.progress-container {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+}
+.btn-cancel {
+    background: none !important;
+    border: none !important;
+    color: #dc3545 !important; /* Bootstrap danger color */
+    font-size: 1.5rem;
+    padding: 0;
+    line-height: 1;
+    box-shadow: none !important;
+}
+.btn-cancel:hover {
+    color: #ff0000 !important;
+}
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.mix-code-item {
+    margin-bottom: 0.5rem;
+}
+
+.mix-code-checkbox {
+    cursor: pointer;
+}
+
+.bg-black {
+    background-color: #000 !important;
+}
+
+/* Excel Button Styling with shadow-only hover effect */
+#importExcel {
+    transition: box-shadow 0.3s ease;
+}
+
+#importExcel:hover:not(:disabled) {
+    box-shadow: 0 4px 8px rgba(13, 202, 240, 0.3);
+}
+
+/* Enhanced Summary Chips for Operation Results */
+.summary-chip {
+    position: relative;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.summary-chip.clickable {
+    cursor: pointer;
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-chip.clickable:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.summary-chip.clickable:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Professional Result Circles */
+.result-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: none;
+}
+
+.result-circle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.result-content {
+    text-align: center;
+    color: white;
+}
+
+.result-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.result-label {
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    opacity: 0.9;
+}
+
+/* MIX codes: responsive grid */
+#mixCodesList {
+  display: grid;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+  gap: 6px;
+}
+
+/* Responsive MIX codes grid for mobile */
+@media (max-width: 576px) {
+    #mixCodesList {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    #mixCodesList {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 5px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .result-circle {
+        width: 100px;
+        height: 100px;
+    }
+    .result-number {
+        font-size: 1.5rem;
+    }
+    .result-label {
+        font-size: 0.8rem;
+    }
+    
+    .step-card .card-header .d-flex {
+        flex-wrap: wrap;
+    }
+    
+    .step-card .card-title {
+        font-size: 1rem;
+    }
+    
+    .step-card .text-muted {
+        font-size: 0.8rem;
+    }
+    
+    .step-status {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .step-num {
+        font-size: 1.5rem;
+    }
+    
+    .detail-item {
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+    }
+    
+    .operation-actions {
+        padding: 1rem;
+    }
+    
+    .operation-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    #downloadReportBtn {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .progress-container {
+        margin: 0 -0.5rem;
+    }
+    
+    #progressText {
+        font-size: 1.1rem !important;
+    }
+    
+    .summary-chip {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        margin: 0.2rem;
+        display: inline-block;
+        white-space: nowrap;
+    }
+    
+    #operationResultsSummary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        justify-content: flex-start;
+    }
+    
+    #operationResultsSummary .summary-chip {
+        flex: 0 1 auto;
+        min-width: fit-content;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let isProcessing = false;
+let progressAnimationInterval = null;
+let currentVisualProgress = 0;
+let targetProgress = 0;
+let availableMixCodes = {};
+let selectedMixCodes = [];
+let selectedFiles = [];
+let excelImportActive = false;
+let excelMappings = {}; // part_code -> [mix_codes]
+let excelImporting = false;
+let availableSections = [];
+let selectedSections = [];
+let step4Collapse = null;
+
+// Global function for file removal (not needed anymore but keeping for compatibility)
+window.removeFile = function(index) {
+    selectedFiles.splice(index, 1);
+    checkFormValidity();
+};
+
+function checkFormValidity() {
+    const referenceFolderInput = document.getElementById('referenceFolder');
+    const confirmStartBtn = document.getElementById('confirmStartBtn');
+    const hasFolder = referenceFolderInput.value.trim();
+    const hasFiles = selectedFiles.length > 0;
+    const hasMixCodes = selectedMixCodes.length > 0;
+    const hasSections = selectedSections.length > 0;
+    const hasExcel = excelImportActive && Object.keys(excelMappings || {}).length > 0;
+    // Valid if (Excel mappings exist OR manual mix selected) and other prerequisites
+    const valid = !!hasFolder && hasFiles && hasSections && (hasExcel || hasMixCodes);
+    
+    // Update step states
+    updateStepStates(hasFolder, hasFiles, hasSections, (hasExcel || hasMixCodes), valid);
+    
+    // Enable/disable confirm button
+    if (confirmStartBtn) {
+        confirmStartBtn.disabled = !valid || isProcessing;
+    }
+    
+    // Show/hide operation details based on form validity
+    const operationDetailsSection = document.getElementById('operationDetailsSection');
+    if (valid && !isProcessing) {
+        updateOperationDetails();
+        const wasHidden = operationDetailsSection.style.display === 'none';
+        operationDetailsSection.style.display = 'block';
+        
+        // Auto-scroll to Step 5 when it becomes visible
+        if (wasHidden) {
+            setTimeout(() => {
+                operationDetailsSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
+        }
+    } else {
+        operationDetailsSection.style.display = 'none';
+    }
+}
+
+function updateStepStates(hasMain, hasFiles, hasSections, hasMixCodes, isValid) {
+    // Step 1: Reference Folder
+    const step1Card = document.getElementById('step1Card');
+    const step1Status = document.getElementById('step1Status');
+    const step2Card = document.getElementById('step2Card');
+    const step2Status = document.getElementById('step2Status');
+    const btnPickAddFiles = document.getElementById('btnPickAddFiles');
+    const addFilesDisplay = document.getElementById('addFilesDisplay');
+    const step3Card = document.getElementById('step3Card');
+    const step3Status = document.getElementById('step3Status');
+    const step4Card = document.getElementById('step4Card');
+    const step4Status = document.getElementById('step4Status');
+    const importExcel = document.getElementById('importExcel');
+    const selectAllMixCodes = document.getElementById('selectAllMixCodes');
+    const deselectAllMixCodes = document.getElementById('deselectAllMixCodes');
+    
+    if (hasMain) {
+        step1Card.classList.remove('disabled');
+        step1Card.classList.add('completed');
+        step1Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step1Status.classList.add('completed');
+        
+        // Enable Step 2
+        step2Card.classList.remove('disabled');
+        step2Card.classList.add('active');
+        step2Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select folder';
+        step2Status.classList.add('active');
+        if (btnPickAddFiles) btnPickAddFiles.disabled = false;
+        if (addFilesDisplay) addFilesDisplay.placeholder = 'Click "Choose Folder" to select';
+    } else {
+        step1Card.classList.remove('completed', 'active');
+        step1Card.classList.add('disabled');
+        step1Status.innerHTML = '<i class="bi bi-clock me-1"></i>Pending';
+        step1Status.classList.remove('completed', 'active');
+        
+        // Disable subsequent steps
+        step2Card.classList.add('disabled');
+        step2Card.classList.remove('active', 'completed');
+        step2Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+        step2Status.classList.remove('completed', 'active');
+        if (btnPickAddFiles) btnPickAddFiles.disabled = true;
+        if (addFilesDisplay) addFilesDisplay.placeholder = 'Complete Step 1 first';
+    }
+    
+    if (hasFiles && hasMain) {
+        step2Card.classList.remove('active');
+        step2Card.classList.add('completed');
+        step2Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step2Status.classList.remove('active');
+        step2Status.classList.add('completed');
+        
+        // Enable Step 3
+        step3Card.classList.remove('disabled');
+        step3Card.classList.add('active');
+        step3Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select sections';
+        step3Status.classList.add('active');
+    } else if (hasMain) {
+        step3Card.classList.add('disabled');
+        step3Card.classList.remove('active', 'completed');
+        step3Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+        step3Status.classList.remove('completed', 'active');
+    }
+    
+    if (hasSections && hasFiles && hasMain) {
+        step3Card.classList.remove('active');
+        step3Card.classList.add('completed');
+        step3Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step3Status.classList.remove('active');
+        step3Status.classList.add('completed');
+        
+        // Enable Step 4
+        step4Card.classList.remove('disabled');
+        step4Card.classList.add('active');
+        step4Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select MIX codes';
+        step4Status.classList.add('active');
+        if (importExcel) importExcel.disabled = false;
+        if (selectAllMixCodes) selectAllMixCodes.disabled = false;
+        if (deselectAllMixCodes) deselectAllMixCodes.disabled = false;
+        
+        // Open Step 4 collapsible when sections are selected
+        if (step4Collapse && !document.getElementById('step4Body').classList.contains('show')) {
+            step4Collapse.show();
+        }
+    } else if (hasFiles && hasMain) {
+        step4Card.classList.add('disabled');
+        step4Card.classList.remove('active', 'completed');
+        step4Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+        step4Status.classList.remove('completed', 'active');
+        if (importExcel) importExcel.disabled = true;
+        if (selectAllMixCodes) selectAllMixCodes.disabled = true;
+        if (deselectAllMixCodes) deselectAllMixCodes.disabled = true;
+        
+        // Close Step 4 collapsible when sections are unselected
+        if (step4Collapse && document.getElementById('step4Body').classList.contains('show')) {
+            step4Collapse.hide();
+        }
+    }
+    
+    if (hasMixCodes && hasSections && hasFiles && hasMain) {
+        step4Card.classList.remove('active');
+        step4Card.classList.add('completed');
+        step4Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+        step4Status.classList.remove('active');
+        step4Status.classList.add('completed');
+    }
+}
+
+function updateOperationDetails() {
+    // Update pre-operation details
+    document.getElementById('detailReferenceFolder').textContent = 
+        document.getElementById('referenceFolder').value || 'Not selected';
+    
+    // Get folder name and file count
+    if (selectedFiles.length > 0) {
+        const folderName = selectedFiles[0].webkitRelativePath.split('/')[0];
+        document.getElementById('detailFileCount').textContent = `${folderName} (${selectedFiles.length} files)`;
+    } else {
+        document.getElementById('detailFileCount').textContent = '0 files';
+    }
+    
+    // Update selected sections
+    if (selectedSections.length > 0) {
+        const sectionNames = selectedSections.map(section => {
+            return typeof section === 'object' ? section.name : section;
+        });
+        document.getElementById('detailSections').textContent = sectionNames.join(', ');
+    } else {
+        document.getElementById('detailSections').textContent = 'None selected';
+    }
+    
+    // Update selected MIX codes
+    if (selectedMixCodes.length > 0) {
+        document.getElementById('detailMixCodes').textContent = selectedMixCodes.slice(0, 10).join(', ') + 
+            (selectedMixCodes.length > 10 ? ` ... (${selectedMixCodes.length} total)` : '');
+    } else if (excelImportActive && Object.keys(excelMappings || {}).length > 0) {
+        document.getElementById('detailMixCodes').textContent = 'Excel imported mappings';
+    } else {
+        document.getElementById('detailMixCodes').textContent = 'None selected';
+    }
+}
+let selectedFilesCollapse = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const referenceFolderInput = document.getElementById('referenceFolder');
+    const addFilesInput = document.getElementById('addFiles');
+    const btnPickAddFiles = document.getElementById('btnPickAddFiles');
+    const addFilesDisplay = document.getElementById('addFilesDisplay');
+    const cancelFileAddBtn = document.getElementById('cancelFileAdd');
+
+    // Initialize Step 4 collapsible
+    const step4Body = document.getElementById('step4Body');
+    const step4Header = document.getElementById('step4Header');
+    const step4Chevron = document.getElementById('step4Chevron');
+    
+    if (step4Body) {
+        step4Collapse = new bootstrap.Collapse(step4Body, { toggle: false });
+        
+        // Handle manual header click (only when step is active)
+        if (step4Header) {
+            step4Header.addEventListener('click', (e) => {
+                // Ignore clicks on buttons
+                if (e.target.closest('button')) return;
+                
+                const step4Card = document.getElementById('step4Card');
+                if (step4Card.classList.contains('disabled')) return;
+                
+                const isShown = step4Body.classList.contains('show');
+                if (isShown) {
+                    step4Collapse.hide();
+                } else {
+                    step4Collapse.show();
+                }
+            });
+        }
+        
+        // Handle chevron animation
+        step4Body.addEventListener('shown.bs.collapse', () => {
+            if (step4Chevron) {
+                step4Chevron.classList.remove('bi-chevron-down');
+                step4Chevron.classList.add('bi-chevron-up');
+            }
+        });
+        
+        step4Body.addEventListener('hidden.bs.collapse', () => {
+            if (step4Chevron) {
+                step4Chevron.classList.remove('bi-chevron-up');
+                step4Chevron.classList.add('bi-chevron-down');
+            }
+        });
+    }
+
+    // Initialize and load available MIX codes
+    async function loadMixCodes() {
+        try {
+            const response = await ScheminiManager.apiCall('/api/file-add/mix-codes', 'GET');
+            if (response.success) {
+                availableMixCodes = response.data;
+                displayMixCodes();
+            }
+        } catch (error) {
+            console.error('Failed to load MIX codes:', error.message);
+        }
+    }
+
+    // Load sections under Schemini base (or current mainFolder)
+    async function loadSections() {
+        try {
+            const base = document.getElementById('referenceFolder').value || '';
+            const url = base ? `/api/file-add/sections?base=${encodeURIComponent(base)}` : '/api/file-add/sections';
+            const resp = await ScheminiManager.apiCall(url, 'GET');
+            if (resp.success) {
+                availableSections = resp.data || [];
+                displaySections();
+            }
+        } catch (e) {
+            console.error('Could not load sections:', e.message);
+        }
+    }
+
+    // Folder selection button click
+    btnPickAddFiles.addEventListener('click', function() {
+        addFilesInput.click();
+    });
+
+    // File selection (folder)
+    addFilesInput.addEventListener('change', function() {
+        selectedFiles = Array.from(this.files || []);
+        
+        // Update display text
+        if (addFilesDisplay && selectedFiles.length > 0) {
+            // Get folder name from first file
+            const folderName = selectedFiles[0].webkitRelativePath.split('/')[0];
+            addFilesDisplay.value = `${folderName} (${selectedFiles.length} files)`;
+        } else if (addFilesDisplay) {
+            addFilesDisplay.value = '';
+        }
+        
+        checkFormValidity();
+    });
+
+    // Folder selection removed per new design (individual file selection only)
+
+    function displayMixCodes() {
+        const mixCodesList = document.getElementById('mixCodesList');
+        mixCodesList.innerHTML = '';
+
+        Object.entries(availableMixCodes).forEach(([code, description]) => {
+            const id = `mix_${code}`;
+            const chip = document.createElement('label');
+            chip.className = 'mix-chip';
+            chip.setAttribute('for', id);
+            if (description) chip.title = description;
+            chip.innerHTML = `
+                <input class="mix-code-checkbox" type="checkbox" value="${code}" id="${id}">
+                <i class="bi bi-tag"></i>
+                <span class="mix-code">${code}</span>
+            `;
+            mixCodesList.appendChild(chip);
+        });
+
+        // Add event listeners
+        document.querySelectorAll('.mix-code-checkbox').forEach(checkbox => {
+            const parent = checkbox.closest('.mix-chip');
+            const syncActive = () => { if (checkbox.checked) parent.classList.add('active'); else parent.classList.remove('active'); };
+            parent.addEventListener('click', (e) => {
+                if (e.target.tagName.toLowerCase() !== 'input') {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                    e.preventDefault();
+                }
+            });
+            checkbox.addEventListener('change', () => { syncActive(); updateSelectedMixCodes(); });
+            syncActive();
+        });
+
+        updateSelectedMixCodes();
+    }
+
+    function updateSelectedMixCodes() {
+        selectedMixCodes = Array.from(document.querySelectorAll('.mix-code-checkbox:checked'))
+            .map(cb => cb.value);
+        
+        document.getElementById('selectedMixCount').textContent = selectedMixCodes.length;
+        checkFormValidity();
+    }
+
+    // Enable/disable manual mix selection UI
+    function setManualMixEnabled(enabled) {
+        document.querySelectorAll('.mix-code-checkbox').forEach(cb => {
+            cb.disabled = !enabled;
+            const parent = cb.closest('.mix-chip');
+            if (parent) parent.style.opacity = enabled ? '1' : '0.6';
+        });
+        const btnAll = document.getElementById('selectAllMixCodes');
+        const btnNone = document.getElementById('deselectAllMixCodes');
+        if (btnAll) btnAll.disabled = !enabled;
+        if (btnNone) btnNone.disabled = !enabled;
+    }
+
+    // Select/Deselect all MIX codes
+    document.getElementById('selectAllMixCodes').addEventListener('click', function() {
+        document.querySelectorAll('.mix-code-checkbox').forEach(cb => {
+            cb.checked = true;
+            const parent = cb.closest('.mix-chip');
+            if (parent) parent.classList.add('active');
+        });
+        updateSelectedMixCodes();
+    });
+
+    document.getElementById('deselectAllMixCodes').addEventListener('click', function() {
+        document.querySelectorAll('.mix-code-checkbox').forEach(cb => {
+            cb.checked = false;
+            const parent = cb.closest('.mix-chip');
+            if (parent) parent.classList.remove('active');
+        });
+        updateSelectedMixCodes();
+    });
+
+    // MIX code filtering removed per new design
+
+    // Excel Import
+    document.getElementById('importExcel').addEventListener('click', function() {
+        const modal = new bootstrap.Modal(document.getElementById('excelImportModal'));
+        modal.show();
+    });
+
+    document.getElementById('processExcel').addEventListener('click', async function() {
+        const fileInput = document.getElementById('excelFile');
+        if (!fileInput.files.length) {
+            ScheminiManager.showNotification('Please select an Excel file', 'warning');
+            return;
+        }
+        try {
+            // Show importing state
+            excelImporting = true;
+            const importBtn = document.getElementById('processExcel');
+            const cancelBtn = document.querySelector('#excelImportModal .btn.btn-secondary');
+            const prevHtml = importBtn.innerHTML;
+            importBtn.disabled = true;
+            if (cancelBtn) cancelBtn.disabled = true;
+            importBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Importing...';
+
+            const form = new FormData();
+            form.append('excel_file', fileInput.files[0]);
+            const resp = await fetch('/api/file-add/excel-parse', { method: 'POST', body: form });
+            const json = await resp.json();
+            if (!json.success) {
+                ScheminiManager.showNotification(json.error || 'Excel parse failed', 'error');
+                return;
+            }
+            const data = json.data || {};
+            excelMappings = data.mappings || {};
+            const mixes = data.selected_mix_codes || [];
+            // Auto-select returned mixes
+            document.querySelectorAll('.mix-code-checkbox').forEach(cb => {
+                cb.checked = mixes.includes(cb.value);
+                const parent = cb.closest('.mix-chip');
+                if (parent) parent.classList.toggle('active', cb.checked);
+                // Fire change to sync any listeners
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            updateSelectedMixCodes();
+            excelImportActive = true;
+            ScheminiManager.showNotification('Excel imported. Mix codes auto-selected.', 'success');
+            // Disable manual mix selection after Excel import
+            setManualMixEnabled(false);
+            const modal = bootstrap.Modal.getInstance(document.getElementById('excelImportModal'));
+            modal.hide();
+            // Re-evaluate form validity explicitly
+            checkFormValidity();
+            // Also explicitly enable Start if all prerequisites met
+            try {
+                const hasFolder = document.getElementById('referenceFolder').value.trim();
+                const hasFiles = selectedFiles.length > 0;
+                const hasSections = selectedSections.length > 0;
+                const hasExcel = excelImportActive && Object.keys(excelMappings || {}).length > 0;
+                const valid = !!hasFolder && hasFiles && hasSections && hasExcel;
+                const startFileAddBtn = document.getElementById('startFileAdd');
+                if (valid && startFileAddBtn) startFileAddBtn.disabled = false;
+            } catch {}
+        } catch (e) {
+            ScheminiManager.showNotification('Excel parse failed', 'error');
+        } finally {
+            // Restore importing state
+            const importBtn = document.getElementById('processExcel');
+            const cancelBtn = document.querySelector('#excelImportModal .btn.btn-secondary');
+            if (importBtn) {
+                importBtn.disabled = false;
+                importBtn.innerHTML = '<i class="bi bi-upload me-1"></i> Import';
+            }
+            if (cancelBtn) cancelBtn.disabled = false;
+            excelImporting = false;
+        }
+    });
+
+    // Initialize with Schemini folder if available
+    async function initializeFolders() {
+        // Prioritize the value rendered from the server
+        if (referenceFolderInput.value) {
+            loadSections();
+            checkFormValidity();
+            return;
+        }
+
+        // Fallback to old IP-based method if server-rendered value is not present
+        try {
+            const response = await fetch('/api/user-folder');
+            const userFolder = await response.json();
+            
+            if (userFolder.success && userFolder.folder) {
+                referenceFolderInput.value = userFolder.folder;
+                loadSections();
+                checkFormValidity();
+            } else {
+                referenceFolderInput.placeholder = "Reference folder not configured in settings";
+            }
+        } catch (error) {
+            console.log('Could not load user folder:', error);
+            referenceFolderInput.placeholder = "Failed to load reference folder";
+        }
+    }
+
+    // Change reference folder
+    document.getElementById('changeReferenceFolder').addEventListener('click', async function() {
+        const newPath = await ScheminiManager.selectFolder('referenceFolder', 'Select New Reference Folder');
+        if (newPath) {
+            referenceFolderInput.value = newPath;
+            await ScheminiManager.updateUserReferenceFolder(newPath);
+            await loadSections(); // Reload sections for the new folder
+            checkFormValidity();
+        }
+    });
+
+    // Start file addition with new step-based UI
+    const confirmStartBtn = document.getElementById('confirmStartBtn');
+    confirmStartBtn.addEventListener('click', async function() {
+        if (isProcessing) return;
+
+        if (!referenceFolderInput.value.trim()) {
+            ScheminiManager.showNotification('Please select reference folder', 'warning');
+            return;
+        }
+
+        if (selectedFiles.length === 0) {
+            ScheminiManager.showNotification('Please select files to add', 'warning');
+            return;
+        }
+
+        if (selectedMixCodes.length === 0 && (!excelImportActive || !Object.keys(excelMappings || {}).length)) {
+            ScheminiManager.showNotification('Please select at least one MIX code or import Excel', 'warning');
+            return;
+        }
+
+        // Reset progress bar and animation state
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        if (progressBar) progressBar.style.width = '0%';
+        if (progressText) progressText.textContent = '0%';
+        currentVisualProgress = 0;
+        targetProgress = 0;
+        if (progressAnimationInterval) clearInterval(progressAnimationInterval);
+
+        isProcessing = true;
+        document.getElementById('operationDetailsSection').style.display = 'none';
+        document.getElementById('progressSection').style.display = 'block';
+        
+        try {
+            // Build FormData for upload
+            const formData = new FormData();
+            formData.append('ana_klasor', referenceFolderInput.value.trim());
+            formData.append('selected_mix_codes', JSON.stringify(selectedMixCodes));
+            selectedFiles.forEach(f => formData.append('files', f, f.name));
+            formData.append('selected_sections', JSON.stringify(selectedSections.map(s => (s.path || s))));
+            if (excelImportActive && excelMappings && Object.keys(excelMappings).length) {
+                formData.append('excel_mappings', JSON.stringify(excelMappings));
+            }
+
+            const resp = await fetch('/api/file-add/upload-and-place', {
+                method: 'POST',
+                body: formData
+            });
+            const json = await resp.json();
+            if (!json.success) {
+                ScheminiManager.showNotification('File addition failed', 'error');
+                stopProcessing();
+                return;
+            }
+            // Start polling progress for live updates
+            await pollProgressUntilComplete();
+        } catch (error) {
+            ScheminiManager.showNotification('File addition failed', 'error');
+            stopProcessing();
+        }
+    });
+
+    // Cancel operation
+    const cancelOperationBtn = document.getElementById('cancelOperationBtn');
+    cancelOperationBtn.addEventListener('click', function() {
+        // Reset form to allow user to make changes
+        checkFormValidity();
+    });
+
+    // Cancel file addition during progress
+    cancelFileAddBtn.addEventListener('click', function() {
+        if (!isProcessing) return;
+        fetch('/api/cancel-operation/file_add', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    ScheminiManager.showNotification('Operation cancelled', 'info');
+                } else {
+                    ScheminiManager.showNotification('Failed to cancel operation', 'error');
+                }
+            })
+            .catch(err => {
+                ScheminiManager.showNotification('Error cancelling operation', 'error');
+            })
+            .finally(() => {
+                stopProcessing(true); // Force stop UI
+            });
+    });
+
+    async function pollProgressUntilComplete() {
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressStatus = document.getElementById('progressStatus');
+        const progressCount = document.getElementById('progressCount');
+        let attempts = 0;
+        let polling = false;
+        let completed = false;
+        const intervalMs = 400; // throttle polling to reduce load
+        return new Promise(async (resolve) => {
+            const timer = setInterval(async () => {
+                if (polling || completed) return; // avoid overlapping fetches
+                polling = true;
+                attempts++;
+                try {
+                    const url = `/api/get-progress/file_add`;
+                    const resp = await fetch(url);
+                    const json = await resp.json();
+                    if (!json.success) throw new Error(json.message || 'progress error');
+                    const p = json.progress || {};
+
+                    // Progress visuals
+                    targetProgress = isFinite(p.percentage) ? Math.round(p.percentage) : 0;
+                    progressStatus.textContent = p.status || '';
+                    progressCount.textContent = `${p.current || 0}/${p.total || 0}`;
+
+                    if (!progressAnimationInterval) {
+                        progressAnimationInterval = setInterval(() => {
+                            if (currentVisualProgress < targetProgress) {
+                                currentVisualProgress = Math.min(currentVisualProgress + 2, targetProgress);
+                            } else if (currentVisualProgress > targetProgress) {
+                                currentVisualProgress = targetProgress;
+                            }
+                            progressBar.style.width = currentVisualProgress + '%';
+                            progressText.textContent = currentVisualProgress + '%';
+                            if (currentVisualProgress >= 100 || (currentVisualProgress >= targetProgress && targetProgress > 0)) {
+                                clearInterval(progressAnimationInterval);
+                                progressAnimationInterval = null;
+                            }
+                        }, 30);
+                    }
+
+                    if (p.completed || p.error) {
+                        completed = true;
+                        clearInterval(timer);
+                        const data = p.integration_result || {};
+                        const result = {
+                            total_files: data.total_uploaded || p.total || selectedFiles.length,
+                            unique_added: data.unique_files_added || data.total_uploaded || 1, // Unique files/codes added
+                            added_files: data.total_copies || 0, // Total copies made
+                            skipped_files: data.skipped_files || 0,
+                            error_files: data.total_errors || 0
+                        };
+                        showResults(result);
+                        if (p.error) ScheminiManager.showNotification('File addition failed', 'error');
+                        else ScheminiManager.showNotification('File addition completed successfully!', 'success');
+                        resolve();
+                    }
+                } catch (e) {
+                    // If repeated failures, stop trying
+                    if (attempts > 150) { // ~60s
+                        clearInterval(timer);
+                        resolve();
+                    }
+                } finally {
+                    polling = false;
+                }
+            }, intervalMs);
+        });
+    }
+
+    function showResults(result) {
+        stopProcessing();
+        
+        // Show post-operation details
+        document.getElementById('preOperationDetails').style.display = 'none';
+        document.getElementById('postOperationDetails').style.display = 'block';
+        document.getElementById('operationDetailsSection').style.display = 'block';
+        
+        const resultsDiv = document.getElementById('operationResultsSummary');
+        const totalFiles = result.total_files || 1;  // Total unique files selected
+        const uniqueAdded = result.unique_added || 0;  // Unique files/codes added (X)
+        const totalCopies = result.added_files || 0;   // Total copies made (Y)
+        const skipped = result.skipped_files || 0;
+        const errorFiles = result.error_files || 0;
+        
+        // Success rate calculation: uniqueAdded / totalFiles * 100% (since uniqueAdded already accounts for successful operations)
+        const successRate = totalFiles > 0 ? Math.round((uniqueAdded / totalFiles) * 100) : 0;
+        
+        // Format Added display as X(Y) when different, otherwise just X
+        const addedDisplay = totalCopies > uniqueAdded ? 
+            `${uniqueAdded}(${totalCopies})` : 
+            `${uniqueAdded}`;
+        
+        resultsDiv.innerHTML = `
+            <span class="summary-chip bg-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Total unique files selected from folder for integration"><i class="bi bi-collection"></i> Selected Total <span class="value">${totalFiles}</span></span>
+            <span class="summary-chip bg-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Unique files/codes added to reference folder (copies made)">
+                <i class="bi bi-plus-circle"></i> Added <span class="value">${addedDisplay}</span>
+            </span>
+            <span class="summary-chip bg-warning text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Files skipped during integration (already exist or no MIX match)"><i class="bi bi-skip-forward"></i> Skipped <span class="value">${skipped}</span></span>
+            ${errorFiles > 0 ? `<span class="summary-chip bg-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Files that encountered errors during integration process"><i class="bi bi-exclamation-triangle"></i> Errors <span class="value">${errorFiles}</span></span>` : ''}
+            <span class="summary-chip bg-primary text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Success rate: Unique Files Added / Total Selected * 100%"><i class="bi bi-speedometer2"></i> Success Rate <span class="value">${successRate}%</span></span>
+        `;
+
+        // Initialize Bootstrap tooltips for the new elements
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Show and wire up download button
+        const dlBtn = document.getElementById('downloadReportBtn');
+        if (dlBtn) {
+            dlBtn.style.display = 'inline-block';
+            dlBtn.onclick = () => { window.location.href = '/api/download-last-report/file_add'; };
+        }
+    }
+
+    // Clear all
+    const clearFileAddBtn = document.getElementById('clearFileAdd');
+    if (clearFileAddBtn) {
+        clearFileAddBtn.addEventListener('click', function() {
+            if (isProcessing) return;
+            
+            // Keep reference folder; clear only selections
+            addFilesInput.value = '';
+            addFilesDisplay.value = '';
+            document.getElementById('excelFile').value = '';
+            
+            // Clear states
+            selectedFiles = [];
+            selectedMixCodes = [];
+            excelImportActive = false;
+            excelMappings = {};
+            
+            // Clear MIX checkboxes and visual states
+            document.querySelectorAll('.mix-code-checkbox').forEach(cb => {
+                cb.checked = false;
+                const parent = cb.closest('.mix-chip');
+                if (parent) parent.classList.remove('active');
+            });
+            // Re-enable manual selection UI
+            setManualMixEnabled(true);
+            // Clear Section selections and visual states
+            document.querySelectorAll('.section-checkbox').forEach(cb => {
+                cb.checked = false;
+                const parent = cb.closest('.section-chip');
+                if (parent) parent.classList.remove('active');
+            });
+            selectedSections = [];
+            
+            // Hide sections
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('operationDetailsSection').style.display = 'none';
+            document.getElementById('preOperationDetails').style.display = 'block';
+            document.getElementById('postOperationDetails').style.display = 'none';
+            
+            updateSelectedMixCodes();
+            checkFormValidity();
+        });
+    }
+
+    function checkFormValidity() {
+        const hasFolder = referenceFolderInput.value.trim();
+        const hasFiles = selectedFiles.length > 0;
+        const hasMixCodes = selectedMixCodes.length > 0;
+        const hasSections = selectedSections.length > 0;
+        const hasExcel = excelImportActive && Object.keys(excelMappings || {}).length > 0;
+        // Valid if (Excel mappings exist OR manual mix selected) and other prerequisites
+        const valid = !!hasFolder && hasFiles && hasSections && (hasExcel || hasMixCodes);
+        
+        // Update step states
+        updateStepStates(hasFolder, hasFiles, hasSections, (hasExcel || hasMixCodes), valid);
+        
+        // Enable/disable confirm button
+        const confirmStartBtn = document.getElementById('confirmStartBtn');
+        if (confirmStartBtn) {
+            confirmStartBtn.disabled = !valid || isProcessing;
+        }
+        
+        // Show/hide operation details based on form validity
+        const operationDetailsSection = document.getElementById('operationDetailsSection');
+        if (valid && !isProcessing) {
+            updateOperationDetails();
+            operationDetailsSection.style.display = 'block';
+        } else {
+            operationDetailsSection.style.display = 'none';
+        }
+    }
+
+    function updateStepStates(hasMain, hasFiles, hasSections, hasMixCodes, isValid) {
+        // Step 1: Reference Folder
+        const step1Card = document.getElementById('step1Card');
+        const step1Status = document.getElementById('step1Status');
+        const step2Card = document.getElementById('step2Card');
+        const step2Status = document.getElementById('step2Status');
+        const btnPickAddFiles = document.getElementById('btnPickAddFiles');
+        const addFilesDisplay = document.getElementById('addFilesDisplay');
+        const step3Card = document.getElementById('step3Card');
+        const step3Status = document.getElementById('step3Status');
+        const step4Card = document.getElementById('step4Card');
+        const step4Status = document.getElementById('step4Status');
+        const importExcel = document.getElementById('importExcel');
+        const selectAllMixCodes = document.getElementById('selectAllMixCodes');
+        const deselectAllMixCodes = document.getElementById('deselectAllMixCodes');
+        
+        if (hasMain) {
+            step1Card.classList.remove('disabled');
+            step1Card.classList.add('completed');
+            step1Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+            step1Status.classList.add('completed');
+            
+            // Enable Step 2
+            step2Card.classList.remove('disabled');
+            step2Card.classList.add('active');
+            step2Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select folder';
+            step2Status.classList.add('active');
+            btnPickAddFiles.disabled = false;
+            addFilesDisplay.placeholder = 'Click "Choose Folder" to select';
+        } else {
+            step1Card.classList.remove('completed', 'active');
+            step1Card.classList.add('disabled');
+            step1Status.innerHTML = '<i class="bi bi-clock me-1"></i>Pending';
+            step1Status.classList.remove('completed', 'active');
+            
+            // Disable subsequent steps
+            step2Card.classList.add('disabled');
+            step2Card.classList.remove('active', 'completed');
+            step2Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+            step2Status.classList.remove('completed', 'active');
+            btnPickAddFiles.disabled = true;
+            addFilesDisplay.placeholder = 'Complete Step 1 first';
+        }
+        
+        if (hasFiles && hasMain) {
+            step2Card.classList.remove('active');
+            step2Card.classList.add('completed');
+            step2Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+            step2Status.classList.remove('active');
+            step2Status.classList.add('completed');
+            
+            // Enable Step 3
+            step3Card.classList.remove('disabled');
+            step3Card.classList.add('active');
+            step3Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select sections';
+            step3Status.classList.add('active');
+        } else if (hasMain) {
+            step3Card.classList.add('disabled');
+            step3Card.classList.remove('active', 'completed');
+            step3Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+            step3Status.classList.remove('completed', 'active');
+        }
+        
+        if (hasSections && hasFiles && hasMain) {
+            step3Card.classList.remove('active');
+            step3Card.classList.add('completed');
+            step3Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+            step3Status.classList.remove('active');
+            step3Status.classList.add('completed');
+            
+            // Enable Step 4
+            step4Card.classList.remove('disabled');
+            step4Card.classList.add('active');
+            step4Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select MIX codes';
+            step4Status.classList.add('active');
+            importExcel.disabled = false;
+            selectAllMixCodes.disabled = false;
+            deselectAllMixCodes.disabled = false;
+        } else if (hasFiles && hasMain) {
+            step4Card.classList.add('disabled');
+            step4Card.classList.remove('active', 'completed');
+            step4Status.innerHTML = '<i class="bi bi-pause-circle me-1"></i>Waiting';
+            step4Status.classList.remove('completed', 'active');
+            importExcel.disabled = true;
+            selectAllMixCodes.disabled = true;
+            deselectAllMixCodes.disabled = true;
+        }
+        
+        if (hasMixCodes && hasSections && hasFiles && hasMain) {
+            step4Card.classList.remove('active');
+            step4Card.classList.add('completed');
+            step4Status.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Completed';
+            step4Status.classList.remove('active');
+            step4Status.classList.add('completed');
+        }
+    }
+
+    function updateOperationDetails() {
+        // Update pre-operation details
+        document.getElementById('detailReferenceFolder').textContent = 
+            document.getElementById('referenceFolder').value || 'Not selected';
+        
+        // Get folder name and file count
+        if (selectedFiles.length > 0) {
+            const folderName = selectedFiles[0].webkitRelativePath.split('/')[0];
+            document.getElementById('detailFileCount').textContent = `${folderName} (${selectedFiles.length} files)`;
+        } else {
+            document.getElementById('detailFileCount').textContent = '0 files';
+        }
+        
+        // Update selected sections
+        if (selectedSections.length > 0) {
+            const sectionNames = selectedSections.map(section => {
+                return typeof section === 'object' ? section.name : section;
+            });
+            document.getElementById('detailSections').textContent = sectionNames.join(', ');
+        } else {
+            document.getElementById('detailSections').textContent = 'None selected';
+        }
+        
+        // Update selected MIX codes
+        if (selectedMixCodes.length > 0) {
+            document.getElementById('detailMixCodes').textContent = selectedMixCodes.slice(0, 10).join(', ') + 
+                (selectedMixCodes.length > 10 ? ` ... (${selectedMixCodes.length} total)` : '');
+        } else if (excelImportActive && Object.keys(excelMappings || {}).length > 0) {
+            document.getElementById('detailMixCodes').textContent = 'Excel imported mappings';
+        } else {
+            document.getElementById('detailMixCodes').textContent = 'None selected';
+        }
+    }
+
+    function stopProcessing(wasCancelled = false) {
+        isProcessing = false;
+        document.getElementById('progressSection').style.display = 'none';
+        checkFormValidity();
+        if (wasCancelled) {
+            document.getElementById('operationDetailsSection').style.display = 'none';
+        }
+    }
+
+    // Initialize
+    loadMixCodes();
+    initializeFolders();
+    checkFormValidity();
+});
+
+// Render sections UI
+function displaySections() {
+    const list = document.getElementById('sectionsList');
+    list.innerHTML = '';
+    selectedSections = [];
+    availableSections.forEach(sec => {
+        const id = `sec_${btoa(unescape(encodeURIComponent(sec.path))).replace(/=/g,'')}`;
+        const chip = document.createElement('label');
+        chip.className = 'section-chip';
+        chip.setAttribute('for', id);
+        chip.innerHTML = `
+            <input class="section-checkbox" type="checkbox" value="${sec.path}" id="${id}">
+            <i class="bi bi-folder2-open"></i>
+            <span class="name">${sec.name}</span>
+        `;
+        list.appendChild(chip);
+    });
+    document.querySelectorAll('.section-checkbox').forEach(cb => {
+        const parent = cb.closest('.section-chip');
+        const syncActive = () => { if (cb.checked) parent.classList.add('active'); else parent.classList.remove('active'); };
+        parent.addEventListener('click', (e) => {
+            if (e.target.tagName.toLowerCase() !== 'input') {
+                cb.checked = !cb.checked;
+                cb.dispatchEvent(new Event('change'));
+                e.preventDefault();
+            }
+        });
+        cb.addEventListener('change', () => {
+            syncActive();
+            selectedSections = Array.from(document.querySelectorAll('.section-checkbox:checked')).map(x => {
+                const section = availableSections.find(s => s.path === x.value);
+                return section || x.value;
+            });
+            const count = selectedSections.length;
+            document.getElementById('sectionsCount').textContent = count;
+            
+            // Automatically activate Step 4 (Mix Selection) when sections are selected
+            if (count > 0) {
+                const step4Card = document.getElementById('step4Card');
+                const step4Status = document.getElementById('step4Status');
+                const importExcel = document.getElementById('importExcel');
+                const selectAllMixCodes = document.getElementById('selectAllMixCodes');
+                const deselectAllMixCodes = document.getElementById('deselectAllMixCodes');
+                
+                step4Card.classList.remove('disabled');
+                step4Card.classList.add('active');
+                step4Status.innerHTML = '<i class="bi bi-arrow-right-circle me-1"></i>Select MIX codes';
+                step4Status.classList.add('active');
+                if (importExcel) importExcel.disabled = false;
+                if (selectAllMixCodes) selectAllMixCodes.disabled = false;
+                if (deselectAllMixCodes) deselectAllMixCodes.disabled = false;
+                
+                // Open Step 4 collapsible
+                if (step4Collapse && !document.getElementById('step4Body').classList.contains('show')) {
+                    step4Collapse.show();
+                }
+            } else {
+                // Close Step 4 when no sections are selected
+                const step4Card = document.getElementById('step4Card');
+                step4Card.classList.add('disabled');
+                step4Card.classList.remove('active', 'completed');
+                
+                if (step4Collapse && document.getElementById('step4Body').classList.contains('show')) {
+                    step4Collapse.hide();
+                }
+            }
+            
+            checkFormValidity();
+        });
+        syncActive();
+    });
+}
+</script>
+{% endblock %}

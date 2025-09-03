@@ -1,0 +1,6 @@
+Flask>=3.0.0
+flask-cors>=4.0.0
+PyPDF2>=3.0.0
+pandas>=2.0.0; python_version>="3.9"
+openpyxl>=3.1.0; python_version>="3.9"
+Werkzeug>=3.0.0

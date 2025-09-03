@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Schemini Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-secondary">
+            <div class="card-header">
+                <h2 class="card-title mb-0">
+                    <i class="bi bi-house-door me-2"></i>
+                    Homepage
+                </h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">Welcome to your file management dashboard.</p>
+                
+                {% if config and config.schemini_klasoru %}
+                    <div class="alert alert-success">
+                        <h5 class="alert-heading">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Schemini Folder Configured
+                        </h5>
+                        <p class="mb-2"><strong>Current folder:</strong></p>
+                        <code class="text-break">{{ config.schemini_klasoru }}</code>
+                        <hr>
+                        <p class="mb-0">You can now use all file management features.</p>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Setup Required
+                        </h5>
+                        <p>Please configure your Schemini folder first to start using the application.</p>
+                        <a href="{{ url_for('settings_page') }}" class="btn btn-warning">
+                            <i class="bi bi-gear me-1"></i>
+                            Go to Settings
+                        </a>
+                    </div>
+                {% endif %}
+                
+                {% if session.logged_in %}
+                <div class="row g-4 mt-2">
+                    <!-- Desktop-Only Card -->
+                    <div class="col-md-4 d-none d-md-block">
+                        <div class="card bg-primary animated-card-background">
+                            <div class="card-body text-center">
+                                <i class="bi bi-search display-4 mb-3"></i>
+                                <h5 class="card-title">File Comparison</h5>
+                                <p class="card-text">Compare two folders and identify differences</p>
+                                <a href="{{ url_for('scan_page') }}" class="btn btn-light">Start Scanning</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card bg-success">
+                            <div class="card-body text-center">
+                                <i class="bi bi-arrow-clockwise display-4 mb-3"></i>
+                                <h5 class="card-title">Smart Update</h5>
+                                <p class="card-text">Update files with newer versions automatically</p>
+                                <a href="{{ url_for('update_page') }}" class="btn btn-light">Start Update</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card bg-warning">
+                            <div class="card-body text-center">
+                                <i class="bi bi-folder-plus display-4 mb-3"></i>
+                                <h5 class="card-title">File Integration</h5>
+                                <p class="card-text">Add files based on MIX codes and Excel imports</p>
+                                <a href="{{ url_for('file_add_page') }}" class="btn btn-dark">Start Integration</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Cards -->
+                    <div class="col-12 d-md-none">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="card bg-primary">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-search display-6 me-3"></i>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-1">File Comparison</h5>
+                                                <p class="card-text mb-0 small">Compare folders and find differences</p>
+                                            </div>
+                                            <a href="{{ url_for('scan_page') }}" class="btn btn-light btn-sm">Start</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="card bg-success">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-arrow-clockwise display-6 me-3"></i>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-1">Smart Update</h5>
+                                                <p class="card-text mb-0 small">Update files with newer versions</p>
+                                            </div>
+                                            <a href="{{ url_for('update_page') }}" class="btn btn-light btn-sm">Start</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="card bg-warning">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-folder-plus display-6 me-3"></i>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-1">File Integration</h5>
+                                                <p class="card-text mb-0 small">Add files based on MIX codes</p>
+                                            </div>
+                                            <a href="{{ url_for('file_add_page') }}" class="btn btn-dark btn-sm">Start</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
