@@ -12,9 +12,9 @@
                     <div class="text-center mb-5">
                         <h1 class="display-4 fw-bold text-white mb-3">
                             <i class="bi bi-compass me-3 float-icon" style="color: #ffd700;"></i>
-                            Search by 9.x's
+                            Search by Code
                         </h1>
-                        <p class="lead text-white-50 mb-0 fs-5">Professional Document Search System</p>
+                        <p class="lead text-white-50 mb-0 fs-5">Professional Document & Component Search System</p>
                         <div class="mt-3 d-none d-md-block">
                             <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
                                 <i class="bi bi-lightning-fill text-warning me-1"></i>
@@ -33,7 +33,7 @@
                             <input type="text" 
                                    id="codeSearchInput" 
                                    class="form-control form-control-lg search-input" 
-                                   placeholder="Enter code (e.g. 9.MX231.01.0)" 
+                                   placeholder="Enter code (e.g. 9.MX231.01.0 or 2.3199.115.0)" 
                                    autofocus />
                             <button class="btn btn-primary btn-lg" id="btnSearchCode">
                                 <i class="bi bi-search me-2"></i>
@@ -58,8 +58,8 @@
                                 <button class="btn btn-outline-light btn-sm rounded-pill quick-search" data-code="I9.GR673.15.2">
                                     I9.GR673.15.2
                                 </button>
-                                <button class="btn btn-outline-light btn-sm rounded-pill quick-search" data-code="9.T5783.10.0">
-                                    9.T5783.10.0
+                                <button class="btn btn-outline-light btn-sm rounded-pill quick-search" data-code="2.3199.115.0">
+                                    2.3199.115.0
                                 </button>
                             </div>
                         </div>
@@ -172,10 +172,26 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     function validate(code) {
         const c = (code || '').trim();
-        if (c.length < 8) return false;
+        if (c.length < 3) return false;
         if (!c.includes('.')) return false;
+        
+        // Check for 9.x or I9.x codes (original functionality)
         const first = c.split('.')[0];
-        return first === '9' || first === 'I9' || first.startsWith('9') || first.startsWith('I9');
+        if (first === '9' || first === 'I9' || first.startsWith('9') || first.startsWith('I9')) {
+            return c.length >= 8; // Original validation for 9.x codes
+        }
+        
+        // Check for component codes (like 2.3199.115.0)
+        const parts = c.split('.');
+        if (parts.length >= 2) {
+            // Component codes typically start with a number
+            const firstPart = parts[0];
+            if (firstPart.match(/^\d/) || (firstPart.length <= 3 && /\d/.test(firstPart))) {
+                return true; // Valid component code format
+            }
+        }
+        
+        return false;
     }
 
     async function search() {
@@ -315,6 +331,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 <i class="bi bi-file-earmark-pdf"></i>
                                 Professional PDF Viewer
                                 <span id="modalDocumentTitle" class="ms-2 text-muted"></span>
+                                ${data.search_type === 'component' ? '<span class="badge bg-info ms-2">Component Search</span>' : ''}
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -508,13 +525,31 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (cut >= 0) folderPath = firstPage.substring(0, cut + 1);
             }
             
-            infoContent.innerHTML = `
+            let infoHtml = `
                 <div><strong>Document:</strong> ${currentDocument.base_name || 'Unknown'}</div>
                 <div><strong>Mix:</strong> ${currentDocument.mix_code || 'Unknown'}</div>
                 <div><strong>Pages:</strong> ${currentDocument.pages ? currentDocument.pages.length : 0}</div>
-                ${folderPath ? `<div class="document-path">${folderPath}</div>` : ''}
             `;
             
+            // Add component-specific information if available
+            if (currentDocument.component_code) {
+                infoHtml += `
+                    <hr class="my-2">
+                    <div class="component-info">
+                        <div><strong>Component Code:</strong> <code>${currentDocument.component_code}</code></div>
+                        <div><strong>Component Name:</strong> ${currentDocument.component_name || 'Unknown'}</div>
+                        <div><strong>Position Number:</strong> ${currentDocument.posnr || 'Unknown'}</div>
+                        <div><strong>Group Code:</strong> ${currentDocument.mix_code || 'Unknown'}</div>
+                        <div><strong>Group Name:</strong> ${currentDocument.mix_name || 'Unknown'}</div>
+                    </div>
+                `;
+            }
+            
+            if (folderPath) {
+                infoHtml += `<div class="document-path mt-2">${folderPath}</div>`;
+            }
+            
+            infoContent.innerHTML = infoHtml;
             infoPanel.style.display = 'block';
         }
     }
@@ -531,6 +566,58 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.body.style.minHeight = '100vh';
         document.querySelector('main').style.minHeight = 'calc(100vh - 60px)';
         
+        // Handle different search types
+        if (data.search_type === 'component') {
+            buildComponentResults(code, data);
+        } else {
+            buildStandardResults(code, data);
+        }
+    }
+    
+    function buildComponentResults(code, data) {
+        // For component search, create mock PDF documents structure for compatibility
+        const mockPdfDocuments = [];
+        const mixCounts = {};
+        const mixNames = {};
+        documentsByMix = {};
+        
+        // Process component search results
+        if (data.pdf_results && data.pdf_results.length > 0) {
+            data.pdf_results.forEach(pdf => {
+                const mixCode = pdf.group_code || 'UNKNOWN';
+                const mockDoc = {
+                    base_name: pdf.base_name || pdf.filename,
+                    group_key: `${mixCode}/${pdf.base_name}`,
+                    mix_code: mixCode,
+                    mix_name: pdf.group_name || mixNames[mixCode],
+                    pages: [pdf.path],
+                    page_count: 1,
+                    // Component-specific data
+                    component_code: pdf.component_code,
+                    component_name: pdf.component_name,
+                    posnr: pdf.posnr
+                };
+                
+                mockPdfDocuments.push(mockDoc);
+                mixCounts[mixCode] = (mixCounts[mixCode] || 0) + 1;
+                if (pdf.group_name) mixNames[mixCode] = pdf.group_name;
+                if (!documentsByMix[mixCode]) documentsByMix[mixCode] = [];
+                documentsByMix[mixCode].push(mockDoc);
+            });
+        }
+        
+        // Create mock data structure for compatibility
+        const mockData = {
+            ...data,
+            pdf_documents: mockPdfDocuments,
+            search_type: 'component'
+        };
+        
+        // Show the professional PDF viewer modal with component data
+        openProfessionalPdfViewer(mockData, mixCounts, mixNames);
+    }
+    
+    function buildStandardResults(code, data) {
         // Build Search Summary with mix selection boxes
         const variantList = Array.isArray(data.variants_found) ? data.variants_found : [];
         const showVariants = variantList.some(v => typeof v === 'string' && v.startsWith('I9.'));

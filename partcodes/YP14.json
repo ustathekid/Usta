@@ -1,0 +1,6137 @@
+{
+  "groups": [
+    {
+      "matnr_hl": "9.IR799.61.0",
+      "maktx_hl": "SEALANT_3CY EN K SERIES",
+      "components": [
+        {
+          "posnr": "000201",
+          "component": "4.0507.001.00",
+          "maktx_cmp": "LOCTITE 242 - 50 ML"
+        },
+        {
+          "posnr": "000202",
+          "component": "4.0503.001.00",
+          "maktx_cmp": "LOCTITE 270 - 50 ML"
+        },
+        {
+          "posnr": "000203",
+          "component": "4.0523.001.00",
+          "maktx_cmp": "LOCTITE 542 - 50 ML"
+        },
+        {
+          "posnr": "000204",
+          "component": "4.0524.001.00",
+          "maktx_cmp": "LOCT.554FEED PUMP ST - 50 ML"
+        },
+        {
+          "posnr": "000205",
+          "component": "4.0505.001.00",
+          "maktx_cmp": "LOCTITE 609"
+        },
+        {
+          "posnr": "000206",
+          "component": "4.0525.001.00",
+          "maktx_cmp": "LOCTITE 638 - 50 ML"
+        },
+        {
+          "posnr": "000207",
+          "component": "4.0508.001.00",
+          "maktx_cmp": "TEROST.FOR NAME PLAT"
+        },
+        {
+          "posnr": "000208",
+          "component": "3.4650.050.0",
+          "maktx_cmp": "COMPOUND - 250 ML"
+        },
+        {
+          "posnr": "000209",
+          "component": "4.970.56.071",
+          "maktx_cmp": "TEROSTAT 8511 250ML"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IW216.00.0",
+      "maktx_hl": "POMPA GASOLIO E INIETTORI",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.6377.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000001",
+          "component": "0.019.6377.0",
+          "maktx_cmp": "Common Rail 3 Cyl."
+        },
+        {
+          "posnr": "000002",
+          "component": "2.4719.681.0/20",
+          "maktx_cmp": "INJECTOR"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.036.3660.3",
+          "maktx_cmp": "TUBO POMPA CP4 - RAIL"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.020.1040.3/10",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.4619.295.0/10",
+          "maktx_cmp": "FUEL INJ.PUMP CP4.1/GP41"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.019.6896.0/10",
+          "maktx_cmp": "FLANGE"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1530.153.0",
+          "maktx_cmp": "O'RING 63.17X2.62"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1099.159.2/10",
+          "maktx_cmp": "NUT M8"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0112.210.2",
+          "maktx_cmp": "VITE M8X1.25X28"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.049.4583.2",
+          "maktx_cmp": "RAIL RETURN PIPE"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.012.6451.0",
+          "maktx_cmp": "RUBBER TUBE"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.019.6930.0/10",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.019.6929.0/10",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.0399.376.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.019.4322.4/10",
+          "maktx_cmp": "FUEL RETURN LINE"
+        },
+        {
+          "posnr": "000016",
+          "component": "0.036.3647.3",
+          "maktx_cmp": "TUBO INIET.CIL.1"
+        },
+        {
+          "posnr": "000016",
+          "component": "0.020.1149.3",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000017",
+          "component": "0.036.3634.3",
+          "maktx_cmp": "TUBO INIET.CIL.2"
+        },
+        {
+          "posnr": "000017",
+          "component": "0.020.1150.3",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000018",
+          "component": "0.036.3637.3",
+          "maktx_cmp": "TUBO INIET.CIL.3"
+        },
+        {
+          "posnr": "000018",
+          "component": "0.020.1151.3",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.6857.006.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.6857.019.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.0432.009.7",
+          "maktx_cmp": "STUD BOLT M8X1X35"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.1310.028.2",
+          "maktx_cmp": "PLAIN WASHER"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1470.052.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.1011.101.2",
+          "maktx_cmp": "HEX NUT M4X0.7"
+        },
+        {
+          "posnr": "000025",
+          "component": "0.040.6708.4/10",
+          "maktx_cmp": "PIPE FUEL RETURN"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.6857.023.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.6839.059.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.0332.204.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000029",
+          "component": "0.028.7550.0",
+          "maktx_cmp": "FUEL HOSE"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939476",
+          "maktx_cmp": "I.M.COMPON.SIST.INIE"
+        },
+        {
+          "posnr": "000102",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IW915.01.0",
+      "maktx_hl": "OIL SENSOR PORT CAP",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1560.014.0",
+          "maktx_cmp": "SEAL.RING18.2X24X1.5"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IW918.04.0_A12",
+      "maktx_hl": "COMPLETION INTAKE KF COMPACT",
+      "components": [
+        {
+          "posnr": "000009",
+          "component": "2.0112.215.2",
+          "maktx_cmp": "H.HEAD BOLTM8X1.2X40"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1312.004.2",
+          "maktx_cmp": "WASHER 8"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1011.105.2",
+          "maktx_cmp": "NUT M8X1.25"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI211.00.0",
+      "maktx_hl": "3 CYL CRANKCASE K SERIES",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.4331.4/50",
+          "maktx_cmp": "3 CYL. CRANKC. ASSY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.035.9283.0",
+          "maktx_cmp": "GUARNIZIONE CARTER"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.035.8887.0",
+          "maktx_cmp": "CARTER DISTRIBUZIONE"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.0312.214.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0312.208.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1529.167.0",
+          "maktx_cmp": "OIL SEAL"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.019.4415.0/10",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.066.1152.0/10",
+          "maktx_cmp": "RUBBER SEAL"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1651.305.0",
+          "maktx_cmp": "PIN 4X12 UNI 7"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1651.507.0",
+          "maktx_cmp": "ROLL PIN 6X16"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.1560.027.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.3139.031.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000019",
+          "component": "0.020.0875.0",
+          "maktx_cmp": "SMALL COVER"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.1539.097.0",
+          "maktx_cmp": "O' RING"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.3139.024.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.0399.367.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.3139.030.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.1561.110.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000102",
+          "component": "927260",
+          "maktx_cmp": "DEBURRING OF CRANKCASE OF ENGINES"
+        },
+        {
+          "posnr": "000103",
+          "component": "927417",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000104",
+          "component": "927421",
+          "maktx_cmp": "SHAFT INT. SUPPORT"
+        },
+        {
+          "posnr": "000105",
+          "component": "939485",
+          "maktx_cmp": "I.M.CARTER ANTERIORE"
+        },
+        {
+          "posnr": "000106",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI212.00.0_B12",
+      "maktx_hl": "3 CYL CRANKSHAFT K SERIES",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.049.9742.3",
+          "maktx_cmp": "3CYL CRANKSHAFT ASSEMBLY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.049.9740.4",
+          "maktx_cmp": "PISTON-ROD-LINER_ASSEMBLY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.049.9740.4/10",
+          "maktx_cmp": "PISTON-ROD-LINER_ASSEMBLY"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.019.5453.0",
+          "maktx_cmp": "CON.ROD HALF BUSHING"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.019.5454.0",
+          "maktx_cmp": "CON.ROD HALF BUSHING"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.019.5455.0/10",
+          "maktx_cmp": "UPPER MAIN BEARING"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.019.5456.0",
+          "maktx_cmp": "MAIN HALF BUSHING"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1599.524.7",
+          "maktx_cmp": "WASHER 21X60X12"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.023.7266.0",
+          "maktx_cmp": "SEMIANELLO DI SPALLAM."
+        },
+        {
+          "posnr": "000012",
+          "component": "0.022.9105.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1475.002.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.0112.207.2",
+          "maktx_cmp": "SCREW  M8 X1.25X20"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1539.259.0",
+          "maktx_cmp": "Cylinder liner O ring (107.62 x 2.62)"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0432.002.7",
+          "maktx_cmp": "PRIG M8X1X18"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0399.365.0",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000100",
+          "component": "927203",
+          "maktx_cmp": "LUBRICATION OF COMP."
+        },
+        {
+          "posnr": "000101",
+          "component": "940295",
+          "maktx_cmp": "I.M. ANELLO DI TENUTA POST."
+        },
+        {
+          "posnr": "000102",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000103",
+          "component": "939411",
+          "maktx_cmp": "IST.MONT.CANNE/GUAR."
+        },
+        {
+          "posnr": "000104",
+          "component": "939471",
+          "maktx_cmp": "IST.MONT. PISTONI"
+        },
+        {
+          "posnr": "000105",
+          "component": "939472",
+          "maktx_cmp": "IST.MONT.BIELLA/PIST"
+        },
+        {
+          "posnr": "000106",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        },
+        {
+          "posnr": "000107",
+          "component": "939556",
+          "maktx_cmp": "I.M. INGRANAG.ALB.M"
+        },
+        {
+          "posnr": "000108",
+          "component": "939484",
+          "maktx_cmp": "I.M. CONROD ASSEMBLY"
+        },
+        {
+          "posnr": "000109",
+          "component": "939845",
+          "maktx_cmp": "I.M.RING.PIS.LIN.ASS"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI213.00.0",
+      "maktx_hl": "3CYL TIMING K SERIES",
+      "components": [
+        {
+          "posnr": "000003",
+          "component": "0.019.4874.3",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.019.4875.3",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.019.4876.3",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.021.3997.0",
+          "maktx_cmp": "RALLA"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.065.1352.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1410.016.1",
+          "maktx_cmp": "CIRCLIP 40"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.019.4147.0/10",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.065.1350.0",
+          "maktx_cmp": "SMALL DISC"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.0132.207.2",
+          "maktx_cmp": "SCREW M10X1,25X25"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.019.4148.0/10",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.0312.216.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1019.129.2/10",
+          "maktx_cmp": "DADO M18X1.5X12"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.065.1353.0",
+          "maktx_cmp": "SMALL PLATE"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.0312.205.2",
+          "maktx_cmp": "SCREW M8X1,25X18"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.1559.398.0",
+          "maktx_cmp": "BUSH"
+        },
+        {
+          "posnr": "000020",
+          "component": "0.040.0184.0",
+          "maktx_cmp": "ALBERO A CAMME 3 CIL."
+        },
+        {
+          "posnr": "000021",
+          "component": "0.019.5378.3",
+          "maktx_cmp": "TAPPETS"
+        },
+        {
+          "posnr": "000022",
+          "component": "0.035.9578.2",
+          "maktx_cmp": "ASTA BILANC."
+        },
+        {
+          "posnr": "000023",
+          "component": "0.019.2888.0/10",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000024",
+          "component": "0.036.0479.4",
+          "maktx_cmp": "COVER ASSEMBLY"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.0312.214.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939194",
+          "maktx_cmp": "RALLA PER INGR.DISTR"
+        },
+        {
+          "posnr": "000102",
+          "component": "939410",
+          "maktx_cmp": "CLEARANCE GEARS SETT"
+        },
+        {
+          "posnr": "000103",
+          "component": "939473",
+          "maktx_cmp": "I.M. COPERCHI VALVOL"
+        },
+        {
+          "posnr": "000104",
+          "component": "939486",
+          "maktx_cmp": "FASATURA ALBER.CAMME"
+        },
+        {
+          "posnr": "000105",
+          "component": "939556",
+          "maktx_cmp": "I.M. INGRANAG.ALB.M"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI214.00.0_A12",
+      "maktx_hl": "TESTE CILINDRI KF3_155bar",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.032.6277.4",
+          "maktx_cmp": "COM.CYL.H.HYB.155bar"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0432.005.7",
+          "maktx_cmp": "STUD BOLT M8X1X25"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1651.505.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0399.375.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.019.7133.0/10",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.019.7134.0/10",
+          "maktx_cmp": "CYL.HEAD GASKET-1.4"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "930053",
+          "maktx_cmp": "CHOICE OF ENGINE-HEAD"
+        },
+        {
+          "posnr": "000102",
+          "component": "939405",
+          "maktx_cmp": "TIGHTNING PROCE.CH"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI299.01.0",
+      "maktx_hl": "3CYL EN.OIL&COOLANT+STANDARDS",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "3.1011.021.0",
+          "maktx_cmp": "SHELL R4X 15W40 TANK"
+        },
+        {
+          "posnr": "000002",
+          "component": "3.4270.020.0/10",
+          "maktx_cmp": "COOLANT ENGINE TEST BENCH"
+        },
+        {
+          "posnr": "000100",
+          "component": "996029",
+          "maktx_cmp": "ENGINE RUNNING IN"
+        },
+        {
+          "posnr": "000101",
+          "component": "996030",
+          "maktx_cmp": "ENGINE SETT.PROCEDUR"
+        },
+        {
+          "posnr": "000200",
+          "component": "927543",
+          "maktx_cmp": "OIL CHECK"
+        },
+        {
+          "posnr": "000201",
+          "component": "927203",
+          "maktx_cmp": "LUBRICATION OF COMP."
+        },
+        {
+          "posnr": "000202",
+          "component": "927486",
+          "maktx_cmp": "SCHMIERSTOFFE FUER MOTOREN SERIE 1000"
+        },
+        {
+          "posnr": "000300",
+          "component": "939871",
+          "maktx_cmp": "FLU.PG88 RODA.MOTORI"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI299.10.0",
+      "maktx_hl": "TARAT. DI SERVIZIO KF3055TA",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "IW2.0107.0",
+          "maktx_cmp": "TAB.TARAT.KF3TA 55kW"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.024.2449.3/10",
+          "maktx_cmp": "SERVICE ENGINE PLATE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.8559.001.0/20",
+          "maktx_cmp": "ENGINE SW V631"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.8569.003.0/10",
+          "maktx_cmp": "DATASET KF3055TA00"
+        },
+        {
+          "posnr": "000100",
+          "component": "939786",
+          "maktx_cmp": "STAMPIGL.TARGHETTA MOT.SERVIZIO"
+        },
+        {
+          "posnr": "000101",
+          "component": "996033",
+          "maktx_cmp": "PROCEDURA CoP"
+        },
+        {
+          "posnr": "000111",
+          "component": "2.8569.035.0",
+          "maktx_cmp": "DATASET TB EOL KF3055TA00 V630_A01"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IF499.05.0",
+      "maktx_hl": "ENGINE PRESERVATION",
+      "components": [
+        {
+          "posnr": "000100",
+          "component": "939877",
+          "maktx_cmp": "I.M.STOCCAGGIO MOTOR"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IH115.04.0_A12",
+      "maktx_hl": "ATTACCO SCARICO OLIO",
+      "components": [
+        {
+          "posnr": "000003",
+          "component": "0.023.1274.0/10",
+          "maktx_cmp": "MANICOTTO SCARICO OLIO"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.6858.014.0",
+          "maktx_cmp": "FASCETTA DN.26"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.6858.012.0",
+          "maktx_cmp": "FASCETTA DN.24"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IH118.10.0",
+      "maktx_hl": "STAFFE MOTORE KE",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.8909.0",
+          "maktx_cmp": "SUPPORTO MOT.POST"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.031.2466.0",
+          "maktx_cmp": "FRONT SUPP.KF4 115KW"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0312.306.2",
+          "maktx_cmp": "VITE M10X1.5X20"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.0312.308.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0312.314.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1480.015.2",
+          "maktx_cmp": "WASHER 10"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1659.536.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1651.505.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IR119.00.0_A12",
+      "maktx_hl": "PTO-HYDRAULIC PUMP PLUS",
+      "components": [
+        {
+          "posnr": "000004",
+          "component": "0.025.5175.0/10",
+          "maktx_cmp": "GUARNIZIONE SPESS.1.1"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.025.5176.0/10",
+          "maktx_cmp": "GUARNIZIONE SPESS.1.05"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.025.5177.0/10",
+          "maktx_cmp": "GUARNIZIONE SPESS.1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0432.011.7",
+          "maktx_cmp": "STUD BOLT M8X1X40"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU615.03.0_A12",
+      "maktx_hl": "LUBRIFICAZIONE TURBINA KF3",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.031.4771.3",
+          "maktx_cmp": "OIL INLET PIPE"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.031.4771.3/10",
+          "maktx_cmp": "TUBO MANDAT.OLIO TC_KF3"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.3249.702.2",
+          "maktx_cmp": "PIPE UNION"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1560.005.0",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.3339.594.2/10",
+          "maktx_cmp": "PIPE FITTING"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1561.107.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.007.1317.4",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1561.112.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.3120.102.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU616.10.0_A12",
+      "maktx_hl": "IMPIANTO ELETTRICO KF3",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.030.6479.4",
+          "maktx_cmp": "WIRING ENGINE KF3CYL"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.023.1281.4/10",
+          "maktx_cmp": "CABLAGGIO INIET. KE3"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.022.9911.3/20",
+          "maktx_cmp": "STAFFA CONNET.MOTORE"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.022.8601.2",
+          "maktx_cmp": "STAFFA CABLAGGIO INIET."
+        },
+        {
+          "posnr": "000008",
+          "component": "2.7099.043.0",
+          "maktx_cmp": "SENSOR"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0312.103.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.7659.449.0",
+          "maktx_cmp": "PUSH-BUTTON"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.7099.041.0",
+          "maktx_cmp": "SPEED SENSOR"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.020.3279.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.0312.104.2",
+          "maktx_cmp": "H.SO.H.SCREW M6X1X16"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.7099.042.0",
+          "maktx_cmp": "SENSOR"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.7099.940.0",
+          "maktx_cmp": "PRESSURE SWITCH"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1560.008.0",
+          "maktx_cmp": "GASKET 12.2 X 18"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1569.118.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.3339.353.2/20",
+          "maktx_cmp": "RACC M12X1.5-M18X1.5"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.1560.014.0",
+          "maktx_cmp": "SEAL.RING18.2X24X1.5"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0432.001.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000021",
+          "component": "0.023.2004.3/10",
+          "maktx_cmp": "STAFFETTA CABLAGGIO"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0432.004.7",
+          "maktx_cmp": "MEDIUM END STUDS M8X"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.6830.006.2",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000024",
+          "component": "0.023.3278.3",
+          "maktx_cmp": "STAFFETTA"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.6830.009.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.0312.101.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.1480.011.2",
+          "maktx_cmp": "SPRING WASHER"
+        },
+        {
+          "posnr": "000030",
+          "component": "2.0312.004.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000032",
+          "component": "2.6839.059.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.6830.008.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000034",
+          "component": "2.1011.103.2",
+          "maktx_cmp": "NUT M6X1"
+        },
+        {
+          "posnr": "000035",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        },
+        {
+          "posnr": "000036",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.3329.043.0",
+          "maktx_cmp": "FIXING CORR. TUBE D.20"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.6852.101.0",
+          "maktx_cmp": "FASCETTA 142X3.6"
+        },
+        {
+          "posnr": "000040",
+          "component": "0.030.2624.0",
+          "maktx_cmp": "PLATE KF"
+        },
+        {
+          "posnr": "000041",
+          "component": "2.0332.203.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000042",
+          "component": "2.1310.028.2",
+          "maktx_cmp": "PLAIN WASHER"
+        },
+        {
+          "posnr": "000043",
+          "component": "2.1470.052.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000045",
+          "component": "2.6852.201.0",
+          "maktx_cmp": "FASCETTA 188X4.8"
+        },
+        {
+          "posnr": "000046",
+          "component": "2.0112.209.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000047",
+          "component": "0.023.3273.0",
+          "maktx_cmp": "STAFFA X CABLAGGIO"
+        },
+        {
+          "posnr": "000048",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000049",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000050",
+          "component": "2.6839.090.2",
+          "maktx_cmp": "FASCETTA X TUBO 6.35"
+        },
+        {
+          "posnr": "000051",
+          "component": "2.0399.307.2",
+          "maktx_cmp": "SMALL COLUMN"
+        },
+        {
+          "posnr": "000052",
+          "component": "2.1549.651.2",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000053",
+          "component": "2.0312.008.2",
+          "maktx_cmp": "SCREW GROUP 06"
+        },
+        {
+          "posnr": "000054",
+          "component": "2.6830.005.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000055",
+          "component": "0.026.5526.0",
+          "maktx_cmp": "STAFFETTA"
+        },
+        {
+          "posnr": "000056",
+          "component": "2.3329.047.0",
+          "maktx_cmp": "FIXING CORR. TUBE D.13"
+        },
+        {
+          "posnr": "000057",
+          "component": "2.7099.222.0",
+          "maktx_cmp": "P3 PRESSURE SENSOR"
+        },
+        {
+          "posnr": "000059",
+          "component": "2.0312.106.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000100",
+          "component": "940168",
+          "maktx_cmp": "CABLAGGI MOTORE KF"
+        },
+        {
+          "posnr": "000101",
+          "component": "939476",
+          "maktx_cmp": "I.M.COMPON.SIST.INIE"
+        },
+        {
+          "posnr": "000102",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU616.11.0_A12",
+      "maktx_hl": "GLOWPLUG KF3",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.032.4917.0",
+          "maktx_cmp": "GLOWPLUG_A250001782"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.032.5468.4/10",
+          "maktx_cmp": "GLOWPLUG WIRING KF3"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1011.101.2",
+          "maktx_cmp": "HEX NUT M4X0.7"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1470.052.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.6852.201.0",
+          "maktx_cmp": "FASCETTA 188X4.8"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU617.00.0_A13",
+      "maktx_hl": "WATER CIRCUIT KF3",
+      "components": [
+        {
+          "posnr": "000005",
+          "component": "0.019.9436.3/10",
+          "maktx_cmp": "PIPE"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.019.8377.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.6858.019.0",
+          "maktx_cmp": "FASCETTA DN.32"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.019.9437.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1480.015.2",
+          "maktx_cmp": "WASHER 10"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.019.8620.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.0313.316.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.0313.312.7",
+          "maktx_cmp": "10X1.5X35 SCREW"
+        },
+        {
+          "posnr": "000040",
+          "component": "2.1530.066.0",
+          "maktx_cmp": "O' RING"
+        },
+        {
+          "posnr": "000041",
+          "component": "0.050.1116.0",
+          "maktx_cmp": "HOSE"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939575",
+          "maktx_cmp": "BELT ALIGNMENT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.00.0_A16",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF3_WG",
+      "components": [
+        {
+          "posnr": "000004",
+          "component": "0.019.8628.0/10",
+          "maktx_cmp": "EXHAUST SEAL"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.017.7810.0",
+          "maktx_cmp": "INTAKE MANIFOLD GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1019.033.0",
+          "maktx_cmp": "SPECIAL NUT M8X1"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1549.786.2",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000033",
+          "component": "0.031.4767.0/10",
+          "maktx_cmp": "TUBO SENSORE P3 KF3"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "940098",
+          "maktx_cmp": "MONT.RACCORDO PARKER"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.01.0_A12",
+      "maktx_hl": "EGR GROUP KF3",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.021.4719.2",
+          "maktx_cmp": "SUPPORTO POST.EGR KE3"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.021.2992.0",
+          "maktx_cmp": "GUARNIZIONE EGR"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.020.4775.2/10",
+          "maktx_cmp": "TUBO GAS EGR"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.031.2456.0/20",
+          "maktx_cmp": "EGR PIPE KF"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.032.8071.0",
+          "maktx_cmp": "HOSE EGR KF"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.032.8071.0/10",
+          "maktx_cmp": "HOSE"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.020.1270.0/10",
+          "maktx_cmp": "FLANGE"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1531.066.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.019.9437.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.6858.014.0",
+          "maktx_cmp": "FASCETTA DN.26"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1019.033.0",
+          "maktx_cmp": "SPECIAL NUT M8X1"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.0112.207.2",
+          "maktx_cmp": "SCREW  M8 X1.25X20"
+        },
+        {
+          "posnr": "000037",
+          "component": "2.6830.010.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000040",
+          "component": "2.1312.003.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000041",
+          "component": "2.0112.004.2",
+          "maktx_cmp": "SCREW 6X1X14"
+        },
+        {
+          "posnr": "000043",
+          "component": "2.6859.198.0",
+          "maktx_cmp": "CLAMP+SPRING Dn 35-50"
+        },
+        {
+          "posnr": "000046",
+          "component": "2.0432.001.2",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000047",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000048",
+          "component": "2.1011.505.2",
+          "maktx_cmp": "NUT 8X1"
+        },
+        {
+          "posnr": "000049",
+          "component": "2.6858.019.0",
+          "maktx_cmp": "FASCETTA DN.32"
+        },
+        {
+          "posnr": "000050",
+          "component": "2.6858.022.0",
+          "maktx_cmp": "CLAMP D38"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IW215.00.0_B12",
+      "maktx_hl": "LU.KF3-55 BL.-BY OP.",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.020.1704.3",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1560.006.0",
+          "maktx_cmp": "SEALING RING 10.2X16"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.028.8459.4",
+          "maktx_cmp": "OIL JET ASSEMBLY"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1651.404.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.023.1278.3",
+          "maktx_cmp": "TUBO RITORNO OLIO"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.020.2503.0",
+          "maktx_cmp": "RUBBER SLEEVE"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.019.6677.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.019.6359.0",
+          "maktx_cmp": "FLANGE"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1470.002.2",
+          "maktx_cmp": "LOCK WASHER 6"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.0312.106.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.0312.114.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.6830.005.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.6858.016.0",
+          "maktx_cmp": "FASCETTA DN.28"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.020.7207.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1121.107.2",
+          "maktx_cmp": "SELFLOCK NUT"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.0432.161.7",
+          "maktx_cmp": "STUD BOLTM10X1,25X40"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.0432.167.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000019",
+          "component": "0.020.7213.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0432.168.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000021",
+          "component": "0.019.7257.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000022",
+          "component": "0.007.0867.0",
+          "maktx_cmp": "T160+R165 SLEEVE"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.3339.307.0",
+          "maktx_cmp": "PIPE FITTING"
+        },
+        {
+          "posnr": "000024",
+          "component": "0.065.1567.0/10",
+          "maktx_cmp": "FILTER"
+        },
+        {
+          "posnr": "000025",
+          "component": "0.021.2544.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000026",
+          "component": "0.012.0613.0",
+          "maktx_cmp": "PIPE UNION"
+        },
+        {
+          "posnr": "000027",
+          "component": "0.041.1135.4",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.0312.205.2",
+          "maktx_cmp": "SCREW M8X1,25X18"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000030",
+          "component": "0.013.8200.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000031",
+          "component": "2.6858.005.0",
+          "maktx_cmp": "FASCETTA"
+        },
+        {
+          "posnr": "000032",
+          "component": "0.019.7514.0/10",
+          "maktx_cmp": "FILTER"
+        },
+        {
+          "posnr": "000033",
+          "component": "0.020.2502.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.020.2504.0",
+          "maktx_cmp": "RUBBER SLEEVE"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.023.1269.0",
+          "maktx_cmp": "TUBO RITORNO OLIO"
+        },
+        {
+          "posnr": "000036",
+          "component": "0.020.2505.0",
+          "maktx_cmp": "RUBBER SLEEVE"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.6858.002.0",
+          "maktx_cmp": "CLAMP D14"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.6858.018.0",
+          "maktx_cmp": "HOSE CLAMP D.30"
+        },
+        {
+          "posnr": "000040",
+          "component": "0.020.5830.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000041",
+          "component": "2.0312.101.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000042",
+          "component": "2.6858.020.0",
+          "maktx_cmp": "HOSE CLAMP D.35"
+        },
+        {
+          "posnr": "000043",
+          "component": "2.6858.019.0",
+          "maktx_cmp": "FASCETTA DN.32"
+        },
+        {
+          "posnr": "000044",
+          "component": "2.6852.101.0",
+          "maktx_cmp": "FASCETTA 142X3.6"
+        },
+        {
+          "posnr": "000045",
+          "component": "0.034.4386.0",
+          "maktx_cmp": "SHIM OPA"
+        },
+        {
+          "posnr": "000046",
+          "component": "0.034.4370.0",
+          "maktx_cmp": "SHIM OPA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.K7715.01.0",
+      "maktx_hl": "OIL PAN",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.6648.0/30",
+          "maktx_cmp": "OIL PAN KD3 DORADO"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.019.6647.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1560.054.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.3199.001.2",
+          "maktx_cmp": "PLUG 1/2 BQPT"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.0112.226.2",
+          "maktx_cmp": "SCREW M8X1.25X85"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0112.230.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.0112.239.2",
+          "maktx_cmp": "SCREW M8X1,25X150"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0112.215.2",
+          "maktx_cmp": "H.HEAD BOLTM8X1.2X40"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.007.1624.2",
+          "maktx_cmp": "OIL DIPSTICK"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.019.6763.3/10",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1539.065.0",
+          "maktx_cmp": "O RING 8,73X1,78V"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.019.6115.3/20",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1532.075.0",
+          "maktx_cmp": "RING"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.6830.005.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1120.003.2",
+          "maktx_cmp": "NUT M6X1"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0312.224.2",
+          "maktx_cmp": "SCREW M8X1,25X90"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.K7812.01.0",
+      "maktx_hl": "PULEGG.MOT.PVK10",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.9925.0",
+          "maktx_cmp": "PULLEY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.019.6668.0",
+          "maktx_cmp": "HUB"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.065.1256.0",
+          "maktx_cmp": "RING"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1579.865.0",
+          "maktx_cmp": "SHOULDER"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0439.195.7/10",
+          "maktx_cmp": "PRIG M20X1.5X20"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1019.094.7/10",
+          "maktx_cmp": "DADO M20X1.5X20"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0112.320.2",
+          "maktx_cmp": "HEX BLT M10X1.5X55"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1479.002.7",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1720.006.0",
+          "maktx_cmp": "KEY 4X6.5"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.019.6413.0",
+          "maktx_cmp": "WHEEL"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1651.505.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "927391/20",
+          "maktx_cmp": "PREDISP.MONTAGG.PTO"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.K8115.02.0",
+      "maktx_hl": "OIL/WATER COOLER",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.2736.0/20",
+          "maktx_cmp": "HEAT EXCHANGER"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.019.7324.0/20",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.O2315.04.0",
+      "maktx_hl": "FILTRO OLIO",
+      "components": [
+        {
+          "posnr": "000010",
+          "component": "2.4419.340.0/10",
+          "maktx_cmp": "OIL FILTER ELEMENT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU617.00.0_A33",
+      "maktx_hl": "WATER CIRCUIT KF3",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.020.3505.4/60",
+          "maktx_cmp": "KD WATER PUMP ASSY"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.010.4297.0/10",
+          "maktx_cmp": "CLOSING CAP"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.6851.001.0",
+          "maktx_cmp": "HOSE CLIP 16/25"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1589.130.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.1589.131.0",
+          "maktx_cmp": "SHIM"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IW917.08.0",
+      "maktx_hl": "PULEG.PV-K10(1.45)",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.035.1344.0",
+          "maktx_cmp": "PULEGGIA VENT.NATUR."
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IW918.04.0_A22",
+      "maktx_hl": "COMPLETION INTAKE KF COMPACT",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.037.8009.3",
+          "maktx_cmp": "INTAKE ELBOW ASSEMBLY"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.030.3743.3/10",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1011.103.2",
+          "maktx_cmp": "NUT M6X1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0422.001.7",
+          "maktx_cmp": "BOLT GROUP 06"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU616.10.0_A22",
+      "maktx_hl": "IMPIANTO ELETTRICO KF3",
+      "components": [
+        {
+          "posnr": "000003",
+          "component": "0.039.6930.3",
+          "maktx_cmp": "BOOST & TEMP. SENSOR"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.7099.039.0",
+          "maktx_cmp": "SENSOR"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.0312.105.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000058",
+          "component": "2.7099.128.0",
+          "maktx_cmp": "MASS FLOW SENSOR"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU616.11.0_A22",
+      "maktx_hl": "GLOWPLUG KF3",
+      "components": [
+        {
+          "posnr": "000005",
+          "component": "0.014.2462.0",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "940168",
+          "maktx_cmp": "CABLAGGI MOTORE KF"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.00.0_A26",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF3_WG",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.4367.0/30",
+          "maktx_cmp": "INTAKE MANIFOLD"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.013.3121.0",
+          "maktx_cmp": "GASKET-"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.0312.226.2",
+          "maktx_cmp": "SCREW M8X1,25X100"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.0312.222.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.0312.215.2",
+          "maktx_cmp": "VITE M8X1.25X45"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0432.013.7",
+          "maktx_cmp": "STUD BOLD M8X1X45"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI214.00.0_A22",
+      "maktx_hl": "TESTE CILINDRI KF3_155bar",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "2.0432.011.7",
+          "maktx_cmp": "STUD BOLT M8X1X40"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.00.0_A56",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF3_WG",
+      "components": [
+        {
+          "posnr": "000015",
+          "component": "2.0432.018.7",
+          "maktx_cmp": "STUD BOLT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IH218.02.0",
+      "maktx_hl": "THROTTLE VALVE K ENG.",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.6432.0",
+          "maktx_cmp": "INTAKE THROTTLE VALVE"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.019.7361.0",
+          "maktx_cmp": "GUARN.THOTTLE VALVE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.0312.115.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939716",
+          "maktx_cmp": "I.M. CABL.MOTORE KE"
+        },
+        {
+          "posnr": "000102",
+          "component": "939734",
+          "maktx_cmp": "I.M. VALV.A FARFALLA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.00.0_A46",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF3_WG",
+      "components": [
+        {
+          "posnr": "000030",
+          "component": "2.1480.011.2",
+          "maktx_cmp": "SPRING WASHER"
+        },
+        {
+          "posnr": "000031",
+          "component": "2.0312.003.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000032",
+          "component": "0.030.1987.0",
+          "maktx_cmp": "P3 SENSOR HOUSING"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.032.6022.4",
+          "maktx_cmp": "MALE CONNEC.TUBE D.8"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.01.0_A22",
+      "maktx_hl": "EGR GROUP KF3",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.7395.0/20",
+          "maktx_cmp": "EGR VALVE"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.030.2443.2/10",
+          "maktx_cmp": "EGR FRONT SUPPORT KF"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.021.8899.0",
+          "maktx_cmp": "BLOCCHETTO"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.031.2457.3/10",
+          "maktx_cmp": "WATER PIPE EGR"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1531.066.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.0312.110.2",
+          "maktx_cmp": "HEX SO.HD SCRM6X1X30"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.6858.014.0",
+          "maktx_cmp": "FASCETTA DN.26"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1011.003.2",
+          "maktx_cmp": "NUT M6X11"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0312.210.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0432.003.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.6858.016.0",
+          "maktx_cmp": "FASCETTA DN.28"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.0312.232.2",
+          "maktx_cmp": "OCKET SCREW M8X1.25X160"
+        },
+        {
+          "posnr": "000028",
+          "component": "0.035.3904.0",
+          "maktx_cmp": "MANICOTTO H2O EGR KF"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.0312.108.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000030",
+          "component": "0.020.7741.0/20",
+          "maktx_cmp": "CORPO VALVOLA EGR KE3"
+        },
+        {
+          "posnr": "000031",
+          "component": "0.022.8360.3",
+          "maktx_cmp": "COPERCHIO EGR KE COMP."
+        },
+        {
+          "posnr": "000032",
+          "component": "0.020.4688.0",
+          "maktx_cmp": "MANICOTTO X EGR KE"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.0312.212.2",
+          "maktx_cmp": "SCREW 8X1,25X35"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.020.4665.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.019.7405.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.019.7405.0",
+          "maktx_cmp": "ASKET"
+        },
+        {
+          "posnr": "000036",
+          "component": "0.019.6953.0",
+          "maktx_cmp": "COOLER"
+        },
+        {
+          "posnr": "000042",
+          "component": "0.035.3915.2",
+          "maktx_cmp": "TUBO H2O EGR KF"
+        },
+        {
+          "posnr": "000042",
+          "component": "0.050.9291.2",
+          "maktx_cmp": "TUBO H2O EGR KF"
+        },
+        {
+          "posnr": "000044",
+          "component": "2.1560.005.0",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000045",
+          "component": "2.3120.007.4",
+          "maktx_cmp": "PLUG M10X1"
+        },
+        {
+          "posnr": "000051",
+          "component": "2.3249.832.2",
+          "maktx_cmp": "BOCCHETTONE M10X1.25"
+        },
+        {
+          "posnr": "000052",
+          "component": "0.031.2606.3",
+          "maktx_cmp": "VENT PIPE"
+        },
+        {
+          "posnr": "000053",
+          "component": "0.032.8072.0",
+          "maktx_cmp": "HOSE KF"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI212.00.0_B22",
+      "maktx_hl": "3 CYL CRANKSHAFT K SERIES",
+      "components": [
+        {
+          "posnr": "000011",
+          "component": "2.1529.168.0",
+          "maktx_cmp": "TENUTA A CASSETTA"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.007.0851.0/20",
+          "maktx_cmp": "COPERC.POST.ALB.MOT."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IH115.04.0_A22",
+      "maktx_hl": "ATTACCO SCARICO OLIO",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "2.3249.908.2",
+          "maktx_cmp": "RACCORDO SPEC. M16X1.5"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1560.012.0",
+          "maktx_cmp": "GUARN 16.2X22"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IR119.00.0_A22",
+      "maktx_hl": "PTO-HYDRAULIC PUMP PLUS",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.027.3361.4",
+          "maktx_cmp": "PTO-HYDR.KD COMPLETA"
+        },
+        {
+          "posnr": "000001",
+          "component": "0.027.3361.4",
+          "maktx_cmp": "PUMP DRIVE HOUSING PTO HYDRAULIC KD"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1549.426.0",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.163.6350.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1651.506.0",
+          "maktx_cmp": "DOWEL"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.007.0812.0",
+          "maktx_cmp": "PLATE"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.0112.207.2",
+          "maktx_cmp": "SCREW  M8 X1.25X20"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1560.012.0",
+          "maktx_cmp": "GUARN 16.2X22"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.3120.110.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "940296",
+          "maktx_cmp": "I.M. REGISTRAZIONE GIOCO INGRANAGGI  PTO"
+        },
+        {
+          "posnr": "000101",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000102",
+          "component": "940167",
+          "maktx_cmp": "I.M. SIGILLATURA GIUNZIONI LAVORATE"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU615.03.0_A22",
+      "maktx_hl": "LUBRIFICAZIONE TURBINA KF3",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.031.4772.3",
+          "maktx_cmp": "OIL OUTLET PIPE"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.020.4302.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0112.007.2",
+          "maktx_cmp": "HEX HEAD BOLTM6X1X20"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.00.0_A36",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF3_WG",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.029.1608.0/20",
+          "maktx_cmp": "COLLETTORE SCARICO 3 CIL."
+        },
+        {
+          "posnr": "000003",
+          "component": "0.032.6717.4/20",
+          "maktx_cmp": "TURBOCHARGER KF3_WG"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.020.4191.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1019.033.0",
+          "maktx_cmp": "SPECIAL NUT M8X1"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.0432.004.7",
+          "maktx_cmp": "MEDIUM END STUDS M8X"
+        },
+        {
+          "posnr": "000019",
+          "component": "0.020.4184.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000020",
+          "component": "0.033.4139.0",
+          "maktx_cmp": "ADATTATORE"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.0432.003.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.032.6022.4",
+          "maktx_cmp": "MALE CONNEC.TUBE D.8"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.030.8767.0",
+          "maktx_cmp": "FLANGE VENTURI TUBE"
+        },
+        {
+          "posnr": "000036",
+          "component": "0.030.3742.0",
+          "maktx_cmp": "INTAKE GASKET VENTUR"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IH317.01.0",
+      "maktx_hl": "TAPPO COLLETT. ACQUA",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "2.3120.109.0",
+          "maktx_cmp": "PLUG M14X1.5"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1560.010.0",
+          "maktx_cmp": "Sealing ring"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU617.00.0_A23",
+      "maktx_hl": "WATER CIRCUIT KF3",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.021.5359.0/10",
+          "maktx_cmp": "COLLETTORE ACQUA"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.021.8912.0",
+          "maktx_cmp": "COPERCHIO TERMOSTATO"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.3120.102.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1560.018.0",
+          "maktx_cmp": "GASKET 22.2X29"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.007.1258.3/20",
+          "maktx_cmp": "THERMOSTAT"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0312.208.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000025",
+          "component": "0.021.8915.3/10",
+          "maktx_cmp": "TUBO RITORNO ACQUA"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000032",
+          "component": "2.1560.006.0",
+          "maktx_cmp": "SEALING RING 10.2X16"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.3110.421.7",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000035",
+          "component": "2.1531.066.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000036",
+          "component": "2.1560.012.0",
+          "maktx_cmp": "GUARN 16.2X22"
+        },
+        {
+          "posnr": "000037",
+          "component": "2.3120.010.4",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.1560.014.0",
+          "maktx_cmp": "SEAL.RING18.2X24X1.5"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IW215.00.0_B22",
+      "maktx_hl": "LU.KF3-55 BL.-BY OP.",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.4189.4/50",
+          "maktx_cmp": "OIL PUMP 3 CYLINDER"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939470",
+          "maktx_cmp": "REGISTR.GIOCO INGRAN"
+        },
+        {
+          "posnr": "000102",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU618.00.0_A66",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF3_WG",
+      "components": [
+        {
+          "posnr": "000016",
+          "component": "2.0119.121.0",
+          "maktx_cmp": "SCREW M6X1X10"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IX211.00.0",
+      "maktx_hl": "3 CYL CRANKCASE",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.028.8221.4/20",
+          "maktx_cmp": "3 CYL. CRANKCASE ASSY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.035.9283.0",
+          "maktx_cmp": "GUARNIZIONE CARTER"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.035.8887.0",
+          "maktx_cmp": "CARTER DISTRIBUZIONE"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0312.214.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.0312.208.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1529.167.0",
+          "maktx_cmp": "OIL SEAL"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.019.4415.0/10",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.066.1152.0/10",
+          "maktx_cmp": "RUBBER SEAL"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1651.305.0",
+          "maktx_cmp": "PIN 4X12 UNI 7"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1651.507.0",
+          "maktx_cmp": "ROLL PIN 6X16"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1560.027.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.3139.031.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000016",
+          "component": "0.020.0875.0",
+          "maktx_cmp": "SMALL COVER"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1539.097.0",
+          "maktx_cmp": "O' RING"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.3139.024.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.0399.456.7",
+          "maktx_cmp": "SCREW.C-SHAFT SUP.KF"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.3139.030.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1561.110.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "927260",
+          "maktx_cmp": "DEBURRING OF CRANKCASE OF ENGINES"
+        },
+        {
+          "posnr": "000102",
+          "component": "927417",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000103",
+          "component": "927421",
+          "maktx_cmp": "SHAFT INT. SUPPORT"
+        },
+        {
+          "posnr": "000104",
+          "component": "939485",
+          "maktx_cmp": "I.M.CARTER ANTERIORE"
+        },
+        {
+          "posnr": "000105",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IX214.00.0_A12",
+      "maktx_hl": "CYLINDER HEAD ASSEMBLY KF3_155 bar",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.032.8567.4/10",
+          "maktx_cmp": "CYL.HEAD ASSY.KF"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0432.005.7",
+          "maktx_cmp": "STUD BOLT M8X1X25"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1651.505.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0399.455.7/10",
+          "maktx_cmp": "SCREW.CYL.HEAD KF"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.019.7133.0/10",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.019.7134.0/10",
+          "maktx_cmp": "CYL.HEAD GASKET-1.4"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "930053",
+          "maktx_cmp": "CHOICE OF ENGINE-HEAD"
+        },
+        {
+          "posnr": "000102",
+          "component": "939405",
+          "maktx_cmp": "TIGHTNING PROCE.CH"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IX214.00.0_A22",
+      "maktx_hl": "CYLINDER HEAD ASSEMBLY KF3_155 bar",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "2.0432.011.7",
+          "maktx_cmp": "STUD BOLT M8X1X40"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IR119.00.0_A12",
+      "maktx_hl": "PTO HYDRAULIC PUMP",
+      "components": [
+        {
+          "posnr": "000004",
+          "component": "0.025.5175.0/10",
+          "maktx_cmp": "GUARNIZIONE SPESS.1.1"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.025.5176.0/10",
+          "maktx_cmp": "GUARNIZIONE SPESS.1.05"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.025.5177.0/10",
+          "maktx_cmp": "GUARNIZIONE SPESS.1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0432.011.7",
+          "maktx_cmp": "STUD BOLT M8X1X40"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IR119.00.0_A22",
+      "maktx_hl": "PTO HYDRAULIC PUMP",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.027.3361.4",
+          "maktx_cmp": "PUMP DRIVE HOUSING PTO HYDRAULIC KD"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1549.426.0",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.163.6350.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1651.506.0",
+          "maktx_cmp": "DOWEL"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.007.0812.0",
+          "maktx_cmp": "PLATE"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.0112.207.2",
+          "maktx_cmp": "SCREW  M8 X1.25X20"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1560.012.0",
+          "maktx_cmp": "GUARN 16.2X22"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.3120.110.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "940296",
+          "maktx_cmp": "I.M. REGISTRAZIONE GIOCO INGRANAGGI  PTO"
+        },
+        {
+          "posnr": "000101",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000102",
+          "component": "940167",
+          "maktx_cmp": "I.M. SIGILLATURA GIUNZIONI LAVORATE"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IL419.00.0_A12",
+      "maktx_hl": "PRESA POTENZA DOPPIA",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.024.7780.0",
+          "maktx_cmp": "GUARNIZIONE"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.024.7781.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.024.7782.0",
+          "maktx_cmp": "GUARNIZIONE"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0432.015.7",
+          "maktx_cmp": "STUD"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0312.215.2",
+          "maktx_cmp": "VITE M8X1.25X45"
+        },
+        {
+          "posnr": "000100",
+          "component": "940203",
+          "maktx_cmp": "I.M. REGISTRAZIONE GIOCO PTO"
+        },
+        {
+          "posnr": "000101",
+          "component": "940167",
+          "maktx_cmp": "I.M. SIGILLATURA GIUNZIONI LAVORATE"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IX015.04.0_A12",
+      "maktx_hl": "ATTACCO SCARICO OLIO M22x1.5",
+      "components": [
+        {
+          "posnr": "000003",
+          "component": "0.024.3310.0",
+          "maktx_cmp": "MANICOTTO SCAR. OLIO"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.6858.014.0",
+          "maktx_cmp": "FASCETTA DN.26"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.02.0",
+      "maktx_hl": "COMPLETAMENTO ASPIRAZIONE KF",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.037.4538.3",
+          "maktx_cmp": "INTAKE ELBOW ASSEMBLY"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.030.3743.3/10",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1011.103.2",
+          "maktx_cmp": "NUT M6X1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0422.001.7",
+          "maktx_cmp": "BOLT GROUP 06"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0112.215.2",
+          "maktx_cmp": "H.HEAD BOLTM8X1.2X40"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1312.004.2",
+          "maktx_cmp": "WASHER 8"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1011.105.2",
+          "maktx_cmp": "NUT M8X1.25"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IL419.00.0_A22",
+      "maktx_hl": "PRESA POTENZA DOPPIA",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.024.0307.4/40",
+          "maktx_cmp": "PRESA POTENZA"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1651.506.0",
+          "maktx_cmp": "DOWEL"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IX015.04.0_A22",
+      "maktx_hl": "ATTACCO SCARICO OLIO M22x1.5",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "2.3249.907.2",
+          "maktx_cmp": "RACCORDO M22x1.5"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1560.018.0",
+          "maktx_cmp": "GASKET 22.2X29"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.K7817.08.0",
+      "maktx_hl": "PULEG.VENT-PK10 1,45",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.0728.0",
+          "maktx_cmp": "PULLEY"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0312.210.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI799.10.0",
+      "maktx_hl": "TARAT. DI SERVIZIO KF3075TA",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "IU6.0107.0",
+          "maktx_cmp": "TAB.TARAT.KF3075TA0A 75kW"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.024.2449.3/10",
+          "maktx_cmp": "SERVICE ENGINE PLATE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.8559.001.0/20",
+          "maktx_cmp": "ENGINE SW V631"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.8569.005.0/10",
+          "maktx_cmp": "DATASET KF3075TA00"
+        },
+        {
+          "posnr": "000100",
+          "component": "939786",
+          "maktx_cmp": "STAMPIGL.TARGHETTA MOT.SERVIZIO"
+        },
+        {
+          "posnr": "000101",
+          "component": "996033",
+          "maktx_cmp": "PROCEDURA CoP"
+        },
+        {
+          "posnr": "000111",
+          "component": "2.8569.036.0",
+          "maktx_cmp": "DATASET TB EOL KF3075TA00 V630_A01"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IR899.61.0",
+      "maktx_hl": "SEALANT_4CY EN K SERIES",
+      "components": [
+        {
+          "posnr": "000201",
+          "component": "4.0507.001.00",
+          "maktx_cmp": "LOCTITE 242 - 50 ML"
+        },
+        {
+          "posnr": "000202",
+          "component": "4.0503.001.00",
+          "maktx_cmp": "LOCTITE 270 - 50 ML"
+        },
+        {
+          "posnr": "000203",
+          "component": "4.0523.001.00",
+          "maktx_cmp": "LOCTITE 542 - 50 ML"
+        },
+        {
+          "posnr": "000204",
+          "component": "4.0524.001.00",
+          "maktx_cmp": "LOCT.554FEED PUMP ST - 50 ML"
+        },
+        {
+          "posnr": "000205",
+          "component": "4.0525.001.00",
+          "maktx_cmp": "LOCTITE 638 - 50 ML"
+        },
+        {
+          "posnr": "000206",
+          "component": "4.0505.001.00",
+          "maktx_cmp": "LOCTITE 609"
+        },
+        {
+          "posnr": "000207",
+          "component": "3.4650.050.0",
+          "maktx_cmp": "COMPOUND - 250 ML"
+        },
+        {
+          "posnr": "000208",
+          "component": "4.0508.001.00",
+          "maktx_cmp": "TEROST.FOR NAME PLAT"
+        },
+        {
+          "posnr": "000209",
+          "component": "4.970.56.071",
+          "maktx_cmp": "TEROSTAT 8511 250ML"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.IW416.00.0",
+      "maktx_hl": "POMPA GASOLIO E INIETTORI",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.2840.0",
+          "maktx_cmp": "COMMON RAIL"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.4719.681.0/20",
+          "maktx_cmp": "INJECTOR"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.036.3660.3",
+          "maktx_cmp": "TUBO POMPA CP4 - RAIL"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.4619.295.0/10",
+          "maktx_cmp": "FUEL INJ.PUMP CP4.1/GP41"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.019.6896.0/10",
+          "maktx_cmp": "FLANGE"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1530.153.0",
+          "maktx_cmp": "O'RING 63.17X2.62"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1099.159.2/10",
+          "maktx_cmp": "NUT M8"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0112.210.2",
+          "maktx_cmp": "VITE M8X1.25X28"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.023.2313.2/10",
+          "maktx_cmp": "TUBO RITORNO GASOL."
+        },
+        {
+          "posnr": "000010",
+          "component": "0.049.4582.2",
+          "maktx_cmp": "RAIL RETURN PIPE"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.012.6451.0",
+          "maktx_cmp": "RUBBER TUBE"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.019.6930.0/10",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.019.6929.0/10",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.0399.376.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.019.4323.4",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000016",
+          "component": "0.036.3647.3",
+          "maktx_cmp": "TUBO INIET.CIL.1"
+        },
+        {
+          "posnr": "000017",
+          "component": "0.036.3634.3",
+          "maktx_cmp": "TUBO INIET.CIL.2"
+        },
+        {
+          "posnr": "000018",
+          "component": "0.036.3637.3",
+          "maktx_cmp": "TUBO INIET.CIL.3"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.6857.006.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.6857.019.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.0432.009.7",
+          "maktx_cmp": "STUD BOLT M8X1X35"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.1310.028.2",
+          "maktx_cmp": "PLAIN WASHER"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1470.052.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.1011.101.2",
+          "maktx_cmp": "HEX NUT M4X0.7"
+        },
+        {
+          "posnr": "000025",
+          "component": "0.036.3640.3",
+          "maktx_cmp": "TUBO INIET.CIL.4"
+        },
+        {
+          "posnr": "000026",
+          "component": "0.023.2003.0",
+          "maktx_cmp": "QUICK CONN. SAE 3/8"
+        },
+        {
+          "posnr": "000026",
+          "component": "0.040.6708.4/10",
+          "maktx_cmp": "PIPE FUEL RETURN"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.6858.004.0",
+          "maktx_cmp": "FASCETTA DN.16"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.6857.023.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.6839.059.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.0332.204.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000030",
+          "component": "0.028.7550.0",
+          "maktx_cmp": "FUEL HOSE"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939476",
+          "maktx_cmp": "I.M.COMPON.SIST.INIE"
+        },
+        {
+          "posnr": "000102",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.JQ811.04.0_A12",
+      "maktx_hl": "PTO SUPPORT AIR COMPR. FILKAR",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.024.7780.0",
+          "maktx_cmp": "GUARNIZIONE"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1560.013.0",
+          "maktx_cmp": "SEALING R.18.2X22X1."
+        },
+        {
+          "posnr": "000005",
+          "component": "2.6858.012.0",
+          "maktx_cmp": "FASCETTA DN.24"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.023.1274.0/10",
+          "maktx_cmp": "MANICOTTO SCARICO OLIO"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.6858.014.0",
+          "maktx_cmp": "FASCETTA DN.26"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.0432.011.7",
+          "maktx_cmp": "STUD BOLT M8X1X40"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0432.021.7",
+          "maktx_cmp": "STUD M8X1.25X40"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.0112.206.2",
+          "maktx_cmp": "SCREW M8X1.25X18"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1651.507.0",
+          "maktx_cmp": "ROLL PIN 6X16"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0432.015.7",
+          "maktx_cmp": "STUD"
+        },
+        {
+          "posnr": "000100",
+          "component": "940167",
+          "maktx_cmp": "I.M. SIGILLATURA GIUNZIONI LAVORATE"
+        },
+        {
+          "posnr": "000101",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NI899.11.0",
+      "maktx_hl": "TARAT. DI SERVIZIO KF4055TA",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "KQ7.0107.0",
+          "maktx_cmp": "TAB.TARAT.KF4055TA 55kW"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.024.2449.3/10",
+          "maktx_cmp": "SERVICE ENGINE PLATE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.8559.001.0/20",
+          "maktx_cmp": "ENGINE SW V631"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.8569.073.0",
+          "maktx_cmp": "DATASET KF4055TA00"
+        },
+        {
+          "posnr": "000100",
+          "component": "939786",
+          "maktx_cmp": "STAMPIGL.TARGHETTA MOT.SERVIZIO"
+        },
+        {
+          "posnr": "000101",
+          "component": "996033",
+          "maktx_cmp": "PROCEDURA CoP"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO211.00.0",
+      "maktx_hl": "4 CYL CRANKCASE K SERIES",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.4332.4/50",
+          "maktx_cmp": "4 CYL. CRANKC.ASSY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.035.9283.0",
+          "maktx_cmp": "GUARNIZIONE CARTER"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.035.8887.0",
+          "maktx_cmp": "CARTER DISTRIBUZIONE"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.0312.214.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0312.208.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1529.167.0",
+          "maktx_cmp": "OIL SEAL"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.019.4415.0/10",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.066.1152.0/10",
+          "maktx_cmp": "RUBBER SEAL"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1651.305.0",
+          "maktx_cmp": "PIN 4X12 UNI 7"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1651.507.0",
+          "maktx_cmp": "ROLL PIN 6X16"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.1560.027.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.3139.031.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000019",
+          "component": "0.020.0875.0",
+          "maktx_cmp": "SMALL COVER"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.1539.097.0",
+          "maktx_cmp": "O' RING"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.3139.024.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.0399.367.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.3139.030.2",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.1561.110.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000102",
+          "component": "927260",
+          "maktx_cmp": "DEBURRING OF CRANKCASE OF ENGINES"
+        },
+        {
+          "posnr": "000103",
+          "component": "927417",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000104",
+          "component": "927421",
+          "maktx_cmp": "SHAFT INT. SUPPORT"
+        },
+        {
+          "posnr": "000105",
+          "component": "939485",
+          "maktx_cmp": "I.M.CARTER ANTERIORE"
+        },
+        {
+          "posnr": "000106",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO212.00.0_B12",
+      "maktx_hl": "4 CYL CRANKSHAFT K SERIES",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.049.9741.3",
+          "maktx_cmp": "4CYL CRANKSHAFT ASSEMBLY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.049.9740.4",
+          "maktx_cmp": "PISTON-ROD-LINER_ASSEMBLY"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.049.9740.4/10",
+          "maktx_cmp": "PISTON-ROD-LINER_ASSEMBLY"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.019.5453.0",
+          "maktx_cmp": "CON.ROD HALF BUSHING"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.019.5454.0",
+          "maktx_cmp": "CON.ROD HALF BUSHING"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.019.5456.0",
+          "maktx_cmp": "MAIN HALF BUSHING"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.019.5455.0/10",
+          "maktx_cmp": "UPPER MAIN BEARING"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1599.524.7",
+          "maktx_cmp": "WASHER 21X60X12"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.023.7266.0",
+          "maktx_cmp": "SEMIANELLO DI SPALLAM."
+        },
+        {
+          "posnr": "000012",
+          "component": "0.022.9105.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1475.002.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.0112.207.2",
+          "maktx_cmp": "SCREW  M8 X1.25X20"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1539.259.0",
+          "maktx_cmp": "Cylinder liner O ring (107.62 x 2.62)"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0432.002.7",
+          "maktx_cmp": "PRIG M8X1X18"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0399.365.0",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000100",
+          "component": "927203",
+          "maktx_cmp": "LUBRICATION OF COMP."
+        },
+        {
+          "posnr": "000101",
+          "component": "940295",
+          "maktx_cmp": "I.M. ANELLO DI TENUTA POST."
+        },
+        {
+          "posnr": "000102",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000103",
+          "component": "939411",
+          "maktx_cmp": "IST.MONT.CANNE/GUAR."
+        },
+        {
+          "posnr": "000104",
+          "component": "939471",
+          "maktx_cmp": "IST.MONT. PISTONI"
+        },
+        {
+          "posnr": "000105",
+          "component": "939472",
+          "maktx_cmp": "IST.MONT.BIELLA/PIST"
+        },
+        {
+          "posnr": "000106",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        },
+        {
+          "posnr": "000107",
+          "component": "939556",
+          "maktx_cmp": "I.M. INGRANAG.ALB.M"
+        },
+        {
+          "posnr": "000108",
+          "component": "939484",
+          "maktx_cmp": "I.M. CONROD ASSEMBLY"
+        },
+        {
+          "posnr": "000109",
+          "component": "939845",
+          "maktx_cmp": "I.M.RING.PIS.LIN.ASS"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO213.00.0",
+      "maktx_hl": "4CYL TIMING K SERIES",
+      "components": [
+        {
+          "posnr": "000003",
+          "component": "0.019.4874.3",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.019.4875.3",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.019.4876.3",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.021.3997.0",
+          "maktx_cmp": "RALLA"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.065.1352.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1410.016.1",
+          "maktx_cmp": "CIRCLIP 40"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.019.4147.0/10",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.065.1350.0",
+          "maktx_cmp": "SMALL DISC"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.0132.207.2",
+          "maktx_cmp": "SCREW M10X1,25X25"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.019.4148.0/10",
+          "maktx_cmp": "GEAR"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.0312.216.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1019.129.2/10",
+          "maktx_cmp": "DADO M18X1.5X12"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.065.1353.0",
+          "maktx_cmp": "SMALL PLATE"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.0312.205.2",
+          "maktx_cmp": "SCREW M8X1,25X18"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.1559.398.0",
+          "maktx_cmp": "BUSH"
+        },
+        {
+          "posnr": "000020",
+          "component": "0.035.9552.0",
+          "maktx_cmp": "ALBERO A CAMME 4 CIL."
+        },
+        {
+          "posnr": "000021",
+          "component": "0.019.5378.3",
+          "maktx_cmp": "TAPPETS"
+        },
+        {
+          "posnr": "000022",
+          "component": "0.035.9578.2",
+          "maktx_cmp": "ASTA BILANC."
+        },
+        {
+          "posnr": "000023",
+          "component": "0.019.2888.0/10",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000024",
+          "component": "0.036.0479.4",
+          "maktx_cmp": "COVER ASSEMBLY"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.0312.214.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939194",
+          "maktx_cmp": "RALLA PER INGR.DISTR"
+        },
+        {
+          "posnr": "000102",
+          "component": "939410",
+          "maktx_cmp": "CLEARANCE GEARS SETT"
+        },
+        {
+          "posnr": "000103",
+          "component": "939473",
+          "maktx_cmp": "I.M. COPERCHI VALVOL"
+        },
+        {
+          "posnr": "000104",
+          "component": "939486",
+          "maktx_cmp": "FASATURA ALBER.CAMME"
+        },
+        {
+          "posnr": "000105",
+          "component": "939556",
+          "maktx_cmp": "I.M. INGRANAG.ALB.M"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO214.00.0_A12",
+      "maktx_hl": "TESTE CILINDRI KF4_155bar",
+      "components": [
+        {
+          "posnr": "000007",
+          "component": "0.019.7134.0/10",
+          "maktx_cmp": "CYL.HEAD GASKET-1.4"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.019.7135.0/10",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "930053",
+          "maktx_cmp": "CHOICE OF ENGINE-HEAD"
+        },
+        {
+          "posnr": "000102",
+          "component": "939405",
+          "maktx_cmp": "TIGHTNING PROCE.CH"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO299.01.0",
+      "maktx_hl": "4CYL EN.OIL&COOLANT+STANDARDS",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "3.1011.021.0",
+          "maktx_cmp": "SHELL R4X 15W40 TANK"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.K03.0000.0",
+          "maktx_cmp": "SEZ.LONGIT.4WTI 80"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.K03.0000.1",
+          "maktx_cmp": "SEZ.TRASVE.4WTI 80"
+        },
+        {
+          "posnr": "000004",
+          "component": "3.4270.020.0/10",
+          "maktx_cmp": "COOLANT ENGINE TEST BENCH"
+        },
+        {
+          "posnr": "000200",
+          "component": "927543",
+          "maktx_cmp": "OIL CHECK"
+        },
+        {
+          "posnr": "000201",
+          "component": "927203",
+          "maktx_cmp": "LUBRICATION OF COMP."
+        },
+        {
+          "posnr": "000202",
+          "component": "927486",
+          "maktx_cmp": "SCHMIERSTOFFE FUER MOTOREN SERIE 1000"
+        },
+        {
+          "posnr": "000203",
+          "component": "939089",
+          "maktx_cmp": "A.I.CODIFICA.-ENGINE"
+        },
+        {
+          "posnr": "000300",
+          "component": "939871",
+          "maktx_cmp": "FLU.PG88 RODA.MOTORI"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.33212.03.0_A12",
+      "maktx_hl": "MASSE CONTROROTANTI",
+      "components": [
+        {
+          "posnr": "000025",
+          "component": "2.1589.139.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.1589.140.0",
+          "maktx_cmp": "SHIM 16.2X0.1"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.1579.628.0",
+          "maktx_cmp": "SPACER 16.5X226"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.1579.629.0",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000034",
+          "component": "2.1589.048.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000035",
+          "component": "2.1589.049.0",
+          "maktx_cmp": "SHIM 12.5X26X0.3"
+        },
+        {
+          "posnr": "000044",
+          "component": "2.1579.626.0",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000045",
+          "component": "2.0139.028.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000046",
+          "component": "2.1699.191.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000049",
+          "component": "2.1589.637.0",
+          "maktx_cmp": "SHIM 16.2X1.5"
+        },
+        {
+          "posnr": "000050",
+          "component": "2.1589.635.0",
+          "maktx_cmp": "SHIM 12.5X26X1.5"
+        },
+        {
+          "posnr": "000051",
+          "component": "2.1589.636.0",
+          "maktx_cmp": "SHIM 16.5X26X1.5"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU715.00.0_B12",
+      "maktx_hl": "LUBRIFIC.BLOW-BY OPEN KF4",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.020.1704.3",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1560.006.0",
+          "maktx_cmp": "SEALING RING 10.2X16"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.028.8459.4",
+          "maktx_cmp": "OIL JET ASSEMBLY"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1651.404.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.023.1278.3",
+          "maktx_cmp": "TUBO RITORNO OLIO"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.020.2503.0",
+          "maktx_cmp": "RUBBER SLEEVE"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.019.6677.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.019.6359.0",
+          "maktx_cmp": "FLANGE"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1470.002.2",
+          "maktx_cmp": "LOCK WASHER 6"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.0312.106.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.0312.114.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.6830.005.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.6858.016.0",
+          "maktx_cmp": "FASCETTA DN.28"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.020.7207.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1121.107.2",
+          "maktx_cmp": "SELFLOCK NUT"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.0432.161.7",
+          "maktx_cmp": "STUD BOLTM10X1,25X40"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.0432.167.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000019",
+          "component": "0.020.7213.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0432.168.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000021",
+          "component": "0.019.7257.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000022",
+          "component": "0.007.0867.0",
+          "maktx_cmp": "T160+R165 SLEEVE"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.3339.307.0",
+          "maktx_cmp": "PIPE FITTING"
+        },
+        {
+          "posnr": "000024",
+          "component": "0.065.1567.0/10",
+          "maktx_cmp": "FILTER"
+        },
+        {
+          "posnr": "000025",
+          "component": "0.021.2544.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000026",
+          "component": "0.012.0613.0",
+          "maktx_cmp": "PIPE UNION"
+        },
+        {
+          "posnr": "000027",
+          "component": "0.041.1135.4",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.0312.205.2",
+          "maktx_cmp": "SCREW M8X1,25X18"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000030",
+          "component": "0.013.6977.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000031",
+          "component": "2.6858.005.0",
+          "maktx_cmp": "FASCETTA"
+        },
+        {
+          "posnr": "000032",
+          "component": "0.019.7514.0/10",
+          "maktx_cmp": "FILTER"
+        },
+        {
+          "posnr": "000033",
+          "component": "0.020.2506.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.020.2504.0",
+          "maktx_cmp": "RUBBER SLEEVE"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.023.1269.0",
+          "maktx_cmp": "TUBO RITORNO OLIO"
+        },
+        {
+          "posnr": "000036",
+          "component": "0.020.2505.0",
+          "maktx_cmp": "RUBBER SLEEVE"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.6858.002.0",
+          "maktx_cmp": "CLAMP D14"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.6858.018.0",
+          "maktx_cmp": "HOSE CLAMP D.30"
+        },
+        {
+          "posnr": "000040",
+          "component": "0.020.5830.0",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000041",
+          "component": "2.0312.101.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000042",
+          "component": "2.6858.020.0",
+          "maktx_cmp": "HOSE CLAMP D.35"
+        },
+        {
+          "posnr": "000043",
+          "component": "2.6858.019.0",
+          "maktx_cmp": "FASCETTA DN.32"
+        },
+        {
+          "posnr": "000044",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        },
+        {
+          "posnr": "000045",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000046",
+          "component": "2.6839.054.0",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000047",
+          "component": "0.034.4386.0",
+          "maktx_cmp": "SHIM OPA"
+        },
+        {
+          "posnr": "000048",
+          "component": "0.034.4370.0",
+          "maktx_cmp": "SHIM OPA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU715.04.0_A22",
+      "maktx_hl": "LUBRIF.TURBINA IN PTO KF4_WG",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.030.2423.3/10",
+          "maktx_cmp": "TUBO MANDATA OLIO"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.3249.697.2",
+          "maktx_cmp": "PIPE UNION"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1560.008.0",
+          "maktx_cmp": "GASKET 12.2 X 18"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.3339.594.2/10",
+          "maktx_cmp": "PIPE FITTING"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1561.107.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.007.1317.4",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1561.112.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.3120.102.0",
+          "maktx_cmp": "PLUG"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.10.0_A55",
+      "maktx_hl": "IMPIANTO ELETTRICO KF4 WG",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.030.6480.4/10",
+          "maktx_cmp": "WIRING ENGINE KF4CYL"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.023.1282.4/10",
+          "maktx_cmp": "CABLAGGIO INIETT.KE4"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.022.9911.3/20",
+          "maktx_cmp": "STAFFA CONNET.MOTORE"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.022.8601.2",
+          "maktx_cmp": "STAFFA CABLAGGIO INIET."
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0312.103.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.7659.449.0",
+          "maktx_cmp": "PUSH-BUTTON"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.7099.041.0",
+          "maktx_cmp": "SPEED SENSOR"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.020.3279.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.0312.104.2",
+          "maktx_cmp": "H.SO.H.SCREW M6X1X16"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.7099.042.0",
+          "maktx_cmp": "SENSOR"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.7099.940.0",
+          "maktx_cmp": "PRESSURE SWITCH"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1560.008.0",
+          "maktx_cmp": "GASKET 12.2 X 18"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1569.118.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.3339.353.2/20",
+          "maktx_cmp": "RACC M12X1.5-M18X1.5"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.1560.014.0",
+          "maktx_cmp": "SEAL.RING18.2X24X1.5"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0432.001.7",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000021",
+          "component": "0.023.2004.3/10",
+          "maktx_cmp": "STAFFETTA CABLAGGIO"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0432.004.7",
+          "maktx_cmp": "MEDIUM END STUDS M8X"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.6830.006.2",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000024",
+          "component": "0.023.3278.3",
+          "maktx_cmp": "STAFFETTA"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.6830.009.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.0312.101.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.1480.011.2",
+          "maktx_cmp": "SPRING WASHER"
+        },
+        {
+          "posnr": "000030",
+          "component": "2.0312.004.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.6830.008.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000034",
+          "component": "2.1011.103.2",
+          "maktx_cmp": "NUT M6X1"
+        },
+        {
+          "posnr": "000035",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        },
+        {
+          "posnr": "000036",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.3329.043.0",
+          "maktx_cmp": "FIXING CORR. TUBE D.20"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.6852.101.0",
+          "maktx_cmp": "FASCETTA 142X3.6"
+        },
+        {
+          "posnr": "000040",
+          "component": "0.030.2624.0",
+          "maktx_cmp": "PLATE KF"
+        },
+        {
+          "posnr": "000041",
+          "component": "2.0332.203.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000042",
+          "component": "2.1310.028.2",
+          "maktx_cmp": "PLAIN WASHER"
+        },
+        {
+          "posnr": "000043",
+          "component": "2.1470.052.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000045",
+          "component": "2.6852.201.0",
+          "maktx_cmp": "FASCETTA 188X4.8"
+        },
+        {
+          "posnr": "000046",
+          "component": "2.0112.209.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000047",
+          "component": "0.023.3273.0",
+          "maktx_cmp": "STAFFA X CABLAGGIO"
+        },
+        {
+          "posnr": "000048",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000049",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000050",
+          "component": "2.6839.090.2",
+          "maktx_cmp": "FASCETTA X TUBO 6.35"
+        },
+        {
+          "posnr": "000051",
+          "component": "2.0399.307.2",
+          "maktx_cmp": "SMALL COLUMN"
+        },
+        {
+          "posnr": "000052",
+          "component": "2.1549.651.2",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000053",
+          "component": "2.0312.008.2",
+          "maktx_cmp": "SCREW GROUP 06"
+        },
+        {
+          "posnr": "000054",
+          "component": "2.6830.005.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000055",
+          "component": "0.026.5526.0",
+          "maktx_cmp": "STAFFETTA"
+        },
+        {
+          "posnr": "000056",
+          "component": "2.3329.047.0",
+          "maktx_cmp": "FIXING CORR. TUBE D.13"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.11.0_A22",
+      "maktx_hl": "GLOWPLUG KF4",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.032.4917.0",
+          "maktx_cmp": "GLOWPLUG_A250001782"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.032.5469.4/10",
+          "maktx_cmp": "GLOWPLUG WIRING KF4"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1011.101.2",
+          "maktx_cmp": "HEX NUT M4X0.7"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1470.052.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.6839.055.0",
+          "maktx_cmp": "CLAMP 11/20 RSGU1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.6852.201.0",
+          "maktx_cmp": "FASCETTA 188X4.8"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "940168",
+          "maktx_cmp": "CABLAGGI MOTORE KF"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU717.00.0_A13",
+      "maktx_hl": "WATER CIRCUIT KF4-WG",
+      "components": [
+        {
+          "posnr": "000005",
+          "component": "0.019.9436.3/10",
+          "maktx_cmp": "PIPE"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.019.8377.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.6858.019.0",
+          "maktx_cmp": "FASCETTA DN.32"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.019.9437.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1480.015.2",
+          "maktx_cmp": "WASHER 10"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.019.8620.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.0313.316.7",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000028",
+          "component": "2.0313.312.7",
+          "maktx_cmp": "10X1.5X35 SCREW"
+        },
+        {
+          "posnr": "000040",
+          "component": "2.1530.066.0",
+          "maktx_cmp": "O' RING"
+        },
+        {
+          "posnr": "000041",
+          "component": "0.050.1116.0",
+          "maktx_cmp": "HOSE"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939575",
+          "maktx_cmp": "BELT ALIGNMENT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.00.0_A16",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF4_WG",
+      "components": [
+        {
+          "posnr": "000004",
+          "component": "0.019.8628.0/10",
+          "maktx_cmp": "EXHAUST SEAL"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.017.7810.0",
+          "maktx_cmp": "INTAKE MANIFOLD GASKET"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1019.033.0",
+          "maktx_cmp": "SPECIAL NUT M8X1"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.1549.786.2",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000033",
+          "component": "0.030.1988.0/10",
+          "maktx_cmp": "TUBO SENS.P3-KF4WG"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.032.6022.4",
+          "maktx_cmp": "MALE CONNEC.TUBE D.8"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.01.0_A13",
+      "maktx_hl": "EGR GROUP KF4",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.020.7742.2/10",
+          "maktx_cmp": "SUPPORTO POST.EGR KE"
+        },
+        {
+          "posnr": "000004",
+          "component": "0.021.2992.0",
+          "maktx_cmp": "GUARNIZIONE EGR"
+        },
+        {
+          "posnr": "000005",
+          "component": "0.020.9731.2/10",
+          "maktx_cmp": "TUBO GAS EGR"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.031.2456.0/20",
+          "maktx_cmp": "EGR PIPE KF"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.032.8071.0/10",
+          "maktx_cmp": "HOSE"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.020.1270.0/10",
+          "maktx_cmp": "FLANGE"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1531.066.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.019.9437.0",
+          "maktx_cmp": "SLEEVE"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.6858.014.0",
+          "maktx_cmp": "FASCETTA DN.26"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0312.210.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1019.033.0",
+          "maktx_cmp": "SPECIAL NUT M8X1"
+        },
+        {
+          "posnr": "000025",
+          "component": "2.1475.102.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000026",
+          "component": "2.0112.207.2",
+          "maktx_cmp": "SCREW  M8 X1.25X20"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.0312.216.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000040",
+          "component": "2.1549.786.2",
+          "maktx_cmp": "SPACER"
+        },
+        {
+          "posnr": "000041",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000042",
+          "component": "2.0399.411.2",
+          "maktx_cmp": "COLONNETTA M8X1"
+        },
+        {
+          "posnr": "000045",
+          "component": "2.0112.004.2",
+          "maktx_cmp": "SCREW 6X1X14"
+        },
+        {
+          "posnr": "000046",
+          "component": "2.6859.198.0",
+          "maktx_cmp": "CLAMP+SPRING Dn 35-50"
+        },
+        {
+          "posnr": "000049",
+          "component": "2.0432.001.2",
+          "maktx_cmp": "STUD BOLT"
+        },
+        {
+          "posnr": "000050",
+          "component": "2.1011.505.2",
+          "maktx_cmp": "NUT 8X1"
+        },
+        {
+          "posnr": "000051",
+          "component": "2.6858.019.0",
+          "maktx_cmp": "FASCETTA DN.32"
+        },
+        {
+          "posnr": "000052",
+          "component": "2.6858.022.0",
+          "maktx_cmp": "CLAMP D38"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.K7915.01.0",
+      "maktx_hl": "OIL PAN",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.3062.0/40",
+          "maktx_cmp": "OIL PAN"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.019.6573.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.1560.054.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.3199.001.2",
+          "maktx_cmp": "PLUG 1/2 BQPT"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.0112.229.2",
+          "maktx_cmp": "SCREW 8X1.25X100"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0112.233.2",
+          "maktx_cmp": "SCREW M8X1.25X120"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.0112.226.2",
+          "maktx_cmp": "SCREW M8X1.25X85"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.0112.239.2",
+          "maktx_cmp": "SCREW M8X1,25X150"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.0112.215.2",
+          "maktx_cmp": "H.HEAD BOLTM8X1.2X40"
+        },
+        {
+          "posnr": "000011",
+          "component": "2.0112.235.2",
+          "maktx_cmp": "SCREW 8X1.25X130"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.1539.065.0",
+          "maktx_cmp": "O RING 8,73X1,78V"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.086.1513.2/30",
+          "maktx_cmp": "DIPSTICK"
+        },
+        {
+          "posnr": "000014",
+          "component": "0.019.9317.3",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000015",
+          "component": "0.019.5960.3/20",
+          "maktx_cmp": "TUBE"
+        },
+        {
+          "posnr": "000016",
+          "component": "2.1532.075.0",
+          "maktx_cmp": "RING"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1470.006.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000019",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.6830.005.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1120.003.2",
+          "maktx_cmp": "NUT M6X1"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU717.00.0_A33",
+      "maktx_hl": "WATER CIRCUIT KF4-WG",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.020.3505.4/60",
+          "maktx_cmp": "KD WATER PUMP ASSY"
+        },
+        {
+          "posnr": "000012",
+          "component": "0.010.4297.0/10",
+          "maktx_cmp": "CLOSING CAP"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.6851.001.0",
+          "maktx_cmp": "HOSE CLIP 16/25"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1589.130.0",
+          "maktx_cmp": "SHIM"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.1589.131.0",
+          "maktx_cmp": "SHIM"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.K7917.08.0",
+      "maktx_hl": "PULEG.VENT-PK10 1,58",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.9097.0",
+          "maktx_cmp": "PULLEY"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0312.210.2",
+          "maktx_cmp": "H.SO.H.SCREW M8X1.25"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.00.0_A66",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF4_WG",
+      "components": [
+        {
+          "posnr": "000016",
+          "component": "2.0119.121.0",
+          "maktx_cmp": "SCREW M6X1X10"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "940098",
+          "maktx_cmp": "MONT.RACCORDO PARKER"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.10.0_A45",
+      "maktx_hl": "IMPIANTO ELETTRICO KF4 WG",
+      "components": [
+        {
+          "posnr": "000003",
+          "component": "0.039.6930.3",
+          "maktx_cmp": "BOOST & TEMP. SENSOR"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.7099.039.0",
+          "maktx_cmp": "SENSOR"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.0312.105.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.11.0_A12",
+      "maktx_hl": "GLOWPLUG KF4",
+      "components": [
+        {
+          "posnr": "000005",
+          "component": "0.014.2462.0",
+          "maktx_cmp": "SPACER"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.00.0_A26",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF4_WG",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.020.3393.0/40",
+          "maktx_cmp": "INTAKE MANIFOLD"
+        },
+        {
+          "posnr": "000007",
+          "component": "0.013.3121.0",
+          "maktx_cmp": "GASKET-"
+        },
+        {
+          "posnr": "000013",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.0312.226.2",
+          "maktx_cmp": "SCREW M8X1,25X100"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.0312.222.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.0312.215.2",
+          "maktx_cmp": "VITE M8X1.25X45"
+        },
+        {
+          "posnr": "000022",
+          "component": "2.0432.013.7",
+          "maktx_cmp": "STUD BOLD M8X1X45"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.1011.405.2",
+          "maktx_cmp": "NUT M8 X 1"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.33212.03.0_A22",
+      "maktx_hl": "MASSE CONTROROTANTI",
+      "components": [
+        {
+          "posnr": "000038",
+          "component": "0.086.1233.4/20",
+          "maktx_cmp": "BALANCING MASS ASSY."
+        },
+        {
+          "posnr": "000201",
+          "component": "927256/10",
+          "maktx_cmp": "TIGHTENING TORQUE"
+        },
+        {
+          "posnr": "000202",
+          "component": "927297",
+          "maktx_cmp": "C/R WEIGHTS TIMING"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO214.00.0_A22",
+      "maktx_hl": "TESTE CILINDRI KF4_155bar",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.032.6277.4",
+          "maktx_cmp": "COM.CYL.H.HYB.155bar"
+        },
+        {
+          "posnr": "000002",
+          "component": "2.0432.011.7",
+          "maktx_cmp": "STUD BOLT M8X1X40"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.0432.005.7",
+          "maktx_cmp": "STUD BOLT M8X1X25"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1651.505.0",
+          "maktx_cmp": "CYLINDRICAL PLUG"
+        },
+        {
+          "posnr": "000005",
+          "component": "2.0399.375.7",
+          "maktx_cmp": "SCREW"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.00.0_A36",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF4_WG",
+      "components": [
+        {
+          "posnr": "000015",
+          "component": "2.0432.018.7",
+          "maktx_cmp": "STUD BOLT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.10.0_A35",
+      "maktx_hl": "IMPIANTO ELETTRICO KF4 WG",
+      "components": [
+        {
+          "posnr": "000057",
+          "component": "2.7099.222.0",
+          "maktx_cmp": "P3 PRESSURE SENSOR"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.00.0_A46",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF4_WG",
+      "components": [
+        {
+          "posnr": "000030",
+          "component": "2.1480.011.2",
+          "maktx_cmp": "SPRING WASHER"
+        },
+        {
+          "posnr": "000031",
+          "component": "2.0312.003.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000032",
+          "component": "0.030.1987.0",
+          "maktx_cmp": "P3 SENSOR HOUSING"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.032.6022.4",
+          "maktx_cmp": "MALE CONNEC.TUBE D.8"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.01.0_A33",
+      "maktx_hl": "EGR GROUP KF4",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.019.7395.0/20",
+          "maktx_cmp": "EGR VALVE"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.030.2443.2/10",
+          "maktx_cmp": "EGR FRONT SUPPORT KF"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.021.8899.0",
+          "maktx_cmp": "BLOCCHETTO"
+        },
+        {
+          "posnr": "000008",
+          "component": "0.031.2457.3/10",
+          "maktx_cmp": "WATER PIPE EGR"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.032.8071.0",
+          "maktx_cmp": "HOSE EGR KF"
+        },
+        {
+          "posnr": "000009",
+          "component": "0.032.8071.0/10",
+          "maktx_cmp": "HOSE"
+        },
+        {
+          "posnr": "000010",
+          "component": "0.032.8072.0",
+          "maktx_cmp": "HOSE KF"
+        },
+        {
+          "posnr": "000014",
+          "component": "2.1480.012.2",
+          "maktx_cmp": "WASHER 6"
+        },
+        {
+          "posnr": "000015",
+          "component": "2.0312.110.2",
+          "maktx_cmp": "HEX SO.HD SCRM6X1X30"
+        },
+        {
+          "posnr": "000017",
+          "component": "2.1011.003.2",
+          "maktx_cmp": "NUT M6X11"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.0312.206.2",
+          "maktx_cmp": "SCREW 8X1,25X20"
+        },
+        {
+          "posnr": "000024",
+          "component": "2.6858.016.0",
+          "maktx_cmp": "FASCETTA DN.28"
+        },
+        {
+          "posnr": "000027",
+          "component": "2.0312.218.2",
+          "maktx_cmp": "BOLT M8X1.25X60"
+        },
+        {
+          "posnr": "000028",
+          "component": "0.031.2455.3/10",
+          "maktx_cmp": "WATER PIPE"
+        },
+        {
+          "posnr": "000029",
+          "component": "2.0312.108.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000030",
+          "component": "0.021.2949.0/20",
+          "maktx_cmp": "CORPO VALVOLA EGR KE4"
+        },
+        {
+          "posnr": "000031",
+          "component": "0.022.8360.3",
+          "maktx_cmp": "COPERCHIO EGR KE COMP."
+        },
+        {
+          "posnr": "000032",
+          "component": "0.020.4688.0",
+          "maktx_cmp": "MANICOTTO X EGR KE"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.0312.212.2",
+          "maktx_cmp": "SCREW 8X1,25X35"
+        },
+        {
+          "posnr": "000034",
+          "component": "0.020.4665.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.019.7405.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.019.7405.0",
+          "maktx_cmp": "ASKET"
+        },
+        {
+          "posnr": "000036",
+          "component": "0.019.6953.0",
+          "maktx_cmp": "COOLER"
+        },
+        {
+          "posnr": "000037",
+          "component": "2.6830.010.2",
+          "maktx_cmp": "CLAMP"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.0312.102.2",
+          "maktx_cmp": "SCREW"
+        },
+        {
+          "posnr": "000043",
+          "component": "0.032.7933.3",
+          "maktx_cmp": "BRACKET"
+        },
+        {
+          "posnr": "000044",
+          "component": "2.1312.003.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000047",
+          "component": "2.1560.005.0",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000048",
+          "component": "2.3120.007.4",
+          "maktx_cmp": "PLUG M10X1"
+        },
+        {
+          "posnr": "000053",
+          "component": "2.3249.832.2",
+          "maktx_cmp": "BOCCHETTONE M10X1.25"
+        },
+        {
+          "posnr": "000054",
+          "component": "0.031.2606.3",
+          "maktx_cmp": "VENT PIPE"
+        },
+        {
+          "posnr": "000055",
+          "component": "2.0312.204.2",
+          "maktx_cmp": "SCREW M8X1.25X16"
+        },
+        {
+          "posnr": "000056",
+          "component": "0.035.3904.0",
+          "maktx_cmp": "MANICOTTO H2O EGR KF"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO212.00.0_B22",
+      "maktx_hl": "4 CYL CRANKSHAFT K SERIES",
+      "components": [
+        {
+          "posnr": "000011",
+          "component": "2.1529.168.0",
+          "maktx_cmp": "TENUTA A CASSETTA"
+        },
+        {
+          "posnr": "000013",
+          "component": "0.007.0851.0/20",
+          "maktx_cmp": "COPERC.POST.ALB.MOT."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.JQ811.04.0_A22",
+      "maktx_hl": "PTO SUPPORT AIR COMPR. FILKAR",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.044.4446.0/10",
+          "maktx_cmp": "AIR COMPRESSOR SUPPORT"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.3259.235.2",
+          "maktx_cmp": "Fitting M18x1.5 De16"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.1560.013.0",
+          "maktx_cmp": "SEALING R.18.2X22X1."
+        },
+        {
+          "posnr": "000013",
+          "component": "0.043.9098.0/10",
+          "maktx_cmp": "SUPPORT BRACKET"
+        },
+        {
+          "posnr": "000018",
+          "component": "2.0112.205.2",
+          "maktx_cmp": "SCREW M8X1,25X16"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU715.04.0_A12",
+      "maktx_hl": "LUBRIF.TURBINA IN PTO KF4_WG",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.030.2571.3/10",
+          "maktx_cmp": "TUBO SCARICO OLIO"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.020.4302.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000006",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.0112.007.2",
+          "maktx_cmp": "HEX HEAD BOLTM6X1X20"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.10.0_A25",
+      "maktx_hl": "IMPIANTO ELETTRICO KF4 WG",
+      "components": [
+        {
+          "posnr": "000013",
+          "component": "2.1310.002.2",
+          "maktx_cmp": "FLAT WASH.6.4X12.5X1"
+        },
+        {
+          "posnr": "000058",
+          "component": "2.7099.128.0",
+          "maktx_cmp": "MASS FLOW SENSOR"
+        },
+        {
+          "posnr": "000059",
+          "component": "2.0312.106.2",
+          "maktx_cmp": "SCREW"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.00.0_A56",
+      "maktx_hl": "ASPIRAZIONE E SCARICO KF4_WG",
+      "components": [
+        {
+          "posnr": "000002",
+          "component": "0.029.1609.0/20",
+          "maktx_cmp": "COLLETTORE SCARICO 4 CIL."
+        },
+        {
+          "posnr": "000003",
+          "component": "0.032.6252.4/10",
+          "maktx_cmp": "TURBOCHARGER KF4_WG"
+        },
+        {
+          "posnr": "000006",
+          "component": "0.020.4191.0",
+          "maktx_cmp": "GASKET"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.0432.009.7",
+          "maktx_cmp": "STUD BOLT M8X1X35"
+        },
+        {
+          "posnr": "000009",
+          "component": "2.1019.033.0",
+          "maktx_cmp": "SPECIAL NUT M8X1"
+        },
+        {
+          "posnr": "000010",
+          "component": "2.1310.004.2",
+          "maktx_cmp": "PL.WASH.8.8X16.6X1.7"
+        },
+        {
+          "posnr": "000012",
+          "component": "2.0432.004.7",
+          "maktx_cmp": "MEDIUM END STUDS M8X"
+        },
+        {
+          "posnr": "000019",
+          "component": "0.030.2280.0",
+          "maktx_cmp": "GASKET-TC KF4 85KW"
+        },
+        {
+          "posnr": "000020",
+          "component": "0.030.2287.0",
+          "maktx_cmp": "ADAPTER KF4 - WG"
+        },
+        {
+          "posnr": "000023",
+          "component": "2.1470.004.2",
+          "maktx_cmp": "WASHER"
+        },
+        {
+          "posnr": "000035",
+          "component": "0.030.8730.0",
+          "maktx_cmp": "FLANGE VENTURI TUBE"
+        },
+        {
+          "posnr": "000036",
+          "component": "0.030.3524.0",
+          "maktx_cmp": "INTAKE GASKET VENTUR"
+        },
+        {
+          "posnr": "000037",
+          "component": "2.0432.003.7",
+          "maktx_cmp": "STUD BOLT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU718.01.0_A23",
+      "maktx_hl": "EGR GROUP KF4",
+      "components": [
+        {
+          "posnr": "000022",
+          "component": "2.0432.003.7",
+          "maktx_cmp": "STUD BOLT"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU716.10.0_A15",
+      "maktx_hl": "IMPIANTO ELETTRICO KF4 WG",
+      "components": [
+        {
+          "posnr": "000008",
+          "component": "2.7099.043.0",
+          "maktx_cmp": "SENSOR"
+        },
+        {
+          "posnr": "000100",
+          "component": "940168",
+          "maktx_cmp": "CABLAGGI MOTORE KF"
+        },
+        {
+          "posnr": "000101",
+          "component": "939476",
+          "maktx_cmp": "I.M.COMPON.SIST.INIE"
+        },
+        {
+          "posnr": "000102",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU717.00.0_A23",
+      "maktx_hl": "WATER CIRCUIT KF4-WG",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.021.6222.0",
+          "maktx_cmp": "COLLETTORE ACQUA"
+        },
+        {
+          "posnr": "000003",
+          "component": "0.021.8912.0",
+          "maktx_cmp": "COPERCHIO TERMOSTATO"
+        },
+        {
+          "posnr": "000007",
+          "component": "2.3120.102.0",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000008",
+          "component": "2.1560.018.0",
+          "maktx_cmp": "GASKET 22.2X29"
+        },
+        {
+          "posnr": "000011",
+          "component": "0.007.1258.3/20",
+          "maktx_cmp": "THERMOSTAT"
+        },
+        {
+          "posnr": "000020",
+          "component": "2.0312.208.2",
+          "maktx_cmp": "SCREW M8X1,25X25"
+        },
+        {
+          "posnr": "000021",
+          "component": "2.1480.014.2",
+          "maktx_cmp": "LOCK WASHER"
+        },
+        {
+          "posnr": "000025",
+          "component": "0.021.8915.3/10",
+          "maktx_cmp": "TUBO RITORNO ACQUA"
+        },
+        {
+          "posnr": "000032",
+          "component": "2.1560.006.0",
+          "maktx_cmp": "SEALING RING 10.2X16"
+        },
+        {
+          "posnr": "000033",
+          "component": "2.3110.421.7",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000035",
+          "component": "2.1531.066.0",
+          "maktx_cmp": "'O' RING"
+        },
+        {
+          "posnr": "000036",
+          "component": "2.1560.012.0",
+          "maktx_cmp": "GUARN 16.2X22"
+        },
+        {
+          "posnr": "000037",
+          "component": "2.3120.010.4",
+          "maktx_cmp": "PLUG"
+        },
+        {
+          "posnr": "000038",
+          "component": "2.1560.014.0",
+          "maktx_cmp": "SEAL.RING18.2X24X1.5"
+        },
+        {
+          "posnr": "000039",
+          "component": "2.3120.101.0",
+          "maktx_cmp": "PLUG"
+        }
+      ]
+    },
+    {
+      "matnr_hl": "I9.IU715.00.0_B22",
+      "maktx_hl": "LUBRIFIC.BLOW-BY OPEN KF4",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "0.028.8407.4/10",
+          "maktx_cmp": "OIL PUMP 4 CYLINDER"
+        },
+        {
+          "posnr": "000100",
+          "component": "939404",
+          "maktx_cmp": "PROCED.FOR ENGINE PA"
+        },
+        {
+          "posnr": "000101",
+          "component": "939470",
+          "maktx_cmp": "REGISTR.GIOCO INGRAN"
+        },
+        {
+          "posnr": "000102",
+          "component": "939487",
+          "maktx_cmp": "PUNTI APPLIC.SIGILL."
+        }
+      ]
+    },
+    {
+      "matnr_hl": "9.NO299.10.0",
+      "maktx_hl": "TARAT. DI SERVIZIO KF4093TA",
+      "components": [
+        {
+          "posnr": "000001",
+          "component": "IU7.0107.0",
+          "maktx_cmp": "TAB.TARAT.KF4093TA0A 93kW"
+        },
+        {
+          "posnr": "000002",
+          "component": "0.024.2449.3/10",
+          "maktx_cmp": "SERVICE ENGINE PLATE"
+        },
+        {
+          "posnr": "000003",
+          "component": "2.8559.001.0/20",
+          "maktx_cmp": "ENGINE SW V631"
+        },
+        {
+          "posnr": "000004",
+          "component": "2.8569.009.0/10",
+          "maktx_cmp": "DATASET KF4093TA00"
+        },
+        {
+          "posnr": "000100",
+          "component": "939786",
+          "maktx_cmp": "STAMPIGL.TARGHETTA MOT.SERVIZIO"
+        },
+        {
+          "posnr": "000101",
+          "component": "996033",
+          "maktx_cmp": "PROCEDURA CoP"
+        },
+        {
+          "posnr": "000111",
+          "component": "2.8569.037.0",
+          "maktx_cmp": "DATASET TB  EOL KF4093TA00 V630_A01"
+        }
+      ]
+    }
+  ],
+  "generated_at": "2025-09-04T09:08:42"
+}

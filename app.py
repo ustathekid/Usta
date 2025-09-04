@@ -1336,6 +1336,162 @@ def _load_schemini_folder():
             return p.resolve()
     return None
 
+def _is_component_code_format(code):
+    """Check if this is a component code (like 2.3199.115.0) rather than a 9.x code"""
+    if not code:
+        return False
+    # Component codes don't start with 9. or I9.
+    if code.startswith('9.') or code.startswith('I9.'):
+        return False
+    # Component codes typically have dots and numbers
+    parts = code.split('.')
+    if len(parts) < 2:
+        return False
+    # Most component codes start with a number
+    try:
+        first_part = parts[0]
+        if first_part.isdigit() or (len(first_part) <= 3 and any(c.isdigit() for c in first_part)):
+            return True
+    except Exception:
+        pass
+    return False
+
+def _search_component_code(component_code):
+    """Search for a component code in the partcodes JSON files"""
+    try:
+        partcodes_dir = Path('partcodes')
+        if not partcodes_dir.exists():
+            return jsonify({'success': False, 'message': 'Part codes directory not found'})
+        
+        matching_groups = []
+        found_in_files = []
+        
+        # Search through all JSON files in partcodes directory
+        for json_file in partcodes_dir.glob('*.json'):
+            try:
+                with open(json_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                
+                if 'groups' not in data:
+                    continue
+                
+                for group in data['groups']:
+                    if 'components' not in group:
+                        continue
+                    
+                    # Check if component code exists in this group
+                    for component in group['components']:
+                        if component.get('component', '').strip() == component_code:
+                            # Found a match
+                            group_info = {
+                                'matnr_hl': group.get('matnr_hl', ''),  # 9.x group code
+                                'maktx_hl': group.get('maktx_hl', ''),  # 9.x group name
+                                'component_code': component_code,
+                                'component_name': component.get('maktx_cmp', ''),
+                                'posnr': component.get('posnr', ''),
+                                'source_file': json_file.stem,
+                                'pdf_code': group.get('matnr_hl', '')
+                            }
+                            matching_groups.append(group_info)
+                            if json_file.stem not in found_in_files:
+                                found_in_files.append(json_file.stem)
+                            break  # Found in this group, move to next group
+                            
+            except Exception as e:
+                logger.warning(f"Error reading {json_file}: {str(e)}")
+                continue
+        
+        if not matching_groups:
+            return jsonify({
+                'success': True,
+                'search_type': 'component',
+                'component_code': component_code,
+                'matching_groups': [],
+                'pdf_results': [],
+                'count': 0,
+                'message': f'Component {component_code} not found in any groups'
+            })
+        
+        # Now search for PDFs for each matching group
+        base_folder = _load_schemini_folder()
+        pdf_results = []
+        
+        if base_folder:
+            for group_info in matching_groups:
+                pdf_code = group_info['pdf_code']
+                if pdf_code:
+                    # Search for PDFs matching this group code
+                    found_pdfs = _find_pdfs_for_code(base_folder, pdf_code)
+                    for pdf_info in found_pdfs:
+                        pdf_info.update({
+                            'component_code': component_code,
+                            'component_name': group_info['component_name'],
+                            'posnr': group_info['posnr'],
+                            'group_code': pdf_code,
+                            'group_name': group_info['maktx_hl']
+                        })
+                        pdf_results.append(pdf_info)
+        
+        return jsonify({
+            'success': True,
+            'search_type': 'component',
+            'component_code': component_code,
+            'matching_groups': matching_groups,
+            'pdf_results': pdf_results,
+            'found_in_files': found_in_files,
+            'count': len(matching_groups),
+            'pdf_count': len(pdf_results)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in component search: {str(e)}")
+        return jsonify({'success': False, 'message': f'Component search failed: {str(e)}'})
+
+def _find_pdfs_for_code(base_folder, code):
+    """Find PDF files that match the given code in the schemini folder"""
+    try:
+        pdf_results = []
+        search_codes = [code]
+        
+        # Add variants (I9. and 9. versions)
+        if code.startswith('I9.'):
+            search_codes.append(code[1:])
+        elif code.startswith('9.'):
+            search_codes.append('I' + code)
+        
+        # Search for PDF files
+        for pdf_path in base_folder.rglob('*.pdf'):
+            pdf_name = pdf_path.stem.lower()
+            for search_code in search_codes:
+                if search_code.lower() in pdf_name:
+                    # Extract base name and page number
+                    base_name = pdf_path.stem
+                    page_num = 1
+                    if '_' in base_name:
+                        parts = base_name.rsplit('_', 1)
+                        if len(parts) == 2 and parts[1].isdigit():
+                            base_name = parts[0]
+                            page_num = int(parts[1])
+                    
+                    # Create PDF token for viewing
+                    pdf_token = _encode_relpath(base_folder, pdf_path)
+                    
+                    pdf_info = {
+                        'path': str(pdf_path),
+                        'base_name': base_name,
+                        'page': page_num,
+                        'token': pdf_token,
+                        'filename': pdf_path.name
+                    }
+                    pdf_results.append(pdf_info)
+                    break
+        
+        return pdf_results
+        
+    except Exception as e:
+        logger.error(f"Error finding PDFs for code {code}: {str(e)}")
+        return []
+
 @app.route('/api/search-code', methods=['POST'])
 def api_search_code():
     """Search for code occurrences using the pre-built search index."""
@@ -1344,6 +1500,11 @@ def api_search_code():
         code = (data.get('code') or '').strip()
         if not code:
             return jsonify({'success': False, 'message': 'Code is required'})
+        
+        # Check if this is a component search (e.g., 2.3199.115.0)
+        if _is_component_code_format(code):
+            return _search_component_code(code)
+        
         if not _validate_code_format(code):
             return jsonify({'success': False, 'message': 'Invalid code format.'})
 
@@ -2382,12 +2543,12 @@ if __name__ == '__main__':
     
     # Run Flask app
     print("🚀 Starting Schemini Management Web Server...")
-    print("📱 Access the application at: http://localhost:5000")
+    print("📱 Access the application at: http://localhost:5752")
     print("🔧 Manager: Cafer T. Usta")
     
     app.run(
         host='0.0.0.0',  # Allow external connections
-        port=5000,
+        port=5752,
         debug=True,
         threaded=True
     )
