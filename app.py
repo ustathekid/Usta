@@ -1357,14 +1357,24 @@ def _is_component_code_format(code):
     return False
 
 def _search_component_code(component_code):
-    """Search for a component code in the partcodes JSON files"""
+    """Search for a component code in the partcodes JSON files and use search index for PDFs"""
     try:
         partcodes_dir = Path('partcodes')
         if not partcodes_dir.exists():
             return jsonify({'success': False, 'message': 'Part codes directory not found'})
         
+        # Check if search index exists
+        index_file = Path("search_index.json")
+        if not index_file.exists():
+            return jsonify({'success': False, 'message': 'Search index not found. Please build it from the Settings page.'})
+            
+        # Load search index
+        with open(index_file, 'r', encoding='utf-8') as f:
+            all_paths = json.load(f)
+        
         matching_groups = []
         found_in_files = []
+        group_codes_found = set()  # Track unique 9.x codes found
         
         # Search through all JSON files in partcodes directory
         for json_file in partcodes_dir.glob('*.json'):
@@ -1382,19 +1392,22 @@ def _search_component_code(component_code):
                     # Check if component code exists in this group
                     for component in group['components']:
                         if component.get('component', '').strip() == component_code:
-                            # Found a match
-                            group_info = {
-                                'matnr_hl': group.get('matnr_hl', ''),  # 9.x group code
-                                'maktx_hl': group.get('maktx_hl', ''),  # 9.x group name
-                                'component_code': component_code,
-                                'component_name': component.get('maktx_cmp', ''),
-                                'posnr': component.get('posnr', ''),
-                                'source_file': json_file.stem,
-                                'pdf_code': group.get('matnr_hl', '')
-                            }
-                            matching_groups.append(group_info)
-                            if json_file.stem not in found_in_files:
-                                found_in_files.append(json_file.stem)
+                            group_code = group.get('matnr_hl', '')
+                            if group_code:  # Only process if we have a valid group code
+                                # Found a match
+                                group_info = {
+                                    'matnr_hl': group_code,  # 9.x group code
+                                    'maktx_hl': group.get('maktx_hl', ''),  # 9.x group name
+                                    'component_code': component_code,
+                                    'component_name': component.get('maktx_cmp', ''),
+                                    'posnr': component.get('posnr', ''),
+                                    'source_file': json_file.stem,
+                                    'pdf_code': group_code
+                                }
+                                matching_groups.append(group_info)
+                                group_codes_found.add(group_code)
+                                if json_file.stem not in found_in_files:
+                                    found_in_files.append(json_file.stem)
                             break  # Found in this group, move to next group
                             
             except Exception as e:
@@ -1412,24 +1425,63 @@ def _search_component_code(component_code):
                 'message': f'Component {component_code} not found in any groups'
             })
         
-        # Now search for PDFs for each matching group
-        base_folder = _load_schemini_folder()
+        # Use search index to find PDFs for each unique group code (MUCH FASTER!)
         pdf_results = []
+        base_folder = _load_schemini_folder()
         
-        if base_folder:
-            for group_info in matching_groups:
-                pdf_code = group_info['pdf_code']
-                if pdf_code:
-                    # Search for PDFs matching this group code
-                    found_pdfs = _find_pdfs_for_code(base_folder, pdf_code)
-                    for pdf_info in found_pdfs:
-                        pdf_info.update({
+        for group_code in group_codes_found:
+            # Get all matching groups for this code
+            groups_for_code = [g for g in matching_groups if g['pdf_code'] == group_code]
+            
+            # Search in index using both variants
+            search_codes = [group_code]
+            if group_code.startswith('I9.'):
+                search_codes.append(group_code[1:])
+            elif group_code.startswith('9.'):
+                search_codes.append('I' + group_code)
+            
+            found_paths = []
+            for path_str in all_paths:
+                for search_code in search_codes:
+                    if search_code.lower() in path_str.lower():
+                        found_paths.append(Path(path_str))
+                        break
+            
+            # Process found PDF paths
+            for path in found_paths:
+                if path.is_file() and path.suffix.lower() == '.pdf':
+                    pdf_name = path.stem
+                    base_name = pdf_name
+                    page_num = 1
+                    if '_' in pdf_name:
+                        parts = pdf_name.rsplit('_', 1)
+                        if len(parts) == 2 and parts[1].isdigit():
+                            base_name = parts[0]
+                            page_num = int(parts[1])
+                    
+                    # Create PDF token for viewing
+                    if base_folder:
+                        try:
+                            pdf_token = _encode_relpath(base_folder, path)
+                        except:
+                            pdf_token = ''
+                    else:
+                        pdf_token = ''
+                    
+                    # Add PDF info for each matching group with this code
+                    for group_info in groups_for_code:
+                        pdf_info = {
+                            'path': str(path),
+                            'base_name': base_name,
+                            'page': page_num,
+                            'token': pdf_token,
+                            'filename': path.name,
                             'component_code': component_code,
                             'component_name': group_info['component_name'],
                             'posnr': group_info['posnr'],
-                            'group_code': pdf_code,
+                            'group_code': group_code,
                             'group_name': group_info['maktx_hl']
-                        })
+                        }
                         pdf_results.append(pdf_info)
         
         return jsonify({
@@ -1440,57 +1492,13 @@ def _search_component_code(component_code):
             'pdf_results': pdf_results,
             'found_in_files': found_in_files,
             'count': len(matching_groups),
-            'pdf_count': len(pdf_results)
+            'pdf_count': len(pdf_results),
+            'group_codes_found': list(group_codes_found)
         })
         
     except Exception as e:
         logger.error(f"Error in component search: {str(e)}")
         return jsonify({'success': False, 'message': f'Component search failed: {str(e)}'})
-
-def _find_pdfs_for_code(base_folder, code):
-    """Find PDF files that match the given code in the schemini folder"""
-    try:
-        pdf_results = []
-        search_codes = [code]
-        
-        # Add variants (I9. and 9. versions)
-        if code.startswith('I9.'):
-            search_codes.append(code[1:])
-        elif code.startswith('9.'):
-            search_codes.append('I' + code)
-        
-        # Search for PDF files
-        for pdf_path in base_folder.rglob('*.pdf'):
-            pdf_name = pdf_path.stem.lower()
-            for search_code in search_codes:
-                if search_code.lower() in pdf_name:
-                    # Extract base name and page number
-                    base_name = pdf_path.stem
-                    page_num = 1
-                    if '_' in base_name:
-                        parts = base_name.rsplit('_', 1)
-                        if len(parts) == 2 and parts[1].isdigit():
-                            base_name = parts[0]
-                            page_num = int(parts[1])
-                    
-                    # Create PDF token for viewing
-                    pdf_token = _encode_relpath(base_folder, pdf_path)
-                    
-                    pdf_info = {
-                        'path': str(pdf_path),
-                        'base_name': base_name,
-                        'page': page_num,
-                        'token': pdf_token,
-                        'filename': pdf_path.name
-                    }
-                    pdf_results.append(pdf_info)
-                    break
-        
-        return pdf_results
-        
-    except Exception as e:
-        logger.error(f"Error finding PDFs for code {code}: {str(e)}")
-        return []
 
 @app.route('/api/search-code', methods=['POST'])
 def api_search_code():

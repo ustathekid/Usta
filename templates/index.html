@@ -230,6 +230,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     let currentMixDocs = [];
     let currentDocument = null;
     let documentsByMix = {};
+    let currentModalData = null; // Store modal data for component search
+    let currentSelectedGroup = null; // For component search group selection
+    let currentGroupPdfs = []; // PDFs in currently selected group
 
     function updateNavigation() {
         // Navigation controls removed - no action needed
@@ -306,6 +309,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Professional PDF Viewer Modal Function
     function openProfessionalPdfViewer(data, mixCounts, mixNames) {
         try {
+            // Store modal data for component search
+            currentModalData = data;
+            
             // Remove any existing modal
             const existingModal = document.getElementById('professionalPdfViewerModal');
             if (existingModal) {
@@ -345,25 +351,36 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 </div>
                                 
                                 <div class="mix-selection-panel">
-                                    <div class="mix-section-title">
-                                        <i class="bi bi-grid-3x3-gap"></i>
-                                        Available Mixes
-                                    </div>
-                                    
-                                    <div class="mix-grid-compact" id="modalMixGrid">
-                                        ${Object.keys(mixCounts).length ? 
-                                            Object.keys(mixCounts).sort().map(k => {
-                                                const label = k === 'UNKNOWN' ? 'MIX?' : k;
-                                                return `
-                                                    <div class="mix-item-compact" data-mix="${k}" title="${mixNames[k] || ''}">
-                                                        <div class="mix-code-compact">${label}</div>
-                                                        <div class="mix-count-compact">${mixCounts[k]} Doc${mixCounts[k] > 1 ? 's' : ''}</div>
-                                                    </div>
-                                                `;
-                                            }).join('') :
-                                            '<div class="text-muted">No mixes found</div>'
-                                        }
-                                    </div>
+                                    ${data.search_type === 'component' ? `
+                                        <div class="mix-section-title">
+                                            <i class="bi bi-diagram-3"></i>
+                                            Component Search Results
+                                        </div>
+                                        
+                                        <div class="component-tree-view" id="componentTreeView">
+                                            <!-- Tree view will be populated by JavaScript -->
+                                        </div>
+                                    ` : `
+                                        <div class="mix-section-title">
+                                            <i class="bi bi-grid-3x3-gap"></i>
+                                            Available Mixes
+                                        </div>
+                                        
+                                        <div class="mix-grid-compact" id="modalMixGrid">
+                                            ${Object.keys(mixCounts).length ? 
+                                                Object.keys(mixCounts).sort().map(k => {
+                                                    const label = k === 'UNKNOWN' ? 'MIX?' : k;
+                                                    return `
+                                                        <div class="mix-item-compact" data-mix="${k}" title="${mixNames[k] || ''}">
+                                                            <div class="mix-code-compact">${label}</div>
+                                                            <div class="mix-count-compact">${mixCounts[k]} Doc${mixCounts[k] > 1 ? 's' : ''}</div>
+                                                        </div>
+                                                    `;
+                                                }).join('') :
+                                                '<div class="text-muted">No mixes found</div>'
+                                            }
+                                        </div>
+                                    `}
                                     
                                     <div class="document-info-panel" id="documentInfoPanel" style="display: none;">
                                         <div class="document-info-title">
@@ -444,13 +461,21 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     // Professional PDF Viewer Handler Functions
     function setupProfessionalPdfViewerHandlers(bsModal, hasDocuments) {
-        // Mix selection handlers
-        document.querySelectorAll('#modalMixGrid .mix-item-compact').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const mixCode = e.currentTarget.dataset.mix;
-                selectMixInModal(mixCode);
+        // Check if this is a component search
+        const isComponentSearch = currentModalData && currentModalData.search_type === 'component';
+        
+        if (isComponentSearch) {
+            // Setup component tree view
+            setupComponentTreeView();
+        } else {
+            // Standard mix selection handlers
+            document.querySelectorAll('#modalMixGrid .mix-item-compact').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const mixCode = e.currentTarget.dataset.mix;
+                    selectMixInModal(mixCode);
+                });
             });
-        });
+        }
         
         // Note: All PDF viewer controls (navigation, zoom, fit, actions) have been removed
         // PDF always opens in Fit Page mode by default
@@ -575,45 +600,107 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     function buildComponentResults(code, data) {
-        // For component search, create mock PDF documents structure for compatibility
-        const mockPdfDocuments = [];
+        // For component search, create hierarchical structure: MIX -> 9.x Groups -> PDFs
         const mixCounts = {};
         const mixNames = {};
+        const mixToGroups = {}; // MIX -> Groups mapping
+        const groupToPdfs = {}; // Group -> PDFs mapping
         documentsByMix = {};
         
-        // Process component search results
+        // First, organize PDFs by group code
         if (data.pdf_results && data.pdf_results.length > 0) {
             data.pdf_results.forEach(pdf => {
-                const mixCode = pdf.group_code || 'UNKNOWN';
-                const mockDoc = {
+                const groupCode = pdf.group_code;
+                if (!groupToPdfs[groupCode]) {
+                    groupToPdfs[groupCode] = [];
+                }
+                groupToPdfs[groupCode].push({
                     base_name: pdf.base_name || pdf.filename,
-                    group_key: `${mixCode}/${pdf.base_name}`,
-                    mix_code: mixCode,
-                    mix_name: pdf.group_name || mixNames[mixCode],
+                    group_key: `${groupCode}/${pdf.base_name}`,
+                    mix_code: 'COMPONENT_SEARCH', // Special identifier for component searches
+                    mix_name: 'Component Search Results',
                     pages: [pdf.path],
                     page_count: 1,
                     // Component-specific data
                     component_code: pdf.component_code,
                     component_name: pdf.component_name,
-                    posnr: pdf.posnr
-                };
-                
-                mockPdfDocuments.push(mockDoc);
-                mixCounts[mixCode] = (mixCounts[mixCode] || 0) + 1;
-                if (pdf.group_name) mixNames[mixCode] = pdf.group_name;
-                if (!documentsByMix[mixCode]) documentsByMix[mixCode] = [];
-                documentsByMix[mixCode].push(mockDoc);
+                    posnr: pdf.posnr,
+                    group_code: groupCode,
+                    group_name: pdf.group_name,
+                    token: pdf.token
+                });
             });
         }
+        
+        // Then organize groups by MIX (extract MIX from PDF paths)
+        const mixPattern = /\/([A-Z]{2,4})\//; // Pattern to extract MIX from path
+        
+        Object.keys(groupToPdfs).forEach(groupCode => {
+            const pdfs = groupToPdfs[groupCode];
+            const samplePath = pdfs[0]?.pages[0] || '';
+            
+            // Try to extract MIX from path
+            let mixCode = 'UNKNOWN';
+            const mixMatch = samplePath.match(mixPattern);
+            if (mixMatch) {
+                mixCode = mixMatch[1];
+            }
+            
+            // Get MIX name from mix_mapping if available
+            let mixName = 'Unknown MIX';
+            if (typeof mix_mapping !== 'undefined' && mix_mapping[mixCode]) {
+                mixName = mix_mapping[mixCode];
+            } else {
+                mixName = mixCode;
+            }
+            
+            if (!mixToGroups[mixCode]) {
+                mixToGroups[mixCode] = {};
+            }
+            mixToGroups[mixCode][groupCode] = {
+                group_code: groupCode,
+                group_name: pdfs[0]?.group_name || 'Unknown Group',
+                pdfs: pdfs,
+                pdf_count: pdfs.length
+            };
+            
+            mixCounts[mixCode] = (mixCounts[mixCode] || 0) + pdfs.length;
+            mixNames[mixCode] = mixName;
+        });
+        
+        // Create mock data structure for compatibility
+        const mockPdfDocuments = [];
+        Object.keys(mixToGroups).forEach(mixCode => {
+            Object.keys(mixToGroups[mixCode]).forEach(groupCode => {
+                const group = mixToGroups[mixCode][groupCode];
+                group.pdfs.forEach(pdf => {
+                    pdf.mix_code = mixCode;
+                    pdf.mix_name = mixNames[mixCode];
+                    mockPdfDocuments.push(pdf);
+                });
+            });
+        });
+        
+        // Store hierarchical data for tree view
+        documentsByMix = {};
+        Object.keys(mixToGroups).forEach(mixCode => {
+            documentsByMix[mixCode] = mockPdfDocuments.filter(doc => doc.mix_code === mixCode);
+        });
         
         // Create mock data structure for compatibility
         const mockData = {
             ...data,
             pdf_documents: mockPdfDocuments,
-            search_type: 'component'
+            search_type: 'component',
+            mix_to_groups: mixToGroups, // Add hierarchical data
+            component_search_results: {
+                mix_counts: mixCounts,
+                mix_names: mixNames,
+                hierarchy: mixToGroups
+            }
         };
         
-        // Show the professional PDF viewer modal with component data
+        // Show the professional PDF viewer modal with hierarchical component data
         openProfessionalPdfViewer(mockData, mixCounts, mixNames);
     }
     
@@ -721,6 +808,184 @@ document.addEventListener('DOMContentLoaded', async function() {
             // ignore
         }
     })();
+    
+    // Component Tree View Setup
+    function setupComponentTreeView() {
+        if (!currentModalData || !currentModalData.mix_to_groups) {
+            return;
+        }
+        
+        const treeView = document.getElementById('componentTreeView');
+        if (!treeView) return;
+        
+        const hierarchy = currentModalData.mix_to_groups;
+        let treeHtml = '';
+        
+        // Build tree structure: MIX -> Groups -> PDFs
+        Object.keys(hierarchy).forEach(mixCode => {
+            const mixGroups = hierarchy[mixCode];
+            const mixName = currentModalData.component_search_results?.mix_names[mixCode] || mixCode;
+            const totalPdfs = Object.values(mixGroups).reduce((sum, group) => sum + group.pdf_count, 0);
+            
+            treeHtml += `
+                <div class="tree-mix-item">
+                    <div class="tree-mix-header" data-mix="${mixCode}">
+                        <i class="bi bi-folder-plus tree-toggle" id="toggle-${mixCode}"></i>
+                        <span class="tree-mix-code">${mixCode}</span>
+                        <span class="tree-mix-count">(${totalPdfs} PDFs)</span>
+                    </div>
+                    <div class="tree-mix-groups" id="groups-${mixCode}" style="display: none;">
+            `;
+            
+            // Add groups under this MIX
+            Object.keys(mixGroups).forEach(groupCode => {
+                const group = mixGroups[groupCode];
+                treeHtml += `
+                    <div class="tree-group-item">
+                        <div class="tree-group-header" data-group="${groupCode}" data-mix="${mixCode}">
+                            <i class="bi bi-diagram-2"></i>
+                            <span class="tree-group-code">${groupCode}</span>
+                            <span class="tree-group-name">${group.group_name}</span>
+                            <span class="tree-group-count">(${group.pdf_count} PDFs)</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            treeHtml += `
+                    </div>
+                </div>
+            `;
+        });
+        
+        treeView.innerHTML = treeHtml;
+        
+        // Setup event handlers
+        setupTreeEventHandlers();
+        
+        // Auto-expand first MIX and select first group
+        const firstMixCode = Object.keys(hierarchy)[0];
+        if (firstMixCode) {
+            // Expand first MIX
+            const firstGroupsDiv = document.getElementById(`groups-${firstMixCode}`);
+            const firstToggleIcon = document.getElementById(`toggle-${firstMixCode}`);
+            if (firstGroupsDiv && firstToggleIcon) {
+                firstGroupsDiv.style.display = 'block';
+                firstToggleIcon.className = 'bi bi-folder-minus tree-toggle';
+                
+                // Select first group
+                const firstGroupCode = Object.keys(hierarchy[firstMixCode])[0];
+                if (firstGroupCode) {
+                    setTimeout(() => {
+                        selectGroupInTree(firstMixCode, firstGroupCode);
+                    }, 100);
+                }
+            }
+        }
+    }
+    
+    // Setup tree event handlers
+    function setupTreeEventHandlers() {
+        // MIX expand/collapse handlers
+        document.querySelectorAll('.tree-mix-header').forEach(header => {
+            header.addEventListener('click', (e) => {
+                const mixCode = e.currentTarget.dataset.mix;
+                const groupsDiv = document.getElementById(`groups-${mixCode}`);
+                const toggleIcon = document.getElementById(`toggle-${mixCode}`);
+                
+                if (groupsDiv.style.display === 'none') {
+                    groupsDiv.style.display = 'block';
+                    toggleIcon.className = 'bi bi-folder-minus tree-toggle';
+                } else {
+                    groupsDiv.style.display = 'none';
+                    toggleIcon.className = 'bi bi-folder-plus tree-toggle';
+                }
+            });
+        });
+        
+        // Group selection handlers
+        document.querySelectorAll('.tree-group-header').forEach(header => {
+            header.addEventListener('click', (e) => {
+                const groupCode = e.currentTarget.dataset.group;
+                const mixCode = e.currentTarget.dataset.mix;
+                selectGroupInTree(mixCode, groupCode);
+            });
+        });
+    }
+    
+    // Select a group in the tree and load its PDFs
+    function selectGroupInTree(mixCode, groupCode) {
+        // Clear previous selection
+        document.querySelectorAll('.tree-group-header').forEach(header => {
+            header.classList.remove('selected');
+        });
+        
+        // Mark selected
+        const selectedHeader = document.querySelector(`[data-group="${groupCode}"][data-mix="${mixCode}"]`);
+        if (selectedHeader) {
+            selectedHeader.classList.add('selected');
+        }
+        
+        // Get PDFs for this group
+        currentSelectedGroup = groupCode;
+        if (currentModalData.mix_to_groups[mixCode] && currentModalData.mix_to_groups[mixCode][groupCode]) {
+            currentGroupPdfs = currentModalData.mix_to_groups[mixCode][groupCode].pdfs || [];
+            currentDocIndex = 0;
+            currentDocument = currentGroupPdfs[0] || null;
+            
+            // Load first PDF
+            if (currentDocument) {
+                loadDocumentInModal(currentDocument);
+                showDocumentInfoInModal();
+            }
+            
+            // Show PDF navigation if multiple PDFs
+            showPdfNavigationForGroup();
+        }
+    }
+    
+    // Show PDF navigation for selected group
+    function showPdfNavigationForGroup() {
+        // Add navigation controls to document info panel
+        const infoPanel = document.getElementById('documentInfoPanel');
+        if (infoPanel && currentGroupPdfs.length > 1) {
+            let navHtml = `
+                <div class="pdf-navigation mt-3">
+                    <div class="pdf-nav-title">
+                        <i class="bi bi-files"></i>
+                        PDFs in Group (${currentDocIndex + 1}/${currentGroupPdfs.length})
+                    </div>
+                    <div class="pdf-nav-controls">
+                        <button class="btn btn-sm btn-outline-light me-2" id="prevPdfBtn" ${currentDocIndex === 0 ? 'disabled' : ''} onclick="navigateGroupPdf(-1)">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <button class="btn btn-sm btn-outline-light" id="nextPdfBtn" ${currentDocIndex >= currentGroupPdfs.length - 1 ? 'disabled' : ''} onclick="navigateGroupPdf(1)">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Insert navigation after existing content
+            infoPanel.innerHTML += navHtml;
+        }
+    }
+    
+    // Navigate between PDFs in selected group (global function for HTML onclick)
+    window.navigateGroupPdf = function(direction) {
+        if (currentGroupPdfs.length === 0) return;
+        
+        const newIndex = currentDocIndex + direction;
+        if (newIndex >= 0 && newIndex < currentGroupPdfs.length) {
+            currentDocIndex = newIndex;
+            currentDocument = currentGroupPdfs[currentDocIndex];
+            
+            if (currentDocument) {
+                loadDocumentInModal(currentDocument);
+                showDocumentInfoInModal();
+            }
+        }
+    };
 });
 </script>
 {% endblock %}
