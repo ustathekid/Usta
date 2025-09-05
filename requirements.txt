@@ -4,3 +4,6 @@ PyPDF2>=3.0.0
 pandas>=2.0.0; python_version>="3.9"
 openpyxl>=3.1.0; python_version>="3.9"
 Werkzeug>=3.0.0
+PyMuPDF>=1.24.0
+pytesseract>=0.3.10 # (optional fallback OCR – requires local Tesseract installation)
+Pillow>=10.0.0 # for image handling if OCR fallback used

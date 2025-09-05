@@ -333,11 +333,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="pdfViewerModalLabel">
-                                <i class="bi bi-file-earmark-pdf"></i>
-                                Professional PDF Viewer
-                                <span id="modalDocumentTitle" class="ms-2 text-muted"></span>
-                                ${data.search_type === 'component' ? '<span class="badge bg-info ms-2">Component Search</span>' : ''}
+                            <h5 class="modal-title w-100 d-flex align-items-center justify-content-between" id="pdfViewerModalLabel">
+                                <span class="d-flex align-items-center">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                    <span id="modalDocumentTitle" class="ms-2"></span>
+                                </span>
+                                ${data.search_type === 'component' ? '<span class="badge bg-info">Component Search</span>' : ''}
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -352,14 +353,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 
                                 <div class="mix-selection-panel">
                                     ${data.search_type === 'component' ? `
-                                        <div class="mix-section-title">
-                                            <i class="bi bi-diagram-3"></i>
-                                            Component Search Results
+                                        <div class="mix-section-title d-flex align-items-center justify-content-between">
+                                            <span><i class="bi bi-diagram-3"></i> Component Search</span>
+                                            <span class="small text-muted">Results</span>
                                         </div>
-                                        
-                                        <div class="component-tree-view" id="componentTreeView">
-                                            <!-- Tree view will be populated by JavaScript -->
-                                        </div>
+                                        <div class="component-tree-view" id="componentTreeView"></div>
                                     ` : `
                                         <div class="mix-section-title">
                                             <i class="bi bi-grid-3x3-gap"></i>
@@ -518,20 +516,50 @@ document.addEventListener('DOMContentLoaded', async function() {
             const zoomLevel = '75'; // Fixed zoom for Fit Page
             const toolbar = '0'; // Hide toolbar for cleaner view
             
+            const isComponentCtx = !!pdfDoc.component_code;
+            const baseSingleUrl = `/api/pdf-file?f=${encodeURIComponent(toToken(pdfDoc.pages[0]))}`;
+
             if (pdfDoc.pages.length === 1) {
-                // Single page - always Fit Page mode
-                pdfUrl = `/api/pdf-file?f=${encodeURIComponent(toToken(pdfDoc.pages[0]))}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+                // Try highlight endpoint first if component context & posnr known
+                if (isComponentCtx && pdfDoc.posnr) {
+                    requestHighlightedPdf(toToken(pdfDoc.pages[0]), pdfDoc.posnr, frame, viewMode, zoomLevel, toolbar, baseSingleUrl);
+                    return;
+                }
+                pdfUrl = `${baseSingleUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
             } else {
-                // Multiple pages - always Fit Page mode
-                pdfUrl = `/api/merged-pdf?g=${encodeURIComponent(toGroupToken(pdfDoc.pages))}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+                // Multiple pages - merged view (highlight first page only for now)
+                const mergedUrl = `/api/merged-pdf?g=${encodeURIComponent(toGroupToken(pdfDoc.pages))}`;
+                pdfUrl = `${mergedUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
             }
             frame.src = pdfUrl;
             
-            // Update modal title
+            // Update modal title with 9.x code
             const modalTitle = document.getElementById('modalDocumentTitle');
             if (modalTitle) {
-                modalTitle.textContent = pdfDoc.base_name || 'Document';
+                modalTitle.textContent = pdfDoc.base_name || '—';
             }
+        }
+    }
+
+    async function requestHighlightedPdf(fileToken, posnr, frame, viewMode, zoomLevel, toolbar, fallbackUrl){
+        try {
+            const res = await fetch('/api/highlight-component', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: fileToken, posnr: (posnr||'').toString().replace(/^0+/, '') })
+            });
+            const contentType = res.headers.get('Content-Type') || '';
+            if (res.ok && contentType.includes('application/pdf')) {
+                // Create blob URL for highlighted PDF
+                const blob = await res.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                frame.src = `${blobUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+            } else {
+                // Fallback to normal PDF if highlight not available
+                frame.src = `${fallbackUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+            }
+        } catch (e) {
+            frame.src = `${fallbackUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
         }
     }
     
@@ -550,22 +578,27 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (cut >= 0) folderPath = firstPage.substring(0, cut + 1);
             }
             
+            // Prefer human-readable mix name from backend; fall back to code
+            const mixLabel = (currentDocument.mix_name && currentDocument.mix_code)
+                ? `${currentDocument.mix_code} — ${currentDocument.mix_name}`
+                : (currentDocument.mix_name || currentDocument.mix_code || 'Unknown');
+
             let infoHtml = `
                 <div><strong>Document:</strong> ${currentDocument.base_name || 'Unknown'}</div>
-                <div><strong>Mix:</strong> ${currentDocument.mix_code || 'Unknown'}</div>
+                <div><strong>Mix:</strong> ${mixLabel}</div>
                 <div><strong>Pages:</strong> ${currentDocument.pages ? currentDocument.pages.length : 0}</div>
+                ${currentDocument.group_name ? `<div><strong>Group:</strong> ${currentDocument.group_name}</div>` : ''}
             `;
             
             // Add component-specific information if available
             if (currentDocument.component_code) {
+                const posClean = (currentDocument.posnr || '').toString().replace(/^0+/, '') || currentDocument.posnr || 'Unknown';
                 infoHtml += `
                     <hr class="my-2">
                     <div class="component-info">
                         <div><strong>Component Code:</strong> <code>${currentDocument.component_code}</code></div>
                         <div><strong>Component Name:</strong> ${currentDocument.component_name || 'Unknown'}</div>
-                        <div><strong>Position Number:</strong> ${currentDocument.posnr || 'Unknown'}</div>
-                        <div><strong>Group Code:</strong> ${currentDocument.mix_code || 'Unknown'}</div>
-                        <div><strong>Group Name:</strong> ${currentDocument.mix_name || 'Unknown'}</div>
+                        <div><strong>Position Number:</strong> ${posClean}</div>
                     </div>
                 `;
             }
@@ -617,8 +650,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 groupToPdfs[groupCode].push({
                     base_name: pdf.base_name || pdf.filename,
                     group_key: `${groupCode}/${pdf.base_name}`,
-                    mix_code: 'COMPONENT_SEARCH', // Special identifier for component searches
-                    mix_name: 'Component Search Results',
+                    // Use backend-provided MIX metadata when available
+                    mix_code: pdf.mix_code || 'UNKNOWN',
+                    mix_name: pdf.mix_name || null,
                     pages: [pdf.path],
                     page_count: 1,
                     // Component-specific data
@@ -632,26 +666,29 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
         
-        // Then organize groups by MIX (extract MIX from PDF paths)
-        const mixPattern = /\/([A-Z]{2,4})\//; // Pattern to extract MIX from path
+        // Then organize groups by MIX (prefer backend mix_code/mix_name; fallback to path parsing)
+        const mixPattern = /\/([A-Z]{2,4})\//; // Pattern to extract MIX from path when needed
         
         Object.keys(groupToPdfs).forEach(groupCode => {
             const pdfs = groupToPdfs[groupCode];
             const samplePath = pdfs[0]?.pages[0] || '';
-            
-            // Try to extract MIX from path
-            let mixCode = 'UNKNOWN';
-            const mixMatch = samplePath.match(mixPattern);
-            if (mixMatch) {
-                mixCode = mixMatch[1];
+
+            // Prefer backend-provided MIX metadata
+            let mixCode = pdfs[0]?.mix_code || 'UNKNOWN';
+            let mixName = pdfs[0]?.mix_name || null;
+
+            // Fallbacks if missing
+            if (!mixCode || mixCode === 'UNKNOWN') {
+                const mixMatch = samplePath.match(mixPattern);
+                if (mixMatch) {
+                    mixCode = mixMatch[1];
+                } else {
+                    mixCode = 'UNKNOWN';
+                }
             }
-            
-            // Get MIX name from mix_mapping if available
-            let mixName = 'Unknown MIX';
-            if (typeof mix_mapping !== 'undefined' && mix_mapping[mixCode]) {
-                mixName = mix_mapping[mixCode];
-            } else {
-                mixName = mixCode;
+            if (!mixName) {
+                // Try map from already collected names; otherwise default to code
+                mixName = (mixNames[mixCode]) || mixCode;
             }
             
             if (!mixToGroups[mixCode]) {
@@ -821,11 +858,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         const hierarchy = currentModalData.mix_to_groups;
         let treeHtml = '';
         
-        // Build tree structure: MIX -> Groups -> PDFs
+    // Build tree structure: MIX -> Individual 9'lu kod groups (no merged doc counts on groups)
         Object.keys(hierarchy).forEach(mixCode => {
             const mixGroups = hierarchy[mixCode];
-            const mixName = currentModalData.component_search_results?.mix_names[mixCode] || mixCode;
-            const totalPdfs = Object.values(mixGroups).reduce((sum, group) => sum + group.pdf_count, 0);
+        const totalPdfs = Object.values(mixGroups).reduce((sum, group) => sum + group.pdf_count, 0); // retained for mix header
             
             treeHtml += `
                 <div class="tree-mix-item">
@@ -834,10 +870,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <span class="tree-mix-code">${mixCode}</span>
                         <span class="tree-mix-count">(${totalPdfs} PDFs)</span>
                     </div>
-                    <div class="tree-mix-groups" id="groups-${mixCode}" style="display: none;">
+            <div class="tree-mix-groups" id="groups-${mixCode}" style="display: none;">
             `;
             
-            // Add groups under this MIX
+        // Add 9'lu kod groups under this MIX (one line per group code, no pdf count aggregation shown per PDF page)
             Object.keys(mixGroups).forEach(groupCode => {
                 const group = mixGroups[groupCode];
                 treeHtml += `
@@ -845,8 +881,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <div class="tree-group-header" data-group="${groupCode}" data-mix="${mixCode}">
                             <i class="bi bi-diagram-2"></i>
                             <span class="tree-group-code">${groupCode}</span>
-                            <span class="tree-group-name">${group.group_name}</span>
-                            <span class="tree-group-count">(${group.pdf_count} PDFs)</span>
+                <!-- Count intentionally hidden as per requirement to list codes directly -->
                         </div>
                     </div>
                 `;
@@ -863,39 +898,28 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Setup event handlers
         setupTreeEventHandlers();
         
-        // Auto-expand first MIX and select first group
-        const firstMixCode = Object.keys(hierarchy)[0];
-        if (firstMixCode) {
-            // Expand first MIX
-            const firstGroupsDiv = document.getElementById(`groups-${firstMixCode}`);
-            const firstToggleIcon = document.getElementById(`toggle-${firstMixCode}`);
-            if (firstGroupsDiv && firstToggleIcon) {
-                firstGroupsDiv.style.display = 'block';
-                firstToggleIcon.className = 'bi bi-folder-minus tree-toggle';
-                
-                // Select first group
-                const firstGroupCode = Object.keys(hierarchy[firstMixCode])[0];
-                if (firstGroupCode) {
-                    setTimeout(() => {
-                        selectGroupInTree(firstMixCode, firstGroupCode);
-                    }, 100);
-                }
-            }
-        }
+    // All mixes start collapsed initially (no auto-expand)
     }
     
     // Setup tree event handlers
     function setupTreeEventHandlers() {
-        // MIX expand/collapse handlers
+        // MIX expand/collapse handlers + on first expand select first group
         document.querySelectorAll('.tree-mix-header').forEach(header => {
             header.addEventListener('click', (e) => {
                 const mixCode = e.currentTarget.dataset.mix;
                 const groupsDiv = document.getElementById(`groups-${mixCode}`);
                 const toggleIcon = document.getElementById(`toggle-${mixCode}`);
-                
-                if (groupsDiv.style.display === 'none') {
+                const wasHidden = groupsDiv.style.display === 'none';
+                if (wasHidden) {
                     groupsDiv.style.display = 'block';
                     toggleIcon.className = 'bi bi-folder-minus tree-toggle';
+                    // On first expand, auto-select first group
+                    const firstGroup = groupsDiv.querySelector('.tree-group-header');
+                    if (firstGroup && !firstGroup.dataset.autoSelected) {
+                        firstGroup.dataset.autoSelected = '1';
+                        const groupCode = firstGroup.dataset.group;
+                        selectGroupInTree(mixCode, groupCode);
+                    }
                 } else {
                     groupsDiv.style.display = 'none';
                     toggleIcon.className = 'bi bi-folder-plus tree-toggle';
@@ -913,7 +937,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
     
-    // Select a group in the tree and load its PDFs
+    // Select a group in the tree and load its PDFs (group-level navigation)
     function selectGroupInTree(mixCode, groupCode) {
         // Clear previous selection
         document.querySelectorAll('.tree-group-header').forEach(header => {
@@ -926,64 +950,49 @@ document.addEventListener('DOMContentLoaded', async function() {
             selectedHeader.classList.add('selected');
         }
         
-        // Get PDFs for this group
         currentSelectedGroup = groupCode;
         if (currentModalData.mix_to_groups[mixCode] && currentModalData.mix_to_groups[mixCode][groupCode]) {
             currentGroupPdfs = currentModalData.mix_to_groups[mixCode][groupCode].pdfs || [];
             currentDocIndex = 0;
             currentDocument = currentGroupPdfs[0] || null;
-            
-            // Load first PDF
             if (currentDocument) {
                 loadDocumentInModal(currentDocument);
                 showDocumentInfoInModal();
             }
-            
-            // Show PDF navigation if multiple PDFs
             showPdfNavigationForGroup();
         }
     }
-    
-    // Show PDF navigation for selected group
+
+    // Show PDF navigation for selected group (each PDF separate, no merging)
     function showPdfNavigationForGroup() {
-        // Add navigation controls to document info panel
         const infoPanel = document.getElementById('documentInfoPanel');
-        if (infoPanel && currentGroupPdfs.length > 1) {
-            let navHtml = `
+        if (!infoPanel) return;
+        // Remove existing nav if any
+        const oldNav = infoPanel.querySelector('.pdf-navigation');
+        if (oldNav) oldNav.remove();
+        if (currentGroupPdfs && currentGroupPdfs.length > 1) {
+            const navHtml = `
                 <div class="pdf-navigation mt-3">
-                    <div class="pdf-nav-title">
-                        <i class="bi bi-files"></i>
-                        PDFs in Group (${currentDocIndex + 1}/${currentGroupPdfs.length})
-                    </div>
+                    <div class="pdf-nav-title"><i class="bi bi-files"></i> PDFs in Group (${currentDocIndex + 1}/${currentGroupPdfs.length})</div>
                     <div class="pdf-nav-controls">
-                        <button class="btn btn-sm btn-outline-light me-2" id="prevPdfBtn" ${currentDocIndex === 0 ? 'disabled' : ''} onclick="navigateGroupPdf(-1)">
-                            <i class="bi bi-chevron-left"></i> Previous
-                        </button>
-                        <button class="btn btn-sm btn-outline-light" id="nextPdfBtn" ${currentDocIndex >= currentGroupPdfs.length - 1 ? 'disabled' : ''} onclick="navigateGroupPdf(1)">
-                            Next <i class="bi bi-chevron-right"></i>
-                        </button>
+                        <button class="btn btn-sm btn-outline-light me-2" id="prevPdfBtn" ${currentDocIndex === 0 ? 'disabled' : ''} onclick="navigateGroupPdf(-1)"><i class="bi bi-chevron-left"></i> Previous</button>
+                        <button class="btn btn-sm btn-outline-light" id="nextPdfBtn" ${currentDocIndex >= currentGroupPdfs.length - 1 ? 'disabled' : ''} onclick="navigateGroupPdf(1)">Next <i class="bi bi-chevron-right"></i></button>
                     </div>
-                </div>
-            `;
-            
-            // Insert navigation after existing content
-            infoPanel.innerHTML += navHtml;
+                </div>`;
+            infoPanel.insertAdjacentHTML('beforeend', navHtml);
         }
     }
-    
-    // Navigate between PDFs in selected group (global function for HTML onclick)
+
+    // Navigate between PDFs in current group
     window.navigateGroupPdf = function(direction) {
-        if (currentGroupPdfs.length === 0) return;
-        
+        if (!currentGroupPdfs || !currentGroupPdfs.length) return;
         const newIndex = currentDocIndex + direction;
         if (newIndex >= 0 && newIndex < currentGroupPdfs.length) {
             currentDocIndex = newIndex;
             currentDocument = currentGroupPdfs[currentDocIndex];
-            
-            if (currentDocument) {
-                loadDocumentInModal(currentDocument);
-                showDocumentInfoInModal();
-            }
+            loadDocumentInModal(currentDocument);
+            showDocumentInfoInModal();
+            showPdfNavigationForGroup();
         }
     };
 });

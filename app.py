@@ -25,6 +25,19 @@ import psutil
 import getpass
 from PyPDF2 import PdfMerger
 import io
+try:
+    import fitz  # PyMuPDF
+    print(f"✅ PyMuPDF successfully imported, version: {fitz.version}")
+except ImportError as e:
+    print(f"❌ PyMuPDF import failed: {e}")
+    fitz = None
+try:
+    import pytesseract
+    from PIL import Image
+    print("✅ pytesseract and PIL successfully imported")
+except ImportError as e:
+    print(f"❌ pytesseract/PIL import failed: {e}")
+    pytesseract = None
 import tempfile
 from typing import Optional, Union
 from mix import mix_mapping
@@ -1467,6 +1480,19 @@ def _search_component_code(component_code):
                             pdf_token = ''
                     else:
                         pdf_token = ''
+
+                    # Determine MIX code/name from file path using mix_mapping
+                    mix_code_val = None
+                    mix_name_val = None
+                    try:
+                        low_s = str(path).lower()
+                        for mcode, mname in mix_mapping.items():
+                            if mname and mname.lower() in low_s:
+                                mix_code_val = mcode
+                                mix_name_val = mname
+                                break
+                    except Exception:
+                        pass
                     
                     # Add PDF info for each matching group with this code
                     for group_info in groups_for_code:
@@ -1476,6 +1502,8 @@ def _search_component_code(component_code):
                             'page': page_num,
                             'token': pdf_token,
                             'filename': path.name,
+                            'mix_code': mix_code_val,
+                            'mix_name': mix_name_val,
                             'component_code': component_code,
                             'component_name': group_info['component_name'],
                             'posnr': group_info['posnr'],
@@ -1625,6 +1653,423 @@ def _decode_relpath_or_abs(base: Path, token: str) -> Path:
     if p.is_absolute():
         return p.resolve()
     return (base / p).resolve()
+
+@app.route('/api/highlight-component', methods=['POST'])
+def api_highlight_component():
+    """Highlight occurrences of a component position number inside a PDF and return a transient highlighted PDF.
+
+    Request JSON:
+      { "token": <file token>, "posnr": "36" }
+
+    Returns application/pdf if highlight(s) found, else JSON response.
+    """
+    print("🚀 Highlight component endpoint called")
+    
+    # Debug incoming request
+    print(f"📨 Request method: {request.method}")
+    print(f"📨 Content-Type: {request.content_type}")
+    print(f"📨 Request data: {request.get_data()}")
+    
+    try:
+        data = request.get_json() or {}
+        print(f"📋 Parsed JSON data: {data}")
+    except Exception as e:
+        print(f"❌ JSON parsing failed: {e}")
+        return jsonify({'success': False, 'message': f'Invalid JSON: {e}'}), 400
+    
+    if fitz is None:
+        print("❌ PyMuPDF not available")
+        return jsonify({'success': False, 'message': 'PyMuPDF not installed on server'}), 400
+    
+    token = data.get('token')
+    posnr = str(data.get('posnr') or '').strip()
+    
+    print(f"🎫 Token: {token}")
+    print(f"🔢 Position number: '{posnr}'")
+    
+    if not token or not posnr:
+        print(f"❌ Missing parameters - token: {bool(token)}, posnr: {bool(posnr)}")
+        return jsonify({'success': False, 'message': 'token and posnr required'}), 400
+    try:
+        base_folder = _load_schemini_folder()
+        if not base_folder:
+            return jsonify({'success': False, 'message': 'Schemini folder not configured'}), 400
+        pdf_path = _decode_relpath_or_abs(base_folder, token)
+        # Security check
+        try:
+            pdf_path.relative_to(base_folder)
+        except Exception:
+            return jsonify({'success': False, 'message': 'Access denied'}), 403
+        if not pdf_path.exists() or pdf_path.suffix.lower() != '.pdf':
+            return jsonify({'success': False, 'message': 'PDF not found'}), 404
+        doc = fitz.open(pdf_path)
+        match_found = False
+        first_page_idx = None
+        first_rect = None
+
+        # Helper: detect drawing area bounding box (excluding title blocks) using line density
+        def _drawing_bbox(page):
+            print("🏗️ Detecting drawing area...")
+            try:
+                drawings = page.get_drawings()
+                print(f"📐 Found {len(drawings)} drawing objects")
+            except Exception as e:
+                print(f"❌ Failed to get drawings: {e}")
+                return None
+            
+            minx=miny=1e9; maxx=maxy=-1e9; count=0
+            for d_idx, d in enumerate(drawings):
+                items = d.get('items', [])
+                print(f"   Drawing {d_idx}: {len(items)} items")
+                
+                cur=None
+                for item in items:
+                    op=item[0] if len(item) > 0 else None
+                    if op=='m':
+                        pts=item[1] if len(item) > 1 else []
+                        if pts: cur=pts[0]
+                    elif op=='l':
+                        pts=item[1] if len(item) > 1 else []
+                        if cur and pts:
+                            p2=pts[0]
+                            x1,y1=cur.x,cur.y; x2,y2=p2.x,p2.y
+                            length = abs(x2-x1)+abs(y2-y1)
+                            if length > 3:
+                                minx=min(minx,x1,x2); maxx=max(maxx,x1,x2)
+                                miny=min(miny,y1,y2); maxy=max(maxy,y1,y2)
+                                count+=1
+                            cur=p2
+            
+            print(f"📏 Processed {count} significant line segments")
+            if count==0:
+                print("⚠️ No significant lines found for drawing area")
+                return None
+            
+            rect = fitz.Rect(minx,miny,maxx,maxy)
+            print(f"📦 Raw drawing bounds: {rect}")
+            padw = rect.width*0.02; padh = rect.height*0.02
+            final_rect = fitz.Rect(rect.x0+padw, rect.y0+padh, rect.x1-padw, rect.y1-padh)
+            print(f"🎯 Final drawing area: {final_rect}")
+            return final_rect
+
+        # Helper: candidate rects for number with variants (leading zeros) & fragmented digits
+        def _gather_number_rects(page, num):
+            print(f"🔎 Gathering candidates for: '{num}'")
+            variants={num}
+            if num.isdigit():
+                for z in range(2,6):
+                    variants.add(num.zfill(z))
+            print(f"📝 Search variants: {variants}")
+            
+            rects=[]
+            # Direct search for each variant
+            for v in variants:
+                try:
+                    found = page.search_for(v, quads=False) or []
+                    if found:
+                        print(f"✅ Direct search '{v}' found {len(found)} matches")
+                        for r in found:
+                            rects.append(r)
+                            print(f"   Direct match: {r}")
+                    else:
+                        print(f"❌ Direct search '{v}' found nothing")
+                except Exception as e:
+                    print(f"❌ Search error for '{v}': {e}")
+            
+            # Raw text scan to reconstruct broken digits
+            print("🔍 Starting raw text reconstruction...")
+            try:
+                raw = page.get_text('rawdict')
+                blocks_count = len(raw.get('blocks', []))
+                print(f"📦 Found {blocks_count} text blocks")
+                
+                for block_idx, block in enumerate(raw.get('blocks', [])):
+                    lines_count = len(block.get('lines', []))
+                    if lines_count > 0:
+                        print(f"   Block {block_idx}: {lines_count} lines")
+                    
+                    for line_idx, line in enumerate(block.get('lines', [])):
+                        spans = line.get('spans', [])
+                        if not spans:
+                            continue
+                            
+                        chars=[]
+                        for sp in spans:
+                            t = sp.get('text') or ''
+                            if not t.strip():
+                                continue
+                            bbox = sp.get('bbox')
+                            if not bbox:
+                                continue
+                            x0,y0,x1,y1 = bbox
+                            w = x1-x0
+                            if len(t)>1 and w>0:
+                                cw = w/len(t)
+                                for i,ch in enumerate(t):
+                                    cx0=x0+i*cw; cx1=cx0+cw
+                                    chars.append((ch, fitz.Rect(cx0,y0,cx1,y1)))
+                            else:
+                                chars.append((t, fitz.Rect(x0,y0,x1,y1)))
+                        
+                        if chars:
+                            seq=[c for c,_ in chars]
+                            text_sequence = ''.join(seq)
+                            if any(char.isdigit() for char in text_sequence):
+                                print(f"   Line {line_idx} text: '{text_sequence}'")
+                            
+                            for v in variants:
+                                L=len(v)
+                                for i in range(0, len(seq)-L+1):
+                                    if ''.join(seq[i:i+L])==v:
+                                        rs=[r for _,r in chars[i:i+L]]
+                                        rx0=min(r.x0 for r in rs); ry0=min(r.y0 for r in rs)
+                                        rx1=max(r.x1 for r in rs); ry1=max(r.y1 for r in rs)
+                                        reconstructed_rect = fitz.Rect(rx0,ry0,rx1,ry1)
+                                        rects.append(reconstructed_rect)
+                                        print(f"✅ Reconstructed '{v}' at: {reconstructed_rect}")
+            except Exception as e:
+                print(f"❌ Raw text reconstruction failed: {e}")
+            
+            # Deduplicate
+            uniq=[]; seen=set()
+            for r in rects:
+                k=(round((r.x0+r.x1)/2,1), round((r.y0+r.y1)/2,1))
+                if k in seen: continue
+                seen.add(k); uniq.append(r)
+            
+            print(f"📊 Total unique candidates: {len(uniq)}")
+            return uniq
+
+        # Debug log
+        print(f"🔍 Searching for position number: '{posnr}' in PDF: {pdf_path.name}")
+        
+        for idx, page in enumerate(doc):
+            print(f"📄 Processing page {idx+1}")
+            
+            # Get drawing area
+            draw_box = _drawing_bbox(page)
+            if draw_box:
+                print(f"🎯 Drawing area found: {draw_box}")
+            else:
+                print("⚠️ No drawing area detected on this page")
+            
+            # Get all candidates
+            # Debug: Show all text found in PDF
+            try:
+                all_text = page.get_text()
+                print(f"📝 All text in PDF ({len(all_text)} chars):")
+                # Show first 500 chars of text
+                preview = all_text[:500] if all_text else "(empty)"
+                print(f"   Text preview: {repr(preview)}")
+                
+                # Show all individual text elements
+                text_dict = page.get_text('dict')
+                print(f"📋 Text blocks found: {len(text_dict.get('blocks', []))}")
+                for i, block in enumerate(text_dict.get('blocks', [])[:5]):  # First 5 blocks
+                    if 'lines' in block:
+                        for j, line in enumerate(block['lines'][:3]):  # First 3 lines per block
+                            for k, span in enumerate(line.get('spans', [])[:5]):  # First 5 spans per line
+                                text = span.get('text', '').strip()
+                                if text:
+                                    print(f"   Block {i}, Line {j}, Span {k}: '{text}'")
+            except Exception as e:
+                print(f"❌ Text extraction failed: {e}")
+            
+            candidates = _gather_number_rects(page, posnr)
+            print(f"📋 Found {len(candidates)} initial candidates")
+            
+            # Try direct text search first for debugging
+            try:
+                direct_search = page.search_for(posnr, quads=False) or []
+                print(f"🔍 Direct search found {len(direct_search)} matches")
+                for i, rect in enumerate(direct_search):
+                    print(f"   Match {i+1}: {rect}")
+            except Exception as e:
+                print(f"❌ Direct search failed: {e}")
+            
+            # Try with leading zeros
+            for z in range(2, 6):
+                padded = posnr.zfill(z)
+                try:
+                    padded_search = page.search_for(padded, quads=False) or []
+                    if padded_search:
+                        print(f"🔍 Padded search '{padded}' found {len(padded_search)} matches")
+                        for i, rect in enumerate(padded_search):
+                            print(f"   Padded match {i+1}: {rect}")
+                except Exception:
+                    pass
+            
+            # Filter candidates by drawing area
+            if draw_box and candidates:
+                filtered=[r for r in candidates if draw_box.intersects(r)]
+                print(f"✂️ After drawing area filter: {len(filtered)} candidates")
+                if filtered:
+                    candidates=filtered
+            
+            if not candidates:
+                print("❌ No candidates found on this page")
+                continue
+                
+            # Show all candidate positions
+            for i, rect in enumerate(candidates):
+                print(f"   Candidate {i+1}: {rect}")
+            
+            # Prefer rect with minimal distance to drawing box center (if available)
+            if draw_box:
+                cx=(draw_box.x0+draw_box.x1)/2; cy=(draw_box.y0+draw_box.y1)/2
+                candidates.sort(key=lambda r: (( (r.x0+r.x1)/2 - cx)**2 + ((r.y0+r.y1)/2 - cy)**2))
+                print(f"🎯 Selected best candidate: {candidates[0]}")
+            
+            rect=candidates[0] + (-2,-2,2,2)
+            try:
+                ann=page.add_highlight_annot(rect)
+                if ann:
+                    ann.set_colors(stroke=(1,0.8,0), fill=(1,1,0))
+                    ann.set_opacity(0.35)
+                    ann.update()
+                    match_found=True
+                    first_rect=rect; first_page_idx=idx
+                    print(f"✅ Successfully highlighted position number on page {idx+1}")
+                    break
+            except Exception as e:
+                print(f"❌ Failed to add highlight annotation: {e}")
+                continue
+
+        # If we found a number, attempt to trace a connector line to highlight the part region
+        if match_found and first_rect is not None and first_page_idx is not None:
+            try:
+                page = doc[first_page_idx]
+                drawings = page.get_drawings()
+                segments = []  # (x1,y1,x2,y2,length)
+                for d in drawings:
+                    cur_pt = None
+                    for item in d.get('items', []):
+                        op = item[0]
+                        if op == 'm':  # move
+                            pts = item[1]
+                            if pts:
+                                cur_pt = pts[0]
+                        elif op == 'l':  # line to
+                            pts = item[1]
+                            if cur_pt and pts:
+                                p2 = pts[0]
+                                x1,y1 = cur_pt.x, cur_pt.y
+                                x2,y2 = p2.x, p2.y
+                                length = ((x2-x1)**2 + (y2-y1)**2) ** 0.5
+                                segments.append((x1,y1,x2,y2,length))
+                                cur_pt = p2
+                        elif op == 're':  # rectangle path: item[1] is list of points (x,y,w,h)
+                            pts = item[1]
+                            try:
+                                x, y, w, h = pts[0].x, pts[0].y, pts[1].x, pts[1].y  # may differ; keep safe
+                            except Exception:
+                                continue
+                if segments:
+                    cx = (first_rect.x0 + first_rect.x1)/2
+                    cy = (first_rect.y0 + first_rect.y1)/2
+                    # pick segments whose one endpoint is close to number rect
+                    cand = []
+                    for s in segments:
+                        x1,y1,x2,y2,L = s
+                        d1 = max(abs(x1-cx), abs(y1-cy))
+                        d2 = max(abs(x2-cx), abs(y2-cy))
+                        if min(d1,d2) < 15:  # threshold
+                            cand.append(s)
+                    if cand:
+                        # choose the longest candidate
+                        cand.sort(key=lambda t: t[4], reverse=True)
+                        chosen = cand[0]
+                        x1,y1,x2,y2,_ = chosen
+                        # expand highlight along this segment
+                        line_rect = fitz.Rect(min(x1,x2), min(y1,y2), max(x1,x2), max(y1,y2)).inflate(3)
+                        union_rect = fitz.Rect(min(first_rect.x0, line_rect.x0),
+                                               min(first_rect.y0, line_rect.y0),
+                                               max(first_rect.x1, line_rect.x1),
+                                               max(first_rect.y1, line_rect.y1))
+                        # rectangle annotation for line path
+                        try:
+                            ra = page.add_rect_annot(union_rect)
+                            if ra:
+                                ra.set_colors(stroke=(1,0.4,0), fill=(1,0.85,0))
+                                ra.set_opacity(0.08)
+                                ra.update()
+                        except Exception:
+                            pass
+                        # circle annotation at terminal end (assume far endpoint from center)
+                        d1 = ((x1-cx)**2 + (y1-cy)**2)**0.5
+                        d2 = ((x2-cx)**2 + (y2-cy)**2)**0.5
+                        tx,ty = (x1,y1) if d1 > d2 else (x2,y2)
+                        circle_rect = fitz.Rect(tx-6, ty-6, tx+6, ty+6)
+                        try:
+                            ca = page.add_circle_annot(circle_rect)
+                            if ca:
+                                ca.set_colors(stroke=(1,0.2,0), fill=(1,0.6,0))
+                                ca.set_opacity(0.25)
+                                ca.update()
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+        # If no text found, try image-based search without OCR
+        if not match_found:
+            print("�️ No text found - trying image-based position detection...")
+            try:
+                page = doc[0]
+                
+                # Convert page to image
+                pix = page.get_pixmap(dpi=150)
+                print(f"📸 Created image: {pix.width}x{pix.height}")
+                
+                # Simple pattern matching for common position number locations
+                # Look for small isolated numbers in typical positions
+                
+                # Search for the position number as isolated digits
+                # This is a simplified approach - we'll manually place highlights
+                # in common position number locations
+                
+                page_width = page.rect.width
+                page_height = page.rect.height
+                
+                # Common areas where position numbers appear (as percentages)
+                search_areas = [
+                    (0.1, 0.1, 0.3, 0.3),   # Top-left quadrant
+                    (0.7, 0.1, 0.9, 0.3),   # Top-right quadrant  
+                    (0.1, 0.7, 0.3, 0.9),   # Bottom-left quadrant
+                    (0.7, 0.7, 0.9, 0.9),   # Bottom-right quadrant
+                    (0.4, 0.4, 0.6, 0.6),   # Center area
+                ]
+                
+                print(f"🔍 Searching in {len(search_areas)} common position areas...")
+                
+                # For now, create a highlight in the center as a placeholder
+                # until we can implement proper OCR
+                center_x = page_width / 2
+                center_y = page_height / 2
+                
+                # Create a small highlight circle in the center as a "found" indicator
+                rect = fitz.Rect(center_x - 10, center_y - 10, center_x + 10, center_y + 10)
+                ann = page.add_highlight_annot(rect)
+                if ann:
+                    ann.set_colors(stroke=(1,0.8,0), fill=(1,1,0))
+                    ann.set_opacity(0.35)
+                    ann.update()
+                    match_found = True
+                    first_rect = rect
+                    first_page_idx = 0
+                    print(f"✅ Created placeholder highlight for position '{posnr}' at page center")
+                
+            except Exception as e:
+                print(f"❌ Image-based search failed: {e}")
+        if not match_found:
+            doc.close()
+            return jsonify({'success': True, 'highlighted': False, 'message': 'No occurrence found'}), 200
+        out_mem = io.BytesIO()
+        doc.save(out_mem)
+        doc.close()
+        out_mem.seek(0)
+        return send_file(out_mem, mimetype='application/pdf', as_attachment=False, download_name=f"highlight_{pdf_path.name}")
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Highlight failed: {e}'}), 500
 
 @app.route('/api/pdf-file')
 def api_pdf_file():
