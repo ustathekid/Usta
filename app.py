@@ -1481,18 +1481,8 @@ def _search_component_code(component_code):
                     else:
                         pdf_token = ''
 
-                    # Determine MIX code/name from file path using mix_mapping
-                    mix_code_val = None
-                    mix_name_val = None
-                    try:
-                        low_s = str(path).lower()
-                        for mcode, mname in mix_mapping.items():
-                            if mname and mname.lower() in low_s:
-                                mix_code_val = mcode
-                                mix_name_val = mname
-                                break
-                    except Exception:
-                        pass
+                    # Determine MIX code/name from file path using robust helper
+                    mix_code_val, mix_name_val = _extract_mix_from_path(path)
                     
                     # Add PDF info for each matching group with this code
                     for group_info in groups_for_code:
@@ -1592,14 +1582,10 @@ def api_search_code():
                     pdf_groups[group_key] = []
                 pdf_groups[group_key].append({'path': s, 'page': page_num, 'base_name': base_name})
                 
-                mix_code = None
-                low_s = s.lower()
-                for mcode, mname in mix_mapping.items():
-                    if mname and mname.lower() in low_s:
-                        mix_code = mcode
-                        mixes_found.add(mcode)
-                        break
-                pdf_details.append({'path': s, 'mix_code': mix_code, 'mix_name': mix_mapping.get(mix_code) if mix_code else None, 'base_name': base_name, 'page': page_num, 'group_key': group_key})
+                mix_code, mix_name = _extract_mix_from_path(path)
+                if mix_code:
+                    mixes_found.add(mix_code)
+                pdf_details.append({'path': s, 'mix_code': mix_code, 'mix_name': mix_name, 'base_name': base_name, 'page': page_num, 'group_key': group_key})
 
         for group_key in pdf_groups:
             pdf_groups[group_key].sort(key=lambda x: x['page'])
@@ -1609,21 +1595,15 @@ def api_search_code():
         for group_key, pages in pdf_groups.items():
             base_name = pages[0]['base_name']
             # determine mix code for this group
-            mix_code = None
-            sample_path = pages[0]['path'].lower()
-            for mcode, mname in mix_mapping.items():
-                try:
-                    if mname and mname.lower() in sample_path:
-                        mix_code = mcode
-                        break
-                except Exception:
-                    continue
-            
+            # determine mix code for this group using first page path
+            first_page_path = Path(pages[0]['path'])
+            mix_code, mix_name = _extract_mix_from_path(first_page_path)
+
             pdf_documents.append({
                 'base_name': base_name,
                 'group_key': group_key,
                 'mix_code': mix_code,
-                'mix_name': mix_mapping.get(mix_code) if mix_code else None,
+                'mix_name': mix_name,
                 'pages': [p['path'] for p in pages],
                 'page_count': len(pages)
             })
@@ -1653,6 +1633,48 @@ def _decode_relpath_or_abs(base: Path, token: str) -> Path:
     if p.is_absolute():
         return p.resolve()
     return (base / p).resolve()
+
+def _extract_mix_from_path(p: Path):
+    """Try to extract (mix_code, mix_name) from a filesystem path.
+
+    Strategy:
+      1. Look for any path segment exactly matching pattern MIX\d{5}.
+      2. If found and present in mix_mapping, return mapping value as name.
+      3. If code found but not in mapping, attempt to use next segment (if it isn't a file) as name.
+      4. Fallback: scan entire lowercased path for any mix description substring; first match wins.
+    Returns (mix_code|None, mix_name|None)
+    """
+    try:
+        import re
+        parts = list(p.parts)
+        code = None; name = None
+        pattern = re.compile(r'^MIX\d{5}$', re.IGNORECASE)
+        for i, seg in enumerate(parts):
+            if pattern.match(seg.upper()):
+                code = seg.upper()
+                if code in mix_mapping:
+                    name = mix_mapping[code]
+                else:
+                    # maybe next segment is the human-readable folder name
+                    if i+1 < len(parts):
+                        candidate = parts[i+1]
+                        # avoid picking file name
+                        if '.' not in candidate:
+                            name = candidate
+                break
+        if code:
+            return code, name
+        # Fallback scan for description inside path string
+        low = str(p).lower()
+        for mcode, mname in mix_mapping.items():
+            try:
+                if mname and mname.lower() in low:
+                    return mcode, mname
+            except Exception:
+                continue
+        return None, None
+    except Exception:
+        return None, None
 
 @app.route('/api/highlight-component', methods=['POST'])
 def api_highlight_component():
@@ -1920,19 +1942,27 @@ def api_highlight_component():
                 candidates.sort(key=lambda r: (( (r.x0+r.x1)/2 - cx)**2 + ((r.y0+r.y1)/2 - cy)**2))
                 print(f"🎯 Selected best candidate: {candidates[0]}")
             
-            rect=candidates[0] + (-2,-2,2,2)
+            # Use a red thick circle instead of yellow rectangle highlight
+            rect = candidates[0] + (-2,-2,2,2)
+            # Slightly inflate to give breathing room for the circle
+            circle_rect = rect.inflate(4)
             try:
-                ann=page.add_highlight_annot(rect)
+                ann = page.add_circle_annot(circle_rect)
                 if ann:
-                    ann.set_colors(stroke=(1,0.8,0), fill=(1,1,0))
-                    ann.set_opacity(0.35)
+                    # Red stroke, no fill
+                    ann.set_colors(stroke=(1,0,0), fill=None)
+                    try:
+                        ann.set_border(width=3)
+                    except Exception:
+                        pass
+                    ann.set_opacity(1.0)  # fully opaque stroke
                     ann.update()
-                    match_found=True
-                    first_rect=rect; first_page_idx=idx
-                    print(f"✅ Successfully highlighted position number on page {idx+1}")
+                    match_found = True
+                    first_rect = circle_rect; first_page_idx = idx
+                    print(f"✅ Successfully circled position number on page {idx+1} -> {circle_rect}")
                     break
             except Exception as e:
-                print(f"❌ Failed to add highlight annotation: {e}")
+                print(f"❌ Failed to add circle annotation: {e}")
                 continue
 
         # If we found a number, attempt to trace a connector line to highlight the part region
@@ -2010,56 +2040,9 @@ def api_highlight_component():
                             pass
             except Exception:
                 pass
-        # If no text found, try image-based search without OCR
+        # Removed placeholder center highlight: if not found we now simply return 'not found'
         if not match_found:
-            print("�️ No text found - trying image-based position detection...")
-            try:
-                page = doc[0]
-                
-                # Convert page to image
-                pix = page.get_pixmap(dpi=150)
-                print(f"📸 Created image: {pix.width}x{pix.height}")
-                
-                # Simple pattern matching for common position number locations
-                # Look for small isolated numbers in typical positions
-                
-                # Search for the position number as isolated digits
-                # This is a simplified approach - we'll manually place highlights
-                # in common position number locations
-                
-                page_width = page.rect.width
-                page_height = page.rect.height
-                
-                # Common areas where position numbers appear (as percentages)
-                search_areas = [
-                    (0.1, 0.1, 0.3, 0.3),   # Top-left quadrant
-                    (0.7, 0.1, 0.9, 0.3),   # Top-right quadrant  
-                    (0.1, 0.7, 0.3, 0.9),   # Bottom-left quadrant
-                    (0.7, 0.7, 0.9, 0.9),   # Bottom-right quadrant
-                    (0.4, 0.4, 0.6, 0.6),   # Center area
-                ]
-                
-                print(f"🔍 Searching in {len(search_areas)} common position areas...")
-                
-                # For now, create a highlight in the center as a placeholder
-                # until we can implement proper OCR
-                center_x = page_width / 2
-                center_y = page_height / 2
-                
-                # Create a small highlight circle in the center as a "found" indicator
-                rect = fitz.Rect(center_x - 10, center_y - 10, center_x + 10, center_y + 10)
-                ann = page.add_highlight_annot(rect)
-                if ann:
-                    ann.set_colors(stroke=(1,0.8,0), fill=(1,1,0))
-                    ann.set_opacity(0.35)
-                    ann.update()
-                    match_found = True
-                    first_rect = rect
-                    first_page_idx = 0
-                    print(f"✅ Created placeholder highlight for position '{posnr}' at page center")
-                
-            except Exception as e:
-                print(f"❌ Image-based search failed: {e}")
+            print("⚠️ No text match found; returning without placeholder highlight.")
         if not match_found:
             doc.close()
             return jsonify({'success': True, 'highlighted': False, 'message': 'No occurrence found'}), 200
@@ -3001,7 +2984,7 @@ if __name__ == '__main__':
     
     app.run(
         host='0.0.0.0',  # Allow external connections
-        port=5752,
+        port=5000,
         debug=True,
         threaded=True
     )

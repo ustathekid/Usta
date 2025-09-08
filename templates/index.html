@@ -329,6 +329,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             const firstDoc = (data.pdf_documents || [])[0] || null;
             const hasDocuments = firstDoc && firstDoc.pages && firstDoc.pages.length > 0;
             
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
             modal.innerHTML = `
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -336,7 +338,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <h5 class="modal-title w-100 d-flex align-items-center justify-content-between" id="pdfViewerModalLabel">
                                 <span class="d-flex align-items-center">
                                     <i class="bi bi-file-earmark-pdf"></i>
-                                    <span id="modalDocumentTitle" class="ms-2"></span>
+                                    <span id="modalDocumentTitle" class="ms-2${isMobile ? ' d-none' : ''}"></span>
+                                    ${data.search_type === 'component' && data.component_code ? `<span class="badge bg-secondary ms-3" id="componentCodeBadgeInline">${data.component_code}</span>` : ''}
                                 </span>
                                 ${data.search_type === 'component' ? '<span class="badge bg-info">Component Search</span>' : ''}
                             </h5>
@@ -351,7 +354,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                                     }
                                 </div>
                                 
-                                <div class="mix-selection-panel">
+                                <div class="mix-selection-panel${isMobile ? ' mobile-bottom-drawer' : ''}" id="mixSelectionPanel">
+                                    ${isMobile ? '<div class="mix-panel-header-inline-info" id="mixPanelHeaderInfo">Tap to Open Details</div>' : ''}
                                     ${data.search_type === 'component' ? `
                                         <div class="mix-section-title d-flex align-items-center justify-content-between">
                                             <span><i class="bi bi-diagram-3"></i> Component Search</span>
@@ -387,6 +391,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                                         </div>
                                         <div class="document-info-content" id="documentInfoContent"></div>
                                     </div>
+                                    <div class="group-documents-panel" id="groupDocumentsPanel" style="display:none;">
+                                        <div class="group-docs-title"><i class="bi bi-folder2-open"></i> PDFs in Group</div>
+                                        <ul class="group-docs-list" id="groupDocsList"></ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -398,6 +406,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             // Initialize the modal
             const bsModal = new bootstrap.Modal(modal);
+            if (isMobile) {
+                modal.classList.add('mobile-mode');
+            }
             
             // Set up event handlers for the professional PDF viewer
             setupProfessionalPdfViewerHandlers(bsModal, hasDocuments);
@@ -405,11 +416,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Auto-select first mix if available
             const sortedMixes = Object.keys(mixCounts).sort();
             if (sortedMixes.length > 0) {
-                selectMixInModal(sortedMixes[0]);
+                // Auto-select first mix in both component and standard searches
+                setTimeout(() => {
+                    selectMixInModal(sortedMixes[0]);
+                }, 100);
             }
             
             // Show the modal
             bsModal.show();
+
+            if (isMobile) {
+                initMobileMixPanel();
+            }
             
             // Add responsive resize handler for mobile optimization
             window.addEventListener('resize', () => {
@@ -512,61 +530,113 @@ document.addEventListener('DOMContentLoaded', async function() {
             let pdfUrl;
             
             // Always use Fit Page mode (no user controls)
-            const viewMode = 'Fit'; // Always Fit Page
-            const zoomLevel = '75'; // Fixed zoom for Fit Page
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            // Aggressive mobile scaling for better fit
+            // Mobile: use page-width so PDF touches left/right edges; desktop keep Fit
+            const viewMode = isMobile ? 'page-width' : 'Fit';
+            const zoomLevel = isMobile ? '50' : '75'; // Reduced zoom for mobile
             const toolbar = '0'; // Hide toolbar for cleaner view
             
-            const isComponentCtx = !!pdfDoc.component_code;
+            const isComponentCtx = !!pdfDoc.component_code; // retained for potential future logic
             const baseSingleUrl = `/api/pdf-file?f=${encodeURIComponent(toToken(pdfDoc.pages[0]))}`;
 
             if (pdfDoc.pages.length === 1) {
-                // Try highlight endpoint first if component context & posnr known
-                if (isComponentCtx && pdfDoc.posnr) {
-                    requestHighlightedPdf(toToken(pdfDoc.pages[0]), pdfDoc.posnr, frame, viewMode, zoomLevel, toolbar, baseSingleUrl);
-                    return;
-                }
-                pdfUrl = `${baseSingleUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+                // Highlight feature disabled for component search per latest requirement.
+                pdfUrl = `${baseSingleUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}&navpanes=0`;
             } else {
-                // Multiple pages - merged view (highlight first page only for now)
+                // Multiple pages - merged view
                 const mergedUrl = `/api/merged-pdf?g=${encodeURIComponent(toGroupToken(pdfDoc.pages))}`;
-                pdfUrl = `${mergedUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+                pdfUrl = `${mergedUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}&navpanes=0`;
             }
             frame.src = pdfUrl;
+
+            // On mobile ensure full PDF (all corners) stays visible irrespective of drawer state
+            if (isMobile) {
+                function applyMobileWidthFit(){
+                    try {
+                        const base = frame.src.split('#')[0];
+                        // Force horizontal fit so left/right edges align; keep toolbar hidden
+                        frame.src = `${base}#view=page-width&zoom=page-width&toolbar=0&navpanes=0&scrollbar=0`;
+                        const display = document.querySelector('.pdf-viewer-modal .pdf-display-area');
+                        if(display){
+                            display.style.height = `calc(100vh - 60px - 48px)`; // constant area
+                            display.style.width = '100%';
+                        }
+                    } catch(e){/* ignore */}
+                }
+                frame.addEventListener('load', function once(){
+                    applyMobileWidthFit();
+                    setTimeout(applyMobileWidthFit, 100); // re-assert small delay
+                    frame.removeEventListener('load', once);
+                });
+            }
             
-            // Update modal title with 9.x code
+            // Update modal title with 9.x code (only on desktop)
             const modalTitle = document.getElementById('modalDocumentTitle');
-            if (modalTitle) {
+            if (modalTitle && !isMobile) {
                 modalTitle.textContent = pdfDoc.base_name || '—';
             }
         }
     }
 
-    async function requestHighlightedPdf(fileToken, posnr, frame, viewMode, zoomLevel, toolbar, fallbackUrl){
-        try {
-            const res = await fetch('/api/highlight-component', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: fileToken, posnr: (posnr||'').toString().replace(/^0+/, '') })
-            });
-            const contentType = res.headers.get('Content-Type') || '';
-            if (res.ok && contentType.includes('application/pdf')) {
-                // Create blob URL for highlighted PDF
-                const blob = await res.blob();
-                const blobUrl = URL.createObjectURL(blob);
-                frame.src = `${blobUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+    // Mobile bottom drawer toggle logic
+    function initMobileMixPanel(){
+        const panel = document.querySelector('.pdf-viewer-modal .mix-selection-panel');
+        if(!panel) return;
+        const headerInfo = document.getElementById('mixPanelHeaderInfo');
+        if(!headerInfo) return;
+        
+        let isExpanded = false;
+    const collapsedHeight = 48; // tighter collapsed state (only header visible)
+    const expandedHeight = window.innerHeight * 0.7; // content region height when expanded (doesn't affect PDF area height now)
+        
+        // Set initial state
+        panel.style.setProperty('--mix-panel-height', collapsedHeight + 'px');
+        
+        function togglePanel() {
+            isExpanded = !isExpanded;
+            const targetHeight = isExpanded ? expandedHeight : collapsedHeight;
+            panel.style.setProperty('--mix-panel-height', targetHeight + 'px');
+
+            if (isExpanded) {
+                panel.classList.add('expanded');
+                if (headerInfo) headerInfo.textContent = 'Tap to Close';
             } else {
-                // Fallback to normal PDF if highlight not available
-                frame.src = `${fallbackUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+                panel.classList.remove('expanded');
+                if (headerInfo) headerInfo.textContent = 'Tap to Open Details';
             }
-        } catch (e) {
-            frame.src = `${fallbackUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}`;
+
+            // Ensure header stays visible (no fade out animation)
+            headerInfo.style.opacity = '1';
+
+            // Do NOT change PDF display height on toggle (remains constant to keep full page visible)
         }
+        
+        // Add click handler only to header info text
+        if (headerInfo) {
+            headerInfo.addEventListener('click', togglePanel);
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const newExpandedHeight = window.innerHeight * 0.7;
+            if (isExpanded) panel.style.setProperty('--mix-panel-height', newExpandedHeight + 'px');
+            // Re-apply constant PDF height
+            const display = document.querySelector('.pdf-viewer-modal .pdf-display-area');
+            if(display){
+                display.style.height = `calc(100vh - 60px - 48px)`;
+            }
+        });
     }
+
+    // requestHighlightedPdf removed: highlight functionality disabled for component searches.
     
     // Modal-specific document info display
     function showDocumentInfoInModal() {
         const infoPanel = document.getElementById('documentInfoPanel');
         const infoContent = document.getElementById('documentInfoContent');
+    const groupPanel = document.getElementById('groupDocumentsPanel');
+    const groupList = document.getElementById('groupDocsList');
         
         if (infoPanel && infoContent && currentDocument) {
             const firstPage = (currentDocument.pages && currentDocument.pages[0]) ? currentDocument.pages[0] : '';
@@ -579,13 +649,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             
             // Prefer human-readable mix name from backend; fall back to code
-            const mixLabel = (currentDocument.mix_name && currentDocument.mix_code)
-                ? `${currentDocument.mix_code} — ${currentDocument.mix_name}`
-                : (currentDocument.mix_name || currentDocument.mix_code || 'Unknown');
+            const mixCodeDisplay = currentDocument.mix_code || 'Unknown';
+            const modelDisplay = currentDocument.mix_name || '';
 
             let infoHtml = `
                 <div><strong>Document:</strong> ${currentDocument.base_name || 'Unknown'}</div>
-                <div><strong>Mix:</strong> ${mixLabel}</div>
+                <div><strong>Mix:</strong> ${mixCodeDisplay}</div>
+                ${modelDisplay ? `<div><strong>Model:</strong> ${modelDisplay}</div>` : ''}
                 <div><strong>Pages:</strong> ${currentDocument.pages ? currentDocument.pages.length : 0}</div>
                 ${currentDocument.group_name ? `<div><strong>Group:</strong> ${currentDocument.group_name}</div>` : ''}
             `;
@@ -609,6 +679,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             infoContent.innerHTML = infoHtml;
             infoPanel.style.display = 'block';
+
+            // Populate group documents list if currentDocument.group_docs provided
+            if (groupPanel && groupList) {
+                if (currentDocument.group_docs && Array.isArray(currentDocument.group_docs) && currentDocument.group_docs.length) {
+                    groupList.innerHTML = currentDocument.group_docs.map(gd => {
+                        const title = gd.base_name || gd.name || 'Document';
+                        return `<li data-doc-id="${gd.id || ''}" data-page="${gd.page || 1}"><i class='bi bi-file-earmark-pdf'></i> ${title}</li>`;
+                    }).join('');
+                    groupPanel.style.display = 'block';
+                } else {
+                    groupPanel.style.display = 'none';
+                }
+            }
         }
     }
 
@@ -898,7 +981,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Setup event handlers
         setupTreeEventHandlers();
         
-    // All mixes start collapsed initially (no auto-expand)
+        // Auto-expand first mix and select first group
+        const firstMixCode = Object.keys(hierarchy)[0];
+        if (firstMixCode) {
+            setTimeout(() => {
+                const firstMixHeader = document.querySelector(`[data-mix="${firstMixCode}"]`);
+                if (firstMixHeader) {
+                    firstMixHeader.click(); // This will expand and auto-select first group
+                }
+            }, 200);
+        }
     }
     
     // Setup tree event handlers
