@@ -1,0 +1,1214 @@
+{% extends "base.html" %}
+
+{% block title %}Material Usage Analysis{% endblock %}
+
+{% block content %}
+<style>
+.step-card {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.step-card.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Keep Step 1 (department selection) always interactive */
+.step-card#step1Card {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
+.step-card#step1Card .form-select {
+    pointer-events: auto !important;
+}
+
+.step-card.disabled .card-body {
+    background: rgba(108, 117, 125, 0.1);
+}
+
+.step-card.active {
+    border-color: #17a2b8 !important;
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+.step-card.completed {
+    border-color: #28a745 !important;
+}
+
+.step-card.completed .step-number .badge {
+    background-color: #28a745 !important;
+}
+
+.step-number {
+    min-width: 50px;
+}
+
+.step-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #17a2b8;
+    line-height: 1;
+}
+
+.step-card.completed .step-num {
+    color: #28a745;
+}
+
+.step-card.active .step-num {
+    color: #ffc107;
+}
+
+.step-card.disabled .step-num {
+    color: #6c757d;
+}
+
+.step-status {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.step-status.completed {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.step-status.active {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.mgroup-chip {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    margin: 0.2rem;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    user-select: none;
+}
+
+.mgroup-chip:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+.mgroup-chip.selected {
+    background-color: #17a2b8;
+    box-shadow: 0 2px 8px rgba(23, 162, 184, 0.4);
+}
+
+.mgroup-chip.selected:hover {
+    background-color: #138496;
+}
+
+.operation-details {
+    background: rgba(248, 249, 250, 0.95);
+    border: 2px solid rgba(23, 162, 184, 0.5);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.detail-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 3px solid rgba(23, 162, 184, 0.8);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.detail-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-left-color: #17a2b8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.operation-actions {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-text {
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.confirmation-text .highlight {
+    color: #17a2b8;
+    font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+    .step-card .card-header .d-flex {
+        flex-wrap: wrap;
+    }
+    
+    .step-card .card-title {
+        font-size: 1rem;
+    }
+    
+    .step-card .text-muted {
+        font-size: 0.8rem;
+    }
+    
+    .step-status {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .step-num {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<div class="container-fluid px-0">
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="card bg-secondary page-full-card page-flex">
+                <div class="card-header">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-industry me-2"></i>
+                        Material Usage Analysis
+                    </h2>
+                    <p class="card-text mt-2 mb-0">Analyze part codes usage across departments and machine groups</p>
+                </div>
+                <div class="card-body content-area">
+                    <!-- Status Alerts -->
+                    <div id="status-container" class="mb-3"></div>
+
+                    <!-- File Comparison Form -->
+                    <form id="analysisForm" class="mb-3">
+                        <!-- Steps 1, 2 & 3: Department, MGroup and Part Codes -->
+                        <div class="row g-3 mb-3">
+                            <!-- Step 1: Department Selection -->
+                            <div class="col-12 col-md-4">
+                                <!-- Step 1 should always be interactive (was being disabled by JS logic) -->
+                                <div class="card bg-dark border-primary step-card active" id="step1Card">
+                                    <div class="card-header py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">1</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fas fa-building me-2"></i>
+                                                    Department
+                                                </h5>
+                                                <small class="text-muted">Select department</small>
+                                            </div>
+                                            <div>
+                                                <span id="step1Status" class="step-status"><i class="fas fa-clock me-1"></i>Pending</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <select class="form-select" id="departmentSelect">
+                                            <option value="">Select a department...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: MGroup Selection -->
+                            <div class="col-12 col-md-4">
+                                <div class="card bg-dark border-secondary step-card disabled" id="step2Card">
+                                    <div class="card-header py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">2</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fas fa-cogs me-2"></i>
+                                                    Machine Groups
+                                                </h5>
+                                                <small class="text-muted">Select MGroups (<span id="mgroupCount">0</span> selected)</small>
+                                            </div>
+                                            <div>
+                                                <span id="step2Status" class="step-status"><i class="fas fa-pause-circle me-1"></i>Waiting</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body py-2" style="max-height: 200px; overflow-y: auto;">
+                                        <div id="mgroupsList" class="text-center text-muted">
+                                            <i class="fas fa-arrow-up me-2"></i>
+                                            Select a department first
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Part Codes Input -->
+                            <div class="col-12 col-md-4">
+                                <div class="card bg-dark border-secondary step-card disabled" id="step3Card">
+                                    <div class="card-header py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-number me-3">
+                                                <span class="step-num">3</span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fas fa-list-ol me-2"></i>
+                                                    Part Codes
+                                                </h5>
+                                                <small class="text-muted">Enter part codes to analyze</small>
+                                            </div>
+                                            <div>
+                                                <span id="step3Status" class="step-status"><i class="fas fa-pause-circle me-1"></i>Waiting</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <textarea class="form-control" id="partCodes" name="partCodes" 
+                                                  rows="6" placeholder="Complete previous steps first..." disabled></textarea>
+                                        <div class="form-text">
+                                            Enter one part code per line
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Step 4: Operation Details Section -->
+                    <div id="operationDetailsSection" class="mb-3" style="display: none;">
+                        <div class="card bg-dark border-primary">
+                            <div class="card-header py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="step-number me-3">
+                                        <span class="step-num">4</span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title mb-0">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <span id="operationDetailsTitle">Analysis Details</span>
+                                        </h5>
+                                        <small class="text-muted">Review details and start analysis</small>
+                                    </div>
+                                    <div>
+                                        <span class="step-status completed"><i class="fas fa-check-circle-fill me-1"></i>Ready</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="operationDetailsContent">
+                                    <!-- Pre-operation content -->
+                                    <div id="preOperationDetails">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-building text-primary me-2"></i>
+                                                    <strong>Department:</strong>
+                                                    <div class="ms-4 text-muted" id="detailDepartment">-</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-cogs text-info me-2"></i>
+                                                    <strong>Machine Groups:</strong>
+                                                    <div class="ms-4 text-muted" id="detailMGroups">-</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-list-ol text-warning me-2"></i>
+                                                    <strong>Part Codes:</strong>
+                                                    <div class="ms-4 text-muted" id="detailPartCodes">0 codes</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-filter text-success me-2"></i>
+                                                    <strong>Filter Mode:</strong>
+                                                    <div class="ms-4 text-muted">Department + MGroup specific analysis</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Confirmation and Action Buttons -->
+                                        <div class="operation-actions">
+                                            <div class="confirmation-text">
+                                                <i class="fas fa-question-circle me-2"></i>
+                                                Do you <span class="highlight">confirm</span> the analysis details above?
+                                            </div>
+                                            <div class="d-flex justify-content-center gap-3">
+                                                <button type="submit" class="btn btn-success btn-lg px-4" id="confirmStartBtn">
+                                                    <i class="fas fa-play me-2"></i>
+                                                    Start Analysis
+                                                </button>
+                                                <button type="button" class="btn btn-secondary btn-lg px-4" id="clearAllBtn">
+                                                    <i class="fas fa-eraser me-2"></i>
+                                                    Clear All
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Post-operation content -->
+                                    <div id="postOperationDetails" style="display: none;">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="alert alert-info border-0" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-info-circle-fill me-2 fs-5" style="color: #0dcaf0;"></i>
+                                                        <div>
+                                                            <strong>Analysis Complete:</strong>
+                                                            <div class="mt-1 small">
+                                                                Review the analysis results below. You can also view detailed hierarchy information in the tabs.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div id="operationResultsSummary" class="summary-bar"></div>
+                                            </div>
+                                            <div class="col-md-4 text-end">
+                                                <button type="button" class="btn btn-outline-primary btn-lg" id="downloadReportBtn">
+                                                    <i class="fas fa-download me-2"></i>
+                                                    Download Report
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Section -->
+                    <div id="progressSection" class="mb-3" style="display: none;">
+                        <div class="card bg-dark">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Analysis Progress</span>
+                                        <span id="progress-text">0%</span>
+                                    </div>
+                                    <div class="progress" style="height: 30px;">
+                                        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                             role="progressbar" style="width: 0%" aria-valuenow="0" 
+                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row text-center mb-3">
+                                    <div class="col-4">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-primary" id="current-count">0</div>
+                                            <small class="text-muted">Current</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-info" id="total-count">0</div>
+                                            <small class="text-muted">Total</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-success" id="found-count">0</div>
+                                            <small class="text-muted">Found</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Current Status:</strong>
+                                    <div id="current-status" class="text-muted">Ready to start...</div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-danger btn-sm" id="cancelBtn">
+                                        <i class="fas fa-stop"></i> Cancel Analysis
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Tabs Section -->
+                    <div id="resultsSection" class="mb-3" style="display: none;">
+                        <div class="card bg-dark">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs" id="resultsTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="summary-tab" data-bs-toggle="tab" 
+                                                data-bs-target="#summary" type="button" role="tab">
+                                            <i class="fas fa-chart-pie"></i> Summary
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="hierarchy-tab" data-bs-toggle="tab" 
+                                                data-bs-target="#hierarchy" type="button" role="tab">
+                                            <i class="fas fa-sitemap"></i> Hierarchy
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="details-tab" data-bs-toggle="tab" 
+                                                data-bs-target="#details" type="button" role="tab">
+                                            <i class="fas fa-list"></i> Details
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="resultsTabContent">
+                                    <!-- Summary Tab -->
+                                    <div class="tab-pane fade show active" id="summary" role="tabpanel">
+                                        <div id="summaryContent">
+                                            <div class="text-center text-muted">
+                                                <i class="fas fa-chart-pie fa-3x mb-3"></i>
+                                                <p>No analysis results yet. Run an analysis to see summary here.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hierarchy Tab -->
+                                    <div class="tab-pane fade" id="hierarchy" role="tabpanel">
+                                        <div id="hierarchyContent">
+                                            <div class="text-center text-muted">
+                                                <i class="fas fa-sitemap fa-3x mb-3"></i>
+                                                <p>No hierarchy data yet. Run an analysis to see hierarchical relationships here.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Details Tab -->
+                                    <div class="tab-pane fade" id="details" role="tabpanel">
+                                        <div id="detailsContent">
+                                            <div class="text-center text-muted">
+                                                <i class="fas fa-list fa-3x mb-3"></i>
+                                                <p>No detailed results yet. Run an analysis to see detailed information here.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Log -->
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list-alt text-info"></i>
+                                Analysis Log
+                            </h5>
+                            <div>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearLogBtn">
+                                    <i class="fas fa-trash"></i> Clear Log
+                                </button>
+                                <button type="button" class="btn btn-outline-info btn-sm" id="downloadLogBtn" disabled>
+                                    <i class="fas fa-download"></i> Download Log
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="live-log" class="log-container" style="height: 300px; overflow-y: auto; 
+                                 background-color: #f8f9fa; font-family: 'Courier New', monospace; font-size: 0.9em; 
+                                 padding: 15px; white-space: pre-wrap;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    let analysisInProgress = false;
+    let progressInterval = null;
+    let logInterval = null;
+    let departmentMGroups = {};
+    let mgroupNames = {};
+    let selectedDepartment = '';
+    let selectedMGroups = [];
+    let partCodesData = [];
+
+    // Load departments and mgroups data
+    loadDepartmentData();
+
+    // Form submission
+    $('#analysisForm').on('submit', function(e) {
+        e.preventDefault();
+        startAnalysis();
+    });
+
+    // Department selection change
+    $('#departmentSelect').on('change', function() {
+        selectedDepartment = $(this).val();
+        loadMGroupsForDepartment();
+        checkFormValidity();
+    });
+
+    // Part codes change
+    $('#partCodes').on('input', function() {
+        const partCodesText = $(this).val().trim();
+        partCodesData = partCodesText ? partCodesText.split('\n').map(code => code.trim()).filter(code => code.length > 0) : [];
+        checkFormValidity();
+    });
+
+    // Clear all button
+    $('#clearAllBtn').on('click', function() {
+        resetAll();
+    });
+
+    // Cancel button
+    $('#cancelBtn').on('click', function() {
+        cancelAnalysis();
+    });
+
+    // Clear log button
+    $('#clearLogBtn').on('click', function() {
+        $('#live-log').empty();
+    });
+
+    // Download log button
+    $('#downloadLogBtn').on('click', function() {
+        downloadLog();
+    });
+
+    // Confirm start button
+    $('#confirmStartBtn').on('click', function(e) {
+        e.preventDefault();
+        startAnalysis();
+    });
+
+    function loadDepartmentData() {
+        console.log('🔍 DEBUG: Loading department data...');
+        
+        // Ensure Step 1 is always active (never disabled) for user interaction
+        const step1Card = $('#step1Card');
+        step1Card.removeClass('disabled').addClass('active');
+        console.log('🔍 DEBUG: Step 1 card forced to active state');
+        
+        $.ajax({
+            url: '/api/material_usage/departments',
+            method: 'GET',
+            success: function(response) {
+                console.log('✅ DEBUG: Department data response:', response);
+                
+                if (response.success) {
+                    const departments = response.departments || {};
+                    const mgroups = response.mgroup_names || {};
+                    
+                    console.log(`✅ DEBUG: Loaded ${Object.keys(departments).length} departments`);
+                    console.log('✅ DEBUG: Department keys:', Object.keys(departments));
+                    console.log(`✅ DEBUG: Loaded ${Object.keys(mgroups).length} mgroup names`);
+                    
+                    departmentMGroups = departments;
+                    mgroupNames = mgroups;
+                    
+                    // Populate department dropdown
+                    const select = $('#departmentSelect');
+                    select.empty().append('<option value="">Select a department...</option>');
+                    
+                    Object.keys(departments).forEach(dept => {
+                        console.log(`✅ DEBUG: Adding department option: ${dept}`);
+                        select.append(`<option value="${dept}">${dept}</option>`);
+                    });
+                    
+                    console.log('✅ DEBUG: Department dropdown populated');
+                    console.log('✅ DEBUG: Dropdown HTML:', select.html());
+                    
+                    // Ensure dropdown is enabled
+                    select.prop('disabled', false);
+                    console.log('✅ DEBUG: Dropdown enabled');
+                    
+                    checkFormValidity();
+                } else {
+                    console.error('❌ DEBUG: Department data failed:', response.message);
+                    showAlert('Failed to load department data: ' + response.message, 'danger');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('❌ DEBUG: AJAX error loading departments:', error);
+                console.error('❌ DEBUG: Status:', status);
+                console.error('❌ DEBUG: Response text:', xhr.responseText);
+                console.error('❌ DEBUG: XHR object:', xhr);
+                showAlert('Error loading department data: ' + error, 'danger');
+            }
+        });
+    }
+
+    function loadMGroupsForDepartment() {
+        const mgroupsList = $('#mgroupsList');
+        const mgroupCount = $('#mgroupCount');
+        
+        if (!selectedDepartment) {
+            mgroupsList.html('<div class="text-center text-muted"><i class="fas fa-arrow-up me-2"></i>Select a department first</div>');
+            selectedMGroups = [];
+            mgroupCount.text('0');
+            return;
+        }
+
+        const mgroups = departmentMGroups[selectedDepartment] || [];
+        
+        if (mgroups.length === 0) {
+            mgroupsList.html('<div class="text-center text-muted">No machine groups available for this department</div>');
+            selectedMGroups = [];
+            mgroupCount.text('0');
+            return;
+        }
+
+        let html = '';
+        mgroups.forEach(mgroup => {
+            const mgroupName = mgroupNames[mgroup] || mgroup;
+            const title = `${mgroup} - ${mgroupName}`;
+            html += `<span class="mgroup-chip" data-mgroup="${mgroup}" title="${title}">${mgroup}</span>`;
+        });
+
+        mgroupsList.html(html);
+        selectedMGroups = [];
+        mgroupCount.text('0');
+
+        // Add click handlers for mgroup chips
+        $('.mgroup-chip').on('click', function() {
+            const mgroup = $(this).data('mgroup');
+            const isSelected = $(this).hasClass('selected');
+            
+            if (isSelected) {
+                $(this).removeClass('selected');
+                selectedMGroups = selectedMGroups.filter(mg => mg !== mgroup);
+            } else {
+                $(this).addClass('selected');
+                selectedMGroups.push(mgroup);
+            }
+            
+            mgroupCount.text(selectedMGroups.length);
+            checkFormValidity();
+        });
+    }
+
+    function checkFormValidity() {
+        const hasDepartment = selectedDepartment.length > 0;
+        const hasMGroups = selectedMGroups.length > 0;
+        const hasPartCodes = partCodesData.length > 0;
+        const isValid = hasDepartment && hasMGroups && hasPartCodes;
+        
+        // Update step states
+        updateStepStates(hasDepartment, hasMGroups, hasPartCodes, isValid);
+        
+        // Enable/disable confirm button
+        $('#confirmStartBtn').prop('disabled', !isValid || analysisInProgress);
+        
+        // Show/hide operation details based on form validity
+        if (isValid && !analysisInProgress) {
+            updateOperationDetails();
+            $('#operationDetailsSection').show();
+        } else {
+            $('#operationDetailsSection').hide();
+        }
+    }
+
+    function updateStepStates(hasDepartment, hasMGroups, hasPartCodes, isValid) {
+        // Step 1: Department Selection
+        const step1Card = $('#step1Card');
+        const step1Status = $('#step1Status');
+        const step2Card = $('#step2Card');
+        const step2Status = $('#step2Status');
+        const step3Card = $('#step3Card');
+        const step3Status = $('#step3Status');
+        const partCodesTextarea = $('#partCodes');
+
+        if (hasDepartment) {
+            // Mark Step 1 completed
+            step1Card.removeClass('active').removeClass('disabled').addClass('completed');
+            step1Status.html('<i class="fas fa-check-circle-fill me-1"></i>Completed').removeClass('active').addClass('completed');
+
+            // Enable Step 2
+            step2Card.removeClass('disabled').addClass('active');
+            step2Status.html('<i class="fas fa-arrow-right-circle me-1"></i>Select MGroups').addClass('active');
+        } else {
+            // Keep Step 1 active (not disabled) so user can interact
+            step1Card.removeClass('completed disabled').addClass('active');
+            step1Status.html('<i class="fas fa-clock me-1"></i>Pending').removeClass('completed').addClass('active');
+
+            // Disable subsequent steps
+            step2Card.addClass('disabled').removeClass('active completed');
+            step2Status.html('<i class="fas fa-pause-circle me-1"></i>Waiting').removeClass('completed active');
+        }
+
+        if (hasMGroups && hasDepartment) {
+            step2Card.removeClass('active').addClass('completed');
+            step2Status.html('<i class="fas fa-check-circle-fill me-1"></i>Completed').removeClass('active').addClass('completed');
+            
+            // Enable Step 3
+            step3Card.removeClass('disabled').addClass('active');
+            step3Status.html('<i class="fas fa-arrow-right-circle me-1"></i>Enter codes').addClass('active');
+            partCodesTextarea.prop('disabled', false).attr('placeholder', 'Enter part codes, one per line...');
+        } else if (hasDepartment) {
+            step3Card.addClass('disabled').removeClass('active completed');
+            step3Status.html('<i class="fas fa-pause-circle me-1"></i>Waiting').removeClass('completed active');
+            partCodesTextarea.prop('disabled', true).attr('placeholder', 'Complete previous steps first...');
+        }
+
+        if (hasPartCodes && hasMGroups && hasDepartment) {
+            step3Card.removeClass('active').addClass('completed');
+            step3Status.html('<i class="fas fa-check-circle-fill me-1"></i>Completed').removeClass('active').addClass('completed');
+        }
+    }
+
+    function updateOperationDetails() {
+        $('#detailDepartment').text(selectedDepartment || 'Not selected');
+        
+        if (selectedMGroups.length > 0) {
+            const mgroupsText = selectedMGroups.map(mg => {
+                const name = mgroupNames[mg] || mg;
+                return `${mg} (${name})`;
+            }).join(', ');
+            $('#detailMGroups').text(mgroupsText);
+        } else {
+            $('#detailMGroups').text('None selected');
+        }
+        
+        $('#detailPartCodes').text(`${partCodesData.length} codes`);
+    }
+
+    function resetAll() {
+        // Reset form
+        $('#departmentSelect').val('');
+        $('#partCodes').val('');
+        selectedDepartment = '';
+        selectedMGroups = [];
+        partCodesData = [];
+        
+        // Reset UI
+        loadMGroupsForDepartment();
+        checkFormValidity();
+        
+        // Hide sections
+        $('#operationDetailsSection').hide();
+        $('#progressSection').hide();
+        $('#resultsSection').hide();
+        
+        // Reset operation details
+        resetOperationDetails();
+        
+        showAlert('Form reset successfully', 'info');
+    }
+
+    function resetOperationDetails() {
+        $('#operationDetailsTitle').text('Analysis Details');
+        $('#preOperationDetails').show();
+        $('#postOperationDetails').hide();
+    }
+
+    function startAnalysis() {
+        if (analysisInProgress) return;
+
+        analysisInProgress = true;
+        $('#confirmStartBtn').prop('disabled', true);
+        
+        // Hide operation details and show progress
+        $('#operationDetailsSection').hide();
+        $('#progressSection').show();
+        $('#resultsSection').hide();
+
+        // Reset progress
+        updateProgressDisplay({
+            percentage: 0,
+            current: 0,
+            total: partCodesData.length,
+            found: 0,
+            status: 'Starting analysis...'
+        });
+
+        clearLog();
+        
+        // Prepare analysis request
+        const requestData = {
+            department: selectedDepartment,
+            mgroups: selectedMGroups,
+            part_codes: partCodesData
+        };
+
+        // Send analysis request
+        $.ajax({
+            url: '/material_usage/analyze_filtered',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function(response) {
+                if (response.success) {
+                    showAlert('Analysis started successfully!', 'success');
+                    startProgressMonitoring();
+                } else {
+                    showAlert('Failed to start analysis: ' + response.message, 'danger');
+                    stopAnalysis();
+                }
+            },
+            error: function(xhr, status, error) {
+                showAlert('Error starting analysis: ' + error, 'danger');
+                stopAnalysis();
+            }
+        });
+    }
+
+    function cancelAnalysis() {
+        $.ajax({
+            url: '/material_usage/cancel',
+            method: 'POST',
+            success: function(response) {
+                showAlert('Analysis cancellation requested...', 'warning');
+            }
+        });
+    }
+
+    function stopAnalysis() {
+        analysisInProgress = false;
+        $('#confirmStartBtn').prop('disabled', false);
+        $('#progressSection').hide();
+        stopProgressMonitoring();
+        checkFormValidity();
+    }
+
+    function startProgressMonitoring() {
+        progressInterval = setInterval(updateProgress, 1000);
+        logInterval = setInterval(updateLog, 2000);
+    }
+
+    function stopProgressMonitoring() {
+        if (progressInterval) {
+            clearInterval(progressInterval);
+            progressInterval = null;
+        }
+        if (logInterval) {
+            clearInterval(logInterval);
+            logInterval = null;
+        }
+    }
+
+    function updateProgress() {
+        $.ajax({
+            url: '/material_usage/progress',
+            method: 'GET',
+            success: function(data) {
+                updateProgressDisplay(data);
+                
+                if (data.completed || data.error) {
+                    stopProgressMonitoring();
+                    stopAnalysis();
+                    
+                    if (data.completed) {
+                        showAlert('Analysis completed successfully!', 'success');
+                        loadResults();
+                        $('#downloadLogBtn').prop('disabled', false);
+                    } else if (data.error) {
+                        showAlert('Analysis failed: ' + data.status, 'danger');
+                    }
+                }
+            }
+        });
+    }
+
+    function updateLog() {
+        $.ajax({
+            url: '/material_usage/logs',
+            method: 'GET',
+            success: function(data) {
+                if (data.logs) {
+                    $('#live-log').text(data.logs);
+                    // Auto-scroll to bottom
+                    const logContainer = $('#live-log')[0];
+                    logContainer.scrollTop = logContainer.scrollHeight;
+                }
+            }
+        });
+    }
+
+    function updateProgressDisplay(data) {
+        $('#progress-bar').css('width', data.percentage + '%').attr('aria-valuenow', data.percentage);
+        $('#progress-text').text(data.percentage + '%');
+        $('#current-count').text(data.current);
+        $('#total-count').text(data.total);
+        $('#found-count').text(data.found || 0);
+        $('#current-status').text(data.status || 'Processing...');
+    }
+
+    function loadResults() {
+        $.ajax({
+            url: '/material_usage/results',
+            method: 'GET',
+            success: function(data) {
+                if (data.success && data.results) {
+                    showResults(data.results);
+                }
+            }
+        });
+    }
+
+    function showResults(results) {
+        // Update operation details to show results
+        $('#operationDetailsTitle').text('Analysis Results');
+        $('#preOperationDetails').hide();
+        $('#postOperationDetails').show();
+        $('#operationDetailsSection').show();
+        
+        // Show results summary in operation details
+        const summaryHtml = `
+            <span class="badge bg-primary me-2">${results.total_parts} Total</span>
+            <span class="badge bg-success me-2">${results.found_parts} Found</span>
+            <span class="badge bg-danger me-2">${results.not_found_parts} Not Found</span>
+            <span class="badge bg-info">${((results.found_parts/results.total_parts)*100).toFixed(1)}% Success</span>
+        `;
+        $('#operationResultsSummary').html(summaryHtml);
+        
+        // Show detailed results in tabs
+        displaySummary(results);
+        displayHierarchy(results);
+        displayDetails(results);
+        
+        // Show results section
+        $('#resultsSection').show();
+    }
+
+    function displaySummary(results) {
+        let html = '<div class="row">';
+        
+        // Summary cards
+        html += `
+            <div class="col-md-3 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h4>${results.total_parts}</h4>
+                        <p class="mb-0">Total Parts</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h4>${results.found_parts}</h4>
+                        <p class="mb-0">Found</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body text-center">
+                        <h4>${results.not_found_parts}</h4>
+                        <p class="mb-0">Not Found</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h4>${((results.found_parts/results.total_parts)*100).toFixed(1)}%</h4>
+                        <p class="mb-0">Success Rate</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        html += '</div>';
+        
+        // Department usage in selected MGroups
+        if (Object.keys(results.department_summary).length > 0) {
+            html += '<div class="card mb-3"><div class="card-header"><h5>Department Usage (Filtered by Selected MGroups)</h5></div><div class="card-body">';
+            html += '<div class="row">';
+            
+            for (const [dept, info] of Object.entries(results.department_summary)) {
+                html += `
+                    <div class="col-md-4 mb-2">
+                        <div class="border rounded p-3">
+                            <h6 class="text-primary">${dept}</h6>
+                            <p class="mb-0">${info.count} parts found in selected MGroups</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div></div></div>';
+        }
+        
+        // MGroup specific results
+        if (Object.keys(results.mgroup_summary).length > 0) {
+            html += '<div class="card mb-3"><div class="card-header"><h5>MGroup Breakdown</h5></div><div class="card-body">';
+            html += '<div class="row">';
+            
+            for (const [mgroup, info] of Object.entries(results.mgroup_summary)) {
+                const mgroupName = mgroupNames[mgroup] || mgroup;
+                html += `
+                    <div class="col-md-6 mb-2">
+                        <div class="border rounded p-3">
+                            <h6 class="text-info">${mgroup}</h6>
+                            <p class="text-muted small">${mgroupName}</p>
+                            <p class="mb-0">${info.count} parts found</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div></div></div>';
+        }
+        
+        $('#summaryContent').html(html);
+    }
+
+    function displayHierarchy(results) {
+        let html = '';
+        
+        if (Object.keys(results.part_analyses).length > 0) {
+            html += '<div class="accordion" id="hierarchyAccordion">';
+            
+            let index = 0;
+            for (const [partCode, analysis] of Object.entries(results.part_analyses)) {
+                if (analysis.found && analysis.hierarchy) {
+                    const hierarchy = analysis.hierarchy;
+                    
+                    html += `
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading${index}">
+                                <button class="accordion-button ${index > 0 ? 'collapsed' : ''}" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#collapse${index}">
+                                    <strong>${partCode}</strong> 
+                                    <span class="badge bg-primary ms-2">${analysis.occurrences} occurrence(s)</span>
+                                    <span class="badge bg-info ms-2">In Selected MGroups</span>
+                                </button>
+                            </h2>
+                            <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
+                                 data-bs-parent="#hierarchyAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card h-100">
+                                                <div class="card-header bg-primary text-white">
+                                                    <h6 class="mb-0"><i class="fas fa-building me-2"></i>Departman</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    ${hierarchy.departments.length > 0 ? 
+                                                        hierarchy.departments.map(dept => `<span class="badge bg-primary me-1 mb-1">${dept}</span>`).join('') : 
+                                                        '<span class="text-muted">None</span>'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card h-100">
+                                                <div class="card-header bg-success text-white">
+                                                    <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Kullanıldığı Modeller</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    ${hierarchy.models.length > 0 ? 
+                                                        hierarchy.models.map(model => `<span class="badge bg-success me-1 mb-1">${model}</span>`).join('') : 
+                                                        '<span class="text-muted">None</span>'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card h-100">
+                                                <div class="card-header bg-warning text-dark">
+                                                    <h6 class="mb-0"><i class="fas fa-code-branch me-2"></i>Kullanıldığı MIX'ler</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    ${hierarchy.mixes.length > 0 ? 
+                                                        hierarchy.mixes.map(mix => `<span class="badge bg-warning text-dark me-1 mb-1">${mix}</span>`).join('') : 
+                                                        '<span class="text-muted">None</span>'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    index++;
+                }
+            }
+            
+            html += '</div>';
+        } else {
+            html = '<div class="text-center text-muted"><p>No hierarchy data available for selected MGroups.</p></div>';
+        }
+        
+        $('#hierarchyContent').html(html);
+    }
+
+    function displayDetails(results) {
+        let html = '';
+        
+        // Found parts
+        if (results.found_list && results.found_list.length > 0) {
+            html += '<div class="card mb-3">';
+            html += '<div class="card-header bg-success text-white"><h6 class="mb-0">✅ Found Parts in Selected MGroups</h6></div>';
+            html += '<div class="card-body"><div class="row">';
+            
+            results.found_list.forEach(part => {
+                html += `<div class="col-md-3 mb-2"><span class="badge bg-success">${part}</span></div>`;
+            });
+            
+            html += '</div></div></div>';
+        }
+        
+        // Not found parts
+        if (results.not_found_list && results.not_found_list.length > 0) {
+            html += '<div class="card mb-3">';
+            html += '<div class="card-header bg-danger text-white"><h6 class="mb-0">❌ Parts Not Found in Selected MGroups</h6></div>';
+            html += '<div class="card-body"><div class="row">';
+            
+            results.not_found_list.forEach(part => {
+                html += `<div class="col-md-3 mb-2"><span class="badge bg-danger">${part}</span></div>`;
+            });
+            
+            html += '</div></div></div>';
+        }
+        
+        if (!html) {
+            html = '<div class="text-center text-muted"><p>No detailed results available.</p></div>';
+        }
+        
+        $('#detailsContent').html(html);
+    }
+
+    function downloadLog() {
+        window.open('/material_usage/download_log', '_blank');
+    }
+
+    function showAlert(message, type) {
+        const alertClass = `alert-${type}`;
+        const alertHtml = `
+            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        $('#status-container').html(alertHtml);
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            $('.alert').alert('close');
+        }, 5000);
+    }
+
+    function clearLog() {
+        $('#live-log').empty();
+    }
+});
+</script>
+{% endblock %}

@@ -40,7 +40,7 @@ except ImportError as e:
     pytesseract = None
 import tempfile
 from typing import Optional, Union
-from mix import mix_mapping
+# mix_mapping is now loaded from mix.json via WebMaterialUsageManager
 
 # Import our managers (converted for web)
 from web_base_manager import WebBaseManager
@@ -48,6 +48,7 @@ from web_scan_manager import WebScanManager
 from web_update_manager import WebUpdateManager
 from web_file_add_manager import WebFileAddManager
 from web_settings_manager import WebSettingsManager
+from web_material_usage_manager import WebMaterialUsageManager
 
 app = Flask(__name__)
 app.secret_key = 'schemini_manager_secret_key_2025'
@@ -69,6 +70,7 @@ scan_manager = WebScanManager()
 update_manager = WebUpdateManager()
 file_add_manager = WebFileAddManager()
 settings_manager = WebSettingsManager()
+material_usage_manager = WebMaterialUsageManager()
 
 # --- User Authentication ---
 def login_required(f):
@@ -2586,6 +2588,264 @@ def get_file_add_status():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/material-usage')
+@login_required
+def material_usage_page():
+    """Material Usage analysis page route"""
+    return render_template('material_usage.html')
+
+# Material Usage API endpoints
+@app.route('/api/material_usage/departments')
+@login_required
+def api_material_usage_departments():
+    """API endpoint to get departments and MGroups data"""
+    try:
+        result = material_usage_manager.get_departments_and_mgroups()
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/material_usage/analyze_filtered', methods=['POST'])
+@login_required
+def api_material_usage_analyze_filtered():
+    """API endpoint to start filtered material usage analysis"""
+    try:
+        data = request.get_json()
+        department = data.get('department', '')
+        mgroups = data.get('mgroups', [])
+        part_codes = data.get('part_codes', [])
+        
+        if not department:
+            return jsonify({'success': False, 'message': 'Department is required'}), 400
+        
+        if not mgroups:
+            return jsonify({'success': False, 'message': 'At least one MGroup must be selected'}), 400
+        
+        if not part_codes:
+            return jsonify({'success': False, 'message': 'No part codes provided'}), 400
+        
+        # Attach client info for logging
+        client_info = {
+            'ip': _client_ip(),
+            'username': session.get('username', ''),
+            'computer_name': socket.gethostname(),
+            'user_agent': request.headers.get('User-Agent', '')
+        }
+        material_usage_manager.set_client_info(client_info)
+        
+        # Start filtered analysis in background thread
+        def filtered_analysis_thread():
+            material_usage_manager.analyze_filtered_parts(department, mgroups, part_codes)
+        
+        thread = threading.Thread(target=filtered_analysis_thread)
+        thread.daemon = True
+        thread.start()
+        
+        return jsonify({'success': True, 'message': 'Filtered material usage analysis started'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/api/material_usage/analyze', methods=['POST'])
+@login_required
+def api_material_usage_analyze():
+    """API endpoint to start material usage analysis"""
+    try:
+        data = request.get_json()
+        part_codes = data.get('part_codes', [])
+        
+        if not part_codes:
+            return jsonify({'success': False, 'message': 'No part codes provided'}), 400
+        
+        # Attach client info for logging
+        client_info = {
+            'ip': _client_ip(),
+            'username': session.get('username', ''),
+            'computer_name': socket.gethostname(),
+            'user_agent': request.headers.get('User-Agent', '')
+        }
+        material_usage_manager.set_client_info(client_info)
+        
+        # Start analysis in background thread
+        def analysis_thread():
+            material_usage_manager.analyze_uploaded_parts(part_codes)
+        
+        thread = threading.Thread(target=analysis_thread)
+        thread.daemon = True
+        thread.start()
+        
+        return jsonify({'success': True, 'message': 'Material usage analysis started'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/material_usage/progress')
+@login_required
+def api_material_usage_progress():
+    """API endpoint to get material usage analysis progress"""
+    try:
+        progress = material_usage_manager.get_progress()
+        return jsonify(progress)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/material_usage/logs')
+@login_required
+def api_material_usage_logs():
+    """API endpoint to get material usage analysis logs"""
+    try:
+        logs = material_usage_manager.get_full_logs()
+        return jsonify({'logs': '\n'.join(logs) if logs else ''})
+    except Exception as e:
+        return jsonify({'logs': f'Error getting logs: {str(e)}'})
+
+@app.route('/material_usage/results')
+@login_required
+def api_material_usage_results():
+    """API endpoint to get material usage analysis results"""
+    try:
+        if hasattr(material_usage_manager, 'analysis_results') and material_usage_manager.analysis_results:
+            return jsonify({'success': True, 'results': material_usage_manager.analysis_results})
+        else:
+            return jsonify({'success': False, 'message': 'No analysis results available'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/material_usage/cancel', methods=['POST'])
+@login_required
+def api_material_usage_cancel():
+    """API endpoint to cancel material usage analysis"""
+    try:
+        material_usage_manager.cancel()
+        return jsonify({'success': True, 'message': 'Analysis cancellation requested'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/material_usage/download_log')
+@login_required
+def api_material_usage_download_log():
+    """API endpoint to download material usage analysis log"""
+    try:
+        progress = material_usage_manager.get_progress()
+        report_file = progress.get('report_file')
+        
+        if report_file:
+            log_path = Path('logs') / report_file
+            if log_path.exists():
+                return send_file(log_path, as_attachment=True)
+        
+        # Fallback: create a comprehensive log from current data
+        import tempfile
+        import datetime
+        
+        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"{timestamp}_material_usage_analysis.txt"
+        
+        # Get full logs
+        full_logs = material_usage_manager.get_full_logs()
+        progress_data = material_usage_manager.get_progress()
+        
+        # Create report content
+        report_lines = []
+        report_lines.append("=" * 80)
+        report_lines.append("SCHEMINI MANAGER - MATERIAL USAGE ANALYSIS REPORT")
+        report_lines.append("=" * 80)
+        report_lines.append(f"Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(f"Computer: {platform.node()}")
+        report_lines.append("")
+        
+        # Add analysis status
+        if progress_data:
+            report_lines.append("📊 ANALYSIS STATUS:")
+            report_lines.append("-" * 60)
+            status = "Completed" if progress_data.get('completed') else "In Progress"
+            if progress_data.get('error'):
+                status = f"Error: {progress_data.get('error')}"
+            report_lines.append(f"Status: {status}")
+            report_lines.append(f"Progress: {progress_data.get('percentage', 0)}%")
+            report_lines.append("")
+        
+        # Add detailed logs
+        if full_logs:
+            report_lines.append("📋 DETAILED ANALYSIS LOG:")
+            report_lines.append("-" * 60)
+            report_lines.extend(full_logs)
+            report_lines.append("")
+        
+        report_lines.append("=" * 80)
+        report_lines.append("END OF REPORT")
+        report_lines.append("=" * 80)
+        
+        # Create file in memory
+        from io import BytesIO
+        report_content = '\n'.join(report_lines)
+        report_buffer = BytesIO()
+        report_buffer.write(report_content.encode('utf-8'))
+        report_buffer.seek(0)
+        
+        return send_file(
+            report_buffer,
+            mimetype='text/plain',
+            as_attachment=True,
+            download_name=filename
+        )
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/api/material_usage/export')
+@login_required
+def api_material_usage_export():
+    """API endpoint to export material usage analysis results"""
+    try:
+        export_path = material_usage_manager.export_analysis_results('json')
+        if export_path:
+            return send_file(export_path, as_attachment=True)
+        else:
+            return jsonify({'success': False, 'message': 'No analysis results to export'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/material_usage/analyze', methods=['POST'])
+@login_required
+def material_usage_analyze():
+    """Material Usage analysis endpoint (alternative path)"""
+    return api_material_usage_analyze()
+
+@app.route('/material_usage/progress')
+@login_required
+def material_usage_progress():
+    """Material Usage progress endpoint (alternative path)"""
+    return api_material_usage_progress()
+
+@app.route('/material_usage/logs')
+@login_required
+def material_usage_logs():
+    """Material Usage logs endpoint (alternative path)"""
+    return api_material_usage_logs()
+
+@app.route('/material_usage/results')
+@login_required
+def material_usage_results():
+    """Material Usage results endpoint (alternative path)"""
+    return api_material_usage_results()
+
+@app.route('/material_usage/cancel', methods=['POST'])
+@login_required
+def material_usage_cancel():
+    """Material Usage cancel endpoint (alternative path)"""
+    return api_material_usage_cancel()
+
+@app.route('/material_usage/download_log')
+@login_required
+def material_usage_download_log():
+    """Material Usage download log endpoint (alternative path)"""
+    return api_material_usage_download_log()
+
+@app.route('/material_usage/export')
+@login_required
+def material_usage_export():
+    """Material Usage export endpoint (alternative path)"""
+    return api_material_usage_export()
+
 # Error handlers
 @app.errorhandler(404)
 def not_found(error):
@@ -2984,7 +3244,7 @@ if __name__ == '__main__':
     
     app.run(
         host='0.0.0.0',  # Allow external connections
-        port=5000,
+        port=5001,
         debug=True,
         threaded=True
     )

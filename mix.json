@@ -1,0 +1,591 @@
+{
+  "mix_mapping": {
+    "MIX00020": "5E Stage V - PB 512",
+    "MIX00024": "5 KEYLINE Stage V - EU - PB513",
+    "MIX00025": "5E LRC - PB513",
+    "MIX00017": "5G - PB511",
+    "MIX00023": "5 KEYLINE IIIB-IV - EPA - PB511",
+    "MIX00009": "5D Stage V - PB314",
+    "MIX00021": "5D KEYLINE GS STAGE V - EU - PB314GS",
+    "MIX00028": "5D KEYLINE GS EPA 80HP - PB314 EPA",
+    "MIX00027": "5D KEYLINE GS EXPORT stage II - PB314 LRC",
+    "MIX00004": "5D KEYLINE Export 3B CKD",
+    "MIX00018": "5D Keyline Stage V TRK - PB324",
+    "MIX00031": "5D KEYLINE GS Stage V - TK - PB314 PS",
+    "MIX00001": "4E Ecoline",
+    "MIX00026": "3E Stage V - PB254",
+    "MIX00002": "4E EXPORT",
+    "MIX00030": "AGROFARM 4 Stage I EXPORT",
+    "MIX00008": "FRTNAT",
+    "MIX00022": "5DF Keyline Stage V - TK - PB344F",
+    "MIX00019": "4E Footstep Stage V - PB305",
+    "MIX00029": "4E FS Stage V GS - TK - PB305GS"
+  },
+  "mix_hierarchical_mapping": {
+    "MIX00020": {
+      "description": "5E Stage V - PB 512",
+      "families": [
+        "5E STAGE V - TK - PB512"
+      ],
+      "models": [
+        "EXPLORER 80 NATURAL",
+        "EXPLORER 95 NATURAL LS",
+        "EXPLORER 105 NATURAL LS",
+        "STRIKE 75 TREND LS",
+        "STRIKE 95 TREND LS",
+        "STRIKE 105 TREND LS",
+        "5080 E",
+        "5095 E LS",
+        "5105 E LS",
+        "EXPLORER 105 NATURAL HD LS",
+        "EXPLORER 115 NATURAL LS",
+        "EXPLORER 125 NATURAL LS",
+        "STRIKE 105 TREND HD LS",
+        "STRIKE 115 TREND LS",
+        "STRIKE 125 TREND LS",
+        "5105 E PLUS LS",
+        "5115 E LS",
+        "5125 E LS",
+        "EXPLORER 80 NATURAL GS",
+        "EXPLORER 95 NATURAL GS",
+        "EXPLORER 105 NATURAL GS",
+        "STRIKE 75 TREND GS",
+        "STRIKE 95 TREND GS",
+        "STRIKE 105 TREND GS",
+        "5080 E GS",
+        "5095 E GS",
+        "5105 E GS",
+        "EXPLORER 105 NATURAL HD GS",
+        "EXPLORER 115 NATURAL GS",
+        "EXPLORER 125 NATURAL GS",
+        "STRIKE 105 TREND HD GS",
+        "STRIKE 115 TREND GS",
+        "STRIKE 125 TREND GS",
+        "5105 E PLUS GS",
+        "5115 E GS",
+        "5125 E GS"
+      ]
+    },
+    "MIX00024": {
+      "description": "5 KEYLINE Stage V - EU - PB513",
+      "families": [
+        "5 KEYLINE STAGE V - EU - PB513"
+      ],
+      "models": [
+        "EXPLORER 75 NATURAL",
+        "EXPLORER 95 NATURAL LS",
+        "EXPLORER 105 NATURAL LS",
+        "STRIKE 75 TREND",
+        "STRIKE 95 TREND LS",
+        "STRIKE 105 TREND LS",
+        "5075 KEYLINE",
+        "5095 KEYLINE LS",
+        "5105 KEYLINE LS",
+        "EXPLORER 105 NATURAL HD LS",
+        "EXPLORER 115 NATURAL LS",
+        "EXPLORER 125 NATURAL LS",
+        "STRIKE 105 TREND HD LS",
+        "STRIKE 115 TREND LS",
+        "STRIKE 125 TREND LS",
+        "5105 KEYLINE PLUS LS",
+        "5115 KEYLINE LS",
+        "5125 KEYLINE LS",
+        "EXPLORER 75 NATURAL GS",
+        "EXPLORER 95 NATURAL GS",
+        "EXPLORER 105 NATURAL GS",
+        "STRIKE 75 TREND GS",
+        "STRIKE 95 TREND GS",
+        "STRIKE 105 TREND GS",
+        "5075 KEYLINE GS",
+        "5095 KEYLINE GS",
+        "5105 KEYLINE GS",
+        "EXPLORER 105 NATURAL HD GS",
+        "EXPLORER 115 NATURAL GS",
+        "EXPLORER 125 NATURAL GS",
+        "STRIKE 105 TREND HD GS",
+        "STRIKE 115 TREND GS",
+        "STRIKE 125 TREND GS",
+        "5105 KEYLINE PLUS GS",
+        "5115 KEYLINE GS",
+        "5125 KEYLINE GS"
+      ]
+    },
+    "MIX00025": {
+      "description": "5E LRC - PB513",
+      "families": [
+        "5E LRC - PB513"
+      ],
+      "models": [
+        "non attivato",
+        "5095 KEYLINE LS LRC",
+        "5105 KEYLINE LS LRC",
+        "5105 KEYLINE PLUS LS LRC",
+        "5115 KEYLINE LS LRC",
+        "5125 KEYLINE LS LRC",
+        "5095 KEYLINE GS LRC",
+        "5105 KEYLINE GS LRC",
+        "5105 KEYLINE PLUS GS LRC",
+        "5115 KEYLINE GS LRC",
+        "5125 KEYLINE GS LRC",
+        "EXPLORER 95 NATURAL LS LRC",
+        "EXPLORER 105 NATURAL LS LRC",
+        "EXPLORER 105 NATURAL HD LS LRC",
+        "EXPLORER 115 NATURAL LS LRC",
+        "EXPLORER 125 NATURAL LS LRC",
+        "EXPLORER 95 NATURAL GS LRC",
+        "EXPLORER 105 NATURAL GS LRC",
+        "EXPLORER 105 NATURAL HD GS LRC",
+        "EXPLORER 115 NATURAL GS LRC",
+        "EXPLORER 125 NATURAL GS LRC"
+      ]
+    },
+    "MIX00017": {
+      "description": "5G - PB511",
+      "families": [
+        "5E STAGE IIIB/IV - TK - PB511"
+      ],
+      "models": [
+        "EXPLORER 80 NATURAL LS",
+        "EXPLORER 95 NATURAL LS",
+        "EXPLORER 105 NATURAL LS",
+        "5080 E LS",
+        "5095 E LS",
+        "5105 E LS",
+        "STRIKE 80 TREND LS",
+        "STRIKE 95 TREND LS",
+        "STRIKE 105 TREND LS",
+        "EXPLORER 105 NATURAL HD LS",
+        "EXPLORER 115 NATURAL LS",
+        "EXPLORER 125 NATURAL LS",
+        "5105 E PLUS LS",
+        "5115 E LS",
+        "5125 E LS",
+        "STRIKE 105 TREND HD LS",
+        "STRIKE 115 TREND LS",
+        "STRIKE 125 TREND LS",
+        "EXPLORER 80 NATURAL GS",
+        "EXPLORER 95 NATURAL GS",
+        "EXPLORER 105 NATURAL GS",
+        "5080 E GS",
+        "5095 E GS",
+        "5105 E GS",
+        "STRIKE 80 TREND GS",
+        "STRIKE 95 TREND GS",
+        "STRIKE 105 TREND GS",
+        "EXPLORER 105 NATURAL HD GS",
+        "EXPLORER 115 NATURAL GS",
+        "EXPLORER 125 NATURAL GS",
+        "5105 E PLUS GS",
+        "5115 E GS",
+        "5125 E GS",
+        "STRIKE 105 TREND HD GS",
+        "STRIKE 115 TREND GS",
+        "STRIKE 125 TREND GS"
+      ]
+    },
+    "MIX00023": {
+      "description": "5 KEYLINE IIIB-IV - EPA - PB511",
+      "families": [
+        "5 KEYLINE IIIB/IV - EPA - PB511"
+      ],
+      "models": [
+        "5075 KEYLINE EPA LS",
+        "5095 KEYLINE EPA LS",
+        "5105 KEYLINE EPA LS",
+        "5105 KEYLINE EPA PLUS LS",
+        "5115 KEYLINE EPA LS",
+        "5125 KEYLINE EPA LS",
+        "5075 KEYLINE EPA GS",
+        "5095 KEYLINE EPA GS",
+        "5105 KEYLINE EPA GS",
+        "5105 KEYLINE EPA PLUS GS",
+        "5115 KEYLINE EPA GS",
+        "5125 KEYLINE EPA GS"
+      ]
+    },
+    "MIX00009": {
+      "description": "5D Stage V - PB314",
+      "families": [
+        "5D Keyline stageV"
+      ],
+      "models": [
+        "XA 70 SPIRIT",
+        "XA 80 SPIRIT",
+        "XA 90 SPIRIT",
+        "XA 100 SPIRIT",
+        "DORADO 70 NATURAL",
+        "DORADO 80 NATURAL",
+        "DORADO 90 NATURAL",
+        "DORADO 100 NATURAL",
+        "5070 D KEYLINE",
+        "5080 D KEYLINE",
+        "5090 D KEYLINE",
+        "5100 D KEYLINE",
+        "SPIRE 70 TREND",
+        "SPIRE 80 TREND",
+        "SPIRE 90 TREND",
+        "SPIRE 100 TREND"
+      ]
+    },
+    "MIX00021": {
+      "description": "5D KEYLINE GS STAGE V - EU - PB314GS",
+      "families": [
+        "5D KEYLINE GS STAGE V - EU - PB314GS",
+        "5D KEYLINE GS STAGE V - EPA - PB314GS EPA"
+      ],
+      "models": [
+        "DORADO 70 NATURAL GS",
+        "DORADO 80 NATURAL GS",
+        "DORADO 90 NATURAL GS",
+        "DORADO 100 NATURAL GS",
+        "5070D KEYLINE GS",
+        "5080D KEYLINE GS",
+        "5090D KEYLINE GS",
+        "5100D KEYLINE GS",
+        "SPIRE 70 TREND GS",
+        "SPIRE 80 TREND GS",
+        "SPIRE 90 TREND GS",
+        "SPIRE 100 TREND GS",
+        "XA 70 SPIRIT GS",
+        "XA 80 SPIRIT GS",
+        "XA 90 SPIRIT GS",
+        "XA 100 SPIRIT GS"
+      ]
+    },
+    "MIX00028": {
+      "description": "5D KEYLINE GS EPA 80HP - PB314 EPA",
+      "families": [
+        "5D KEYLINE GS EPA 80HP - PB314 EPA"
+      ],
+      "models": [
+        "5070D KEYLINE GS",
+        "5080D KEYLINE GS"
+      ]
+    },
+    "MIX00027": {
+      "description": "5D KEYLINE GS EXPORT stage II - PB314 LRC",
+      "families": [
+        "5D KEYLINE GS EXPORT stage II - PB314 LRC"
+      ],
+      "models": [
+        "DORADO 70 NATURAL GS",
+        "DORADO 80 NATURAL GS",
+        "DORADO 90 NATURAL GS",
+        "DORADO 100 NATURAL GS",
+        "5070D KEYLINE GS",
+        "5080D KEYLINE GS",
+        "5090D KEYLINE GS",
+        "5100D KEYLINE GS"
+      ]
+    },
+    "MIX00004": {
+      "description": "5D KEYLINE Export 3B CKD",
+      "families": [
+        "5D Keyline Export 3B CKD"
+      ],
+      "models": [
+        "DORADO 70 NATURAL",
+        "DORADO 80 NATURAL",
+        "DORADO 90 NATURAL",
+        "DORADO 100 NATURAL",
+        "5070D KEYLINE",
+        "5080D KEYLINE",
+        "5090D KEYLINE",
+        "5100D KEYLINE",
+        "SPIRE 70 TREND",
+        "SPIRE 80 TREND",
+        "SPIRE 90 TREND",
+        "SPIRE 100 TREND",
+        "XA 70 SPIRIT",
+        "XA 80 SPIRIT",
+        "XA 90 SPIRIT",
+        "XA 100 SPIRIT"
+      ]
+    },
+    "MIX00018": {
+      "description": "5D Keyline Stage V TRK - PB324",
+      "families": [
+        "5D KEYLINE GS STAGE V - TK - PB324 GS",
+        "5D KEYLINE STAGE V - TK - PB324"
+      ],
+      "models": [
+        "5060 DK",
+        "5070 DK",
+        "5080 DK",
+        "5090 DK",
+        "5100 DK",
+        "SPIRE 60 TREND",
+        "SPIRE 70 TREND",
+        "SPIRE 80 TREND",
+        "SPIRE 90 TREND",
+        "SPIRE 100 TREND",
+        "DORADO 60 NATURAL",
+        "DORADO 70 NATURAL",
+        "DORADO 80 NATURAL",
+        "DORADO 90 NATURAL",
+        "DORADO 100 NATURAL"
+      ]
+    },
+    "MIX00031": {
+      "description": "5D KEYLINE GS Stage V - TK - PB314 PS",
+      "families": [
+        "5D KEYLINE GS STAGE V - TK - PB314 PS"
+      ],
+      "models": [
+        "DORADO 65 NATURAL GS (TURKEY)",
+        "DORADO 75 NATURAL GS (TURKEY)",
+        "DORADO 90 NATURAL GS (TURKEY)",
+        "DORADO 100 NATURAL GS (TURKEY)",
+        "5065 D GS (TURKEY)",
+        "5075 D GS (TURKEY)",
+        "5090 D GS (TURKEY)",
+        "5100 D GS (TURKEY)"
+      ]
+    },
+    "MIX00001": {
+      "description": "4E Ecoline",
+      "families": [
+        "3E TK",
+        "3E TK MR"
+      ],
+      "models": [
+        "3046 E 2WD",
+        "3046 E",
+        "3050 E 2W",
+        "3050 E",
+        "3055 E 2WD",
+        "3055 E",
+        "3060 E 2WD",
+        "3060 E"
+      ]
+    },
+    "MIX00026": {
+      "description": "3E Stage V - PB254",
+      "families": [
+        "3E STAGE V - TK - PB254"
+      ],
+      "models": [
+        "TIGER 65 2WD",
+        "3045 E",
+        "3050 E 2WD",
+        "3050 E",
+        "3055 E 2WD",
+        "3055 E",
+        "3065 E 2WD",
+        "3065 E",
+        "TIGER 45 2WD",
+        "TIGER 50 2WD",
+        "TIGER 50",
+        "TIGER 55 2WD",
+        "TIGER 55",
+        "TIGER 50"
+      ]
+    },
+    "MIX00002": {
+      "description": "4E EXPORT",
+      "families": [
+        "4E 3A Export CKD"
+      ],
+      "models": [
+        "DORADO 50 NATURAL 2WD",
+        "DORADO 50 NATURAL 4WD",
+        "DORADO 65 NATURAL 2WD",
+        "DORADO 65 NATURAL 4WD",
+        "DORADO 75 NATURAL 2WD",
+        "DORADO 75 NATURAL 4WD",
+        "DORADO 85 NATURAL 2WD",
+        "DORADO 85 NATURAL 4WD",
+        "DORADO 80.4 NATURAL 2WD",
+        "DORADO 80.4 NATURAL 4WD",
+        "DORADO 90.4 NATURAL 4WD",
+        "DORADO 100.4 NATURAL 4WD",
+        "4050E 2WD",
+        "4050E 4WD",
+        "4065E 2WD",
+        "4065E 4WD",
+        "4075E 2WD",
+        "4075E 4WD",
+        "4085E 2WD",
+        "4085E 4WD",
+        "4080.4E 2WD",
+        "4080.4E 4WD",
+        "4090.4E 4WD",
+        "4100.4E 4WD EXP",
+        "SPIRE 50 TREND 2WD",
+        "SPIRE 50 TREND",
+        "SPIRE 65 TREND 2WD",
+        "SPIRE 65 TREND",
+        "SPIRE 75 TREND 2WD",
+        "SPIRE 75 TREND",
+        "SPIRE 85 TREND 2WD",
+        "SPIRE 85 TREND",
+        "SPIRE 80.4 TREND 2WD",
+        "SPIRE 80.4 TREND",
+        "SPIRE 90.4 TREND",
+        "SPIRE 100.4 TREND"
+      ]
+    },
+    "MIX00030": {
+      "description": "AGROFARM 4 Stage I EXPORT",
+      "families": [
+        "AGROFARM 4 STAGE I Export (ex 4E cab) - PB301"
+      ],
+      "models": [
+        "DORADO 75 NATURAL 2WD",
+        "DORADO 75 NATURAL",
+        "DORADO 90.4 NATURAL",
+        "DORADO 100.4 NATURAL",
+        "AGROPLUS 75 2WD",
+        "AGROPLUS 75",
+        "AGROPLUS 90.4",
+        "AGROPLUS 100.4"
+      ]
+    },
+    "MIX00008": {
+      "description": "FRTNAT",
+      "families": [
+        "Argon F - Tiger F TK (loose parts)",
+        "Frutteto Natural MR (Argon/Tiger F TK (loose parts)"
+      ],
+      "models": [
+        "FRUTTETO³ 55 Natural 2WD (15+15)",
+        "FRUTTETO³ 55 Natural 4WD (15+15)",
+        "AGROPLUS F 55 Keyline 2WD (15+15)",
+        "AGROPLUS F 55 Keyline 4WD (15+15)",
+        "FRUTTETO³ 65 Natural 2WD (15+15)",
+        "FRUTTETO³ 65 Natural 4WD (15+15)",
+        "AGROPLUS F 65 Keyline 2WD (15+15)",
+        "AGROPLUS F 65 Keyline 4WD (15+15)",
+        "AGROPLUS F 75 Keyline 2WD (15+15)",
+        "AGROPLUS F 75 Keyline 4WD (15+15)",
+        "FRUTTETO³ 50 NATURAL 2WD (12+3)",
+        "FRUTTETO³ 50 NATURAL (12+3)",
+        "AGROPLUS 50 KEYLINE 2WD (12+3)",
+        "AGROPLUS 50 KEYLINE (12+3)",
+        "FRUTTETO³ 55 NATURAL 2WD (12+3)",
+        "FRUTTETO³ 55 NATURAL (12+3)",
+        "AGROPLUS 55F KEYLINE 2WD (12+3)",
+        "AGROPLUS 55 KEYLINE (12+3)",
+        "FRUTTETO³ 65 NATURAL 2WD (12+3)",
+        "FRUTTETO³ 65 NATURAL (12+3)",
+        "AGROPLUS 65 KEYLINE 2WD (12+3)",
+        "AGROPLUS 65 KEYLINE (12+3)",
+        "FRUTTETO³ 75 NATURAL 2WD (12+3)",
+        "FRUTTETO³ 75 NATURAL (12+3)",
+        "AGROPLUS 75F KEYLINE 2WD (12+3)",
+        "AGROPLUS 75F KEYLINE (12+3)"
+      ]
+    },
+    "MIX00022": {
+      "description": "5DF Keyline Stage V - TK - PB344F",
+      "families": [
+        "5DF KEYLINE STAGE V - TK - PB344F"
+      ],
+      "models": [
+        "5060 DF KEYLINE",
+        "5070 DF KEYLINE",
+        "5080 DF KEYLINE",
+        "RF 60 TREND",
+        "RF 70 TREND",
+        "RF 80 TREND",
+        "FRUTTETO 60 NATURAL",
+        "FRUTTETO 70 NATURAL",
+        "FRUTTETO 80 NATURAL"
+      ]
+    },
+    "MIX00019": {
+      "description": "4E Footstep Stage V - PB305",
+      "families": [
+        "4E FS STAGE V - TK - PB305"
+      ],
+      "models": [
+        "4055 EF 2WD",
+        "4055 EF",
+        "4065 E 2WD",
+        "4065 E",
+        "4075 E 2WD",
+        "4075 E",
+        "4090 EF",
+        "4100 EF",
+        "CRONO 55 2WD",
+        "CRONO 55",
+        "CRONO 65 2WD",
+        "CRONO 75 2WD",
+        "CRONO 75",
+        "CRONO 90",
+        "CRONO 100",
+        "ARGON 55 2WD",
+        "ARGON 55",
+        "ARGON 65 2WD",
+        "ARGON 65",
+        "ARGON 75 2WD",
+        "ARGON 75",
+        "ARGON 90",
+        "ARGON 100"
+      ]
+    },
+    "MIX00029": {
+      "description": "4E FS Stage V GS - TK - PB305GS",
+      "families": [
+        "4E FS STAGE V GS - TK - PB305GS"
+      ],
+      "models": [
+        "ARGON 65 GS",
+        "ARGON 75 GS",
+        "ARGON 90 GS",
+        "ARGON 100 GS",
+        "4065 E GS",
+        "4075 E GS",
+        "4090 E GS",
+        "4100 E GS"
+      ]
+    },
+    "MIX00003": {
+      "description": "MR_4E",
+      "families": [
+        "4E TK (loose parts)",
+        "4E TK (loose parts) MR"
+      ],
+      "models": [
+        "DORADO 50 NATURAL 2WD",
+        "DORADO 50 NATURAL 4WD",
+        "DORADO 55 NATURAL 2WD",
+        "DORADO 55 NATURAL 4WD",
+        "DORADO 65 NATURAL 2WD",
+        "DORADO 65 NATURAL 4WD",
+        "DORADO 75 NATURAL 2WD",
+        "DORADO 75 NATURAL 4WD",
+        "DORADO 80 NATURAL 2WD",
+        "DORADO 80 NATURAL 4WD",
+        "DORADO 90 NATURAL 4WD",
+        "DORADO 100 NATURAL 4WD",
+        "4050E 2WD",
+        "4050E 4WD",
+        "4055E 2WD",
+        "4055E 4WD",
+        "4065E 2WD",
+        "4065E 4WD",
+        "4075E 2WD",
+        "4075E 4WD",
+        "4080E 2WD",
+        "4080E 4WD",
+        "4090E 4WD",
+        "4100E 4WD",
+        "DORADO 50 NATURAL 4WD",
+        "DORADO 55 NATURAL 2WD",
+        "DORADO 55 NATURAL 4WD",
+        "DORADO 65 NATURAL 2WD",
+        "DORADO 65 NATURAL 4WD",
+        "DORADO 75 NATURAL 2WD",
+        "DORADO 75 NATURAL 4WD",
+        "DORADO 80 NATURAL 4WD",
+        "DORADO 90 NATURAL 4WD",
+        "DORADO 100 NATURAL 4WD",
+        "4055E Plus 2WD",
+        "4055E Plus 4WD",
+        "DORADO 55 Plus NATURAL 2WD",
+        "DORADO 55 Plus NATURAL 4WD"
+      ]
+    }
+  }
+}
