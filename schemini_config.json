@@ -14,7 +14,7 @@
   "users": [
     {
       "username": "admin",
-      "password_hash": "scrypt:32768:8:1$YeQ0Zo8XEkGwDOZn$2ba3859ba045ad8d655d186271ed8630fdfbbf274682fac8b3312b62953c5d65623de5306ca8dfdf7e494f1b4814a980f6253e541152353cdc2c0af35f805df3",
+      "password_hash": "scrypt:32768:8:1$blxnXoYjo8SmJA0G$14ee4e7084a665002bc1e3de5ff94ffff4c764c4854146ec8847f0d06c912c55f1d3e83962995f88eacafb45aa672ed24fb53888f19c9e85b13341b07397aa73",
       "email": "admin@example.com",
       "role": "admin"
     },
@@ -26,7 +26,7 @@
     },
     {
       "username": "cafer.usta",
-      "password_hash": "scrypt:32768:8:1$3OWSDL3XWxoQ2gEP$defeb57e5dd46fb975d93c7db95e6bd73a3b790204de22e6709072165479d91d2e9737484d05d3da49aecb8660d19bc3a4537b6798c4959d38889af84794ce53",
+      "password_hash": "scrypt:32768:8:1$NGa0KtArNswwH0RJ$923c4700905d365eb265b57abe7969e83a48b2d1749ec25aa12ffa4083285ab7da7e4db6fed18feeedff9324db54326f1976b66ff82786eeef391dd66d8947a4",
       "email": "cafer.usta@sdfgroup.com",
       "role": "admin"
     },

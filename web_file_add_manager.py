@@ -30,7 +30,7 @@ class WebFileAddManager(WebBaseManager):
         self.PANDAS_AVAILABLE = PANDAS_AVAILABLE
         self._is_cancelled = False
         
-        # Mix codes and descriptions dictionary - loaded from mix.py
+        # Mix codes and descriptions dictionary - loaded from mix.json
         self.mix_kodlari = {}
         self.load_mix_codes()
         
@@ -50,22 +50,35 @@ class WebFileAddManager(WebBaseManager):
         self._is_cancelled = True
 
     def load_mix_codes(self):
-        """Load mix codes from mix.py file"""
+        """Load mix codes from mix.json file"""
         try:
-            # Try to import mix codes from mix.py
-            import importlib.util
-            spec = importlib.util.spec_from_file_location("mix", "mix.py")
-            if not spec or not getattr(spec, 'loader', None):
-                raise ImportError("Could not load mix.py spec/loader")
-            mix_module = importlib.util.module_from_spec(spec)
-            loader = spec.loader  # type: ignore[assignment]
-            # Execute module via spec loader
-            loader.exec_module(mix_module)  # type: ignore[attr-defined]
+            # Try to load mix codes from mix.json
+            import json
+            from pathlib import Path
             
-            if hasattr(mix_module, 'mix_mapping'):
-                self.mix_kodlari = mix_module.mix_mapping
+            mix_json_path = Path('mix.json')
+            if mix_json_path.exists():
+                with open(mix_json_path, 'r', encoding='utf-8') as f:
+                    mix_data = json.load(f)
+                    if 'mix_mapping' in mix_data:
+                        self.mix_kodlari = mix_data['mix_mapping']
+                    else:
+                        raise KeyError("mix_mapping not found in JSON")
             else:
-                raise AttributeError("mix_mapping variable not found")
+                # Fallback to mix.py if JSON doesn't exist
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("mix", "mix.py")
+                if not spec or not getattr(spec, 'loader', None):
+                    raise ImportError("Could not load mix.py spec/loader")
+                mix_module = importlib.util.module_from_spec(spec)
+                loader = spec.loader  # type: ignore[assignment]
+                # Execute module via spec loader
+                loader.exec_module(mix_module)  # type: ignore[attr-defined]
+                
+                if hasattr(mix_module, 'mix_mapping'):
+                    self.mix_kodlari = mix_module.mix_mapping
+                else:
+                    raise AttributeError("mix_mapping variable not found")
         except Exception as e:
             # Use default codes in case of error
             self.mix_kodlari = {
@@ -950,6 +963,10 @@ class WebFileAddManager(WebBaseManager):
                 pass
 
             # Complete operation
+            if overall["total_copies"] > 0:  # Eğer en az bir dosya kopyalandıysa otomatik indexleme başlat
+                self.add_log("🔄 File addition tamamlandı, otomatik indexleme başlatılıyor...")
+                self._trigger_auto_indexing()
+            
             self.set_completed()
             # Proactively free memory buffers after operation
             try:
@@ -1316,6 +1333,11 @@ class WebFileAddManager(WebBaseManager):
             if log_file:
                 self.add_log(f"📋 Report saved: {log_file.name}")
             
+            # File addition başarıyla tamamlandıysa otomatik indexleme başlat
+            if eklenen_sayisi > 0:  # Eğer en az bir dosya eklendiyse
+                self.add_log("🔄 File addition tamamlandı, otomatik indexleme başlatılıyor...")
+                self._trigger_auto_indexing()
+            
             self.set_completed()
             # Proactively free memory buffers after operation
             try:
@@ -1382,3 +1404,12 @@ class WebFileAddManager(WebBaseManager):
         except Exception as e:
             self.set_error(f"Copy operation failed: {str(e)}")
             return False
+    
+    def _trigger_auto_indexing(self):
+        """File addition işlemi sonrası otomatik indexleme tetikler."""
+        try:
+            from web_settings_manager import WebSettingsManager
+            settings_manager = WebSettingsManager()
+            settings_manager.build_search_index_background("post_file_add")
+        except Exception as e:
+            self.add_log(f"⚠️ Otomatik indexleme başlatılamadı: {str(e)}")

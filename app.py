@@ -1329,7 +1329,19 @@ def _validate_code_format(code: str) -> bool:
         if len(parts) < 4:
             return False
         first = parts[0]
-        return first == '9' or first == 'I9' or first.startswith('9') or first.startswith('I9')
+        # Accept codes starting with 9. or I9. - last part can be numeric or alphabetic (like A, B, C)
+        if first == '9' or first == 'I9' or first.startswith('9') or first.startswith('I9'):
+            # Last part can be: numeric (0, 1, 2), alphabetic (A, B, C), alphanumeric (A1, B2), 
+            # or with underscore suffix (A_1, A_2, B_1, etc.)
+            last_part = parts[-1].strip()
+            if last_part:
+                # Allow alphanumeric characters and underscores
+                # Examples: 0, A, B, A1, B2, A_1, A_2, B_1, etc.
+                import re
+                # Pattern: starts with alphanumeric, can have underscore followed by alphanumeric
+                if re.match(r'^[A-Za-z0-9]+(_[A-Za-z0-9]+)*$', last_part):
+                    return True
+        return False
     except Exception:
         return False
 
@@ -1397,39 +1409,75 @@ def _search_component_code(component_code):
                 with open(json_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                 
-                if 'groups' not in data:
-                    continue
+                # Check if this is the new format with ZGROUPS
+                if 'ZGROUPS' in data:
+                    # New format: ZGROUPS > MAKTX_S_GROUPS > MATNR_GROUPS > components
+                    for zgroup in data['ZGROUPS']:
+                        maktx_s_groups = zgroup.get('MAKTX_S_GROUPS', [])
+                        for maktx_group in maktx_s_groups:
+                            matnr_groups = maktx_group.get('MATNR_GROUPS', [])
+                            for group in matnr_groups:
+                                if 'components' not in group:
+                                    continue
+                                
+                                # Check if component code exists in this group
+                                for component in group['components']:
+                                    if component.get('component', '').strip() == component_code:
+                                        group_code = group.get('matnr_hl', '')
+                                        if group_code:  # Only process if we have a valid group code
+                                            # Found a match
+                                            group_info = {
+                                                'matnr_hl': group_code,  # 9.x group code
+                                                'maktx_hl': group.get('maktx_hl', ''),  # 9.x group name
+                                                'component_code': component_code,
+                                                'component_name': component.get('maktx_cmp', ''),
+                                                'posnr': component.get('posnr', ''),
+                                                'source_file': json_file.stem,
+                                                'pdf_code': group_code,
+                                                'model': maktx_group.get('MAKTX_S', ''),  # Model bilgisi
+                                                'zgroup': zgroup.get('ZGROUP', '')  # ZGroup bilgisi
+                                            }
+                                            matching_groups.append(group_info)
+                                            group_codes_found.add(group_code)
+                                            if json_file.stem not in found_in_files:
+                                                found_in_files.append(json_file.stem)
+                                        break  # Found in this group, move to next group
                 
-                for group in data['groups']:
-                    if 'components' not in group:
-                        continue
-                    
-                    # Check if component code exists in this group
-                    for component in group['components']:
-                        if component.get('component', '').strip() == component_code:
-                            group_code = group.get('matnr_hl', '')
-                            if group_code:  # Only process if we have a valid group code
-                                # Found a match
-                                group_info = {
-                                    'matnr_hl': group_code,  # 9.x group code
-                                    'maktx_hl': group.get('maktx_hl', ''),  # 9.x group name
-                                    'component_code': component_code,
-                                    'component_name': component.get('maktx_cmp', ''),
-                                    'posnr': component.get('posnr', ''),
-                                    'source_file': json_file.stem,
-                                    'pdf_code': group_code
-                                }
-                                matching_groups.append(group_info)
-                                group_codes_found.add(group_code)
-                                if json_file.stem not in found_in_files:
-                                    found_in_files.append(json_file.stem)
-                            break  # Found in this group, move to next group
+                # Check for old format with direct 'groups' key for backwards compatibility
+                elif 'groups' in data:
+                    for group in data['groups']:
+                        if 'components' not in group:
+                            continue
+                        
+                        # Check if component code exists in this group
+                        for component in group['components']:
+                            if component.get('component', '').strip() == component_code:
+                                group_code = group.get('matnr_hl', '')
+                                if group_code:  # Only process if we have a valid group code
+                                    # Found a match
+                                    group_info = {
+                                        'matnr_hl': group_code,  # 9.x group code
+                                        'maktx_hl': group.get('maktx_hl', ''),  # 9.x group name
+                                        'component_code': component_code,
+                                        'component_name': component.get('maktx_cmp', ''),
+                                        'posnr': component.get('posnr', ''),
+                                        'source_file': json_file.stem,
+                                        'pdf_code': group_code,
+                                        'model': '',  # No model info in old format
+                                        'zgroup': ''  # No zgroup info in old format
+                                    }
+                                    matching_groups.append(group_info)
+                                    group_codes_found.add(group_code)
+                                    if json_file.stem not in found_in_files:
+                                        found_in_files.append(json_file.stem)
+                                break  # Found in this group, move to next group
                             
             except Exception as e:
                 logger.warning(f"Error reading {json_file}: {str(e)}")
                 continue
         
         if not matching_groups:
+            print(f"🔍 DEBUG: Component {component_code} not found in any groups")
             return jsonify({
                 'success': True,
                 'search_type': 'component',
@@ -1440,11 +1488,18 @@ def _search_component_code(component_code):
                 'message': f'Component {component_code} not found in any groups'
             })
         
+        print(f"✅ DEBUG: Found component {component_code} in {len(matching_groups)} groups")
+        print(f"🔍 DEBUG: Group codes found: {list(group_codes_found)}")
+        
         # Use search index to find PDFs for each unique group code (MUCH FASTER!)
         pdf_results = []
         base_folder = _load_schemini_folder()
         
+        print(f"🔍 DEBUG: Base folder: {base_folder}")
+        print(f"🔍 DEBUG: Search index contains {len(all_paths)} paths")
+        
         for group_code in group_codes_found:
+            print(f"🔍 DEBUG: Searching PDFs for group code: {group_code}")
             # Get all matching groups for this code
             groups_for_code = [g for g in matching_groups if g['pdf_code'] == group_code]
             
@@ -1455,12 +1510,17 @@ def _search_component_code(component_code):
             elif group_code.startswith('9.'):
                 search_codes.append('I' + group_code)
             
+            print(f"🔍 DEBUG: Search codes for {group_code}: {search_codes}")
+            
             found_paths = []
             for path_str in all_paths:
                 for search_code in search_codes:
                     if search_code.lower() in path_str.lower():
                         found_paths.append(Path(path_str))
+                        print(f"✅ DEBUG: Found match: {search_code} in {path_str}")
                         break
+            
+            print(f"🔍 DEBUG: Found {len(found_paths)} paths for group {group_code}")
             
             # Process found PDF paths
             for path in found_paths:
@@ -1619,7 +1679,7 @@ def api_search_code():
             'pdfs': pdfs,
             'pdf_details': pdf_details,
             'pdf_documents': pdf_documents,  # New grouped documents
-            'mixes': [{'code': m, 'name': mix_mapping.get(m)} for m in sorted(mixes_found) ],
+            'mixes': [{'code': m, 'name': material_usage_manager.mix_data.get('mix_mapping', {}).get(m)} for m in sorted(mixes_found) ],
             'count': {'folders': len(folders), 'pdfs': len(pdfs), 'documents': len(pdf_documents)}
         })
     except Exception as e:
@@ -1648,6 +1708,24 @@ def _extract_mix_from_path(p: Path):
     """
     try:
         import re
+        
+        # Get mix_mapping from material_usage_manager
+        mix_mapping = {}
+        try:
+            mix_mapping = material_usage_manager.mix_data.get('mix_mapping', {})
+        except:
+            # Fallback: try to load from mix.json directly
+            try:
+                import json
+                from pathlib import Path as PathLib
+                mix_json_path = PathLib('mix.json')
+                if mix_json_path.exists():
+                    with open(mix_json_path, 'r', encoding='utf-8') as f:
+                        mix_data = json.load(f)
+                        mix_mapping = mix_data.get('mix_mapping', {})
+            except:
+                pass
+        
         parts = list(p.parts)
         code = None; name = None
         pattern = re.compile(r'^MIX\d{5}$', re.IGNORECASE)
@@ -2592,7 +2670,10 @@ def get_file_add_status():
 @login_required
 def material_usage_page():
     """Material Usage analysis page route"""
-    return render_template('material_usage.html')
+    # Get mix data from the manager
+    mix_data = material_usage_manager.mix_data.get('mix_mapping', {})
+    
+    return render_template('material_usage.html', mix_data=mix_data)
 
 # Material Usage API endpoints
 @app.route('/api/material_usage/departments')
@@ -2612,6 +2693,7 @@ def api_material_usage_analyze_filtered():
     try:
         data = request.get_json()
         department = data.get('department', '')
+        mixes = data.get('mixes', [])
         mgroups = data.get('mgroups', [])
         part_codes = data.get('part_codes', [])
         
@@ -2635,7 +2717,9 @@ def api_material_usage_analyze_filtered():
         
         # Start filtered analysis in background thread
         def filtered_analysis_thread():
-            material_usage_manager.analyze_filtered_parts(department, mgroups, part_codes)
+            # Get selected mix code (first one if multiple selected)
+            selected_mix = mixes[0] if mixes else None
+            material_usage_manager.analyze_uploaded_parts(part_codes, selected_mix, mgroups)
         
         thread = threading.Thread(target=filtered_analysis_thread)
         thread.daemon = True
@@ -3239,12 +3323,12 @@ if __name__ == '__main__':
     
     # Run Flask app
     print("🚀 Starting Schemini Management Web Server...")
-    print("📱 Access the application at: http://localhost:5752")
+    print("📱 Access the application at: http://localhost:5000")
     print("🔧 Manager: Cafer T. Usta")
     
     app.run(
         host='0.0.0.0',  # Allow external connections
-        port=5001,
+        port=5000,
         debug=True,
         threaded=True
     )

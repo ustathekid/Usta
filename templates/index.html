@@ -169,6 +169,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     const input = document.getElementById('codeSearchInput');
     const btn = document.getElementById('btnSearchCode');
     const rightCol = document.getElementById('searchSummaryCol');
+    
+    // Check for URL parameters from Material Usage page
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchCode = urlParams.get('search');
+    const autoSearch = urlParams.get('auto_search');
+    
+    // If we have a search code from Material Usage, auto-populate and search
+    if (searchCode && autoSearch === '1') {
+        console.log('Auto-executing search for 9.x code:', searchCode);
+        input.value = searchCode;
+        
+        // Execute search after a short delay to ensure page is fully loaded
+        setTimeout(() => {
+            search();
+        }, 500);
+    }
 
     function validate(code) {
         const c = (code || '').trim();

@@ -205,12 +205,13 @@ class WebMaterialUsageManager(WebBaseManager):
             self.add_log(f"❌ Error searching part codes: {str(e)}")
             return []
 
-    def _trace_part_hierarchy(self, part_results: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Trace the hierarchical path: part -> model -> mgroup -> department -> mix"""
+    def _trace_part_hierarchy(self, part_results: List[Dict[str, Any]], selected_mix: str = None, selected_mgroups: List[str] = None) -> Dict[str, Any]:
+        """Trace the hierarchical path: part -> model -> mgroup -> department -> mix with optional filtering"""
         hierarchy = {
             'part_code': '',
             'models': set(),
             'mgroups': set(),
+            'nine_x_groups': set(),  # 9'lu kodlar için yeni alan
             'departments': set(),
             'mixes': set()
         }
@@ -224,41 +225,61 @@ class WebMaterialUsageManager(WebBaseManager):
         for result in part_results:
             model = result.get('model', '')
             mgroup = result.get('mgroup', '')
+            nine_x_code = result.get('group_code', '')  # matnr_hl verisi
+            
+            # Apply mgroup filter if specified
+            if selected_mgroups and mgroup not in selected_mgroups:
+                continue
             
             if model:
                 hierarchy['models'].add(model)
             
             if mgroup:
                 hierarchy['mgroups'].add(mgroup)
+            
+            if nine_x_code:
+                hierarchy['nine_x_groups'].add(nine_x_code)
                 
-                # Find department for this mgroup
+            # Find department for this mgroup
+            if mgroup:
                 for dept, mgroups in self.workcenters_data.get('department_mgroups', {}).items():
                     if mgroup in mgroups:
                         hierarchy['departments'].add(dept)
                         break
             
-            # Try to find matching MIX based on model
+            # Try to find matching MIX based on model with optional mix filter
             if model and self.mix_data.get('hierarchical_mapping'):
                 for mix_code, mix_info in self.mix_data['hierarchical_mapping'].items():
+                    # Apply mix filter if specified
+                    if selected_mix and mix_code != selected_mix:
+                        continue
+                        
                     if model in mix_info.get('models', []):
                         hierarchy['mixes'].add(mix_code)
         
         # Convert sets to lists for JSON serialization
         hierarchy['models'] = list(hierarchy['models'])
         hierarchy['mgroups'] = list(hierarchy['mgroups'])
+        hierarchy['nine_x_groups'] = list(hierarchy['nine_x_groups'])
         hierarchy['mixes'] = list(hierarchy['mixes'])
         hierarchy['departments'] = list(hierarchy['departments'])
         
         return hierarchy
 
-    def analyze_uploaded_parts(self, uploaded_parts: List[str]) -> Dict[str, Any]:
-        """Analyze uploaded part codes and trace their hierarchies"""
+    def analyze_uploaded_parts(self, uploaded_parts: List[str], selected_mix: str = None, selected_mgroups: List[str] = None) -> Dict[str, Any]:
+        """Analyze uploaded part codes and trace their hierarchies with optional mix/mgroup filtering"""
         try:
             self.clear_logs()
             self._is_cancelled = False
             
+            filter_info = ""
+            if selected_mix:
+                filter_info += f" (Mix: {selected_mix})"
+            if selected_mgroups:
+                filter_info += f" (MGroups: {', '.join(selected_mgroups)})"
+            
             self.add_log("🔍 Starting material usage analysis...")
-            self.add_log(f"📄 Analyzing {len(uploaded_parts)} part codes")
+            self.add_log(f"📄 Analyzing {len(uploaded_parts)} part codes{filter_info}")
             
             results = {
                 'total_parts': len(uploaded_parts),
@@ -290,8 +311,20 @@ class WebMaterialUsageManager(WebBaseManager):
                 part_results = self._find_part_in_partcodes(part_code)
                 
                 if part_results:
-                    # Trace hierarchy
-                    hierarchy = self._trace_part_hierarchy(part_results)
+                    # Trace hierarchy with filtering
+                    hierarchy = self._trace_part_hierarchy(part_results, selected_mix, selected_mgroups)
+                    
+                    # Skip this part if no matches after filtering
+                    if not hierarchy['mgroups'] and not hierarchy['mixes'] and (selected_mix or selected_mgroups):
+                        results['not_found_parts'] += 1
+                        results['not_found_list'].append(part_code)
+                        results['part_analyses'][part_code] = {
+                            'found': False,
+                            'hierarchy': {},
+                            'filtered_out': True
+                        }
+                        self.add_log(f"❌ Filtered out: {part_code} (doesn't match selected filters)")
+                        continue
                     
                     results['part_analyses'][part_code] = {
                         'found': True,

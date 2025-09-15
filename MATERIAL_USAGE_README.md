@@ -59,16 +59,16 @@ Parça Kodu → 9 Haneli Grup Kodu → Model → MGroup → Workcenter → Depar
 
 ### Veri Kaynakları
 1. **partcodes klasörü**: JSON formatındaki parça veritabanı
-2. **workcenters.py**: MGroup-Workcenter-Departman eşleştirmeleri
-3. **mix.py**: Model-MIX kodu ilişkileri
+2. **mgroups.json**: MGroup-Workcenter-Departman eşleştirmeleri
+3. **mix.json**: Model-MIX kodu ilişkileri
 
 ### Arama Algoritması
 1. Parça kodu partcodes JSON dosyalarında aranır
 2. Eşleşen 9 haneli grup kodları bulunur
 3. Model bilgileri çıkarılır
-4. MGroup ve workcenter bilgileri workcenters.py'den alınır
+4. MGroup ve workcenter bilgileri mgroups.json'dan alınır
 5. Departman bilgileri workcenter'dan çıkarılır
-6. MIX kodları mix.py'den eşleştirilir
+6. MIX kodları mix.json'dan eşleştirilir
 
 ### Performans Optimizasyonları
 - **Paralel İşleme**: Birden fazla parça aynı anda işlenir
@@ -84,8 +84,8 @@ Parça Kodu → 9 Haneli Grup Kodu → Model → MGroup → Workcenter → Depar
 
 ### Sorun Giderme
 - partcodes klasörünün dolu olduğundan emin olun
-- workcenters.py dosyasının güncel olduğunu kontrol edin
-- mix.py dosyasındaki hiyerarşik yapının doğruluğunu teyit edin
+- mgroups.json dosyasının güncel olduğunu kontrol edin
+- mix.json dosyasındaki hiyerarşik yapının doğruluğunu teyit edin
 
 ## API Endpoints
 
@@ -110,11 +110,11 @@ Parça Kodu → 9 Haneli Grup Kodu → Model → MGroup → Workcenter → Depar
 ### Ortam Ayarları
 Material Usage modülü mevcut Schemini yapılandırmasını kullanır:
 - partcodes klasörü konumu
-- workcenters.py dosyası
-- mix.py hiyerarşik verileri
+- mgroups.json dosyası
+- mix.json hiyerarşik verileri
 
 ### Özelleştirme
-Workcenters.py dosyasına yeni utility fonksiyonlar eklenmiştir:
+Mgroups.json dosyasına yeni utility fonksiyonlar eklenmiştir:
 - `get_hierarchy_path(mgroup)` - Tam hiyerarşi yolu
 - `export_to_json()` - JSON uyumlu veri
 - `validate_data()` - Veri tutarlılığı kontrolü
@@ -135,4 +135,4 @@ Herhangi bir sorun durumunda:
 
 ---
 
-**Not**: Bu modül workcenters.py ve mix.py dosyalarının güncel kalması için düzenli bakım gerektirir.
+**Not**: Bu modül mgroups.json ve mix.json dosyalarının güncel kalması için düzenli bakım gerektirir.

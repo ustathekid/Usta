@@ -6,8 +6,18 @@ Web-based application settings management
 import os
 import json
 import threading
+import time
+import datetime
 from pathlib import Path
 from web_base_manager import WebBaseManager
+
+# Schedule kütüphanesini güvenli şekilde import et
+try:
+    import schedule
+    SCHEDULE_AVAILABLE = True
+except ImportError:
+    SCHEDULE_AVAILABLE = False
+    schedule = None
 try:
     from werkzeug.security import generate_password_hash, check_password_hash
     WERKZEUG_AVAILABLE = True
@@ -48,6 +58,58 @@ class WebSettingsManager(WebBaseManager):
             "current_phase": "idle",
             "elapsed_time": 0
         }
+        
+        # Günlük otomatik indexleme için scheduler başlat
+        self._start_daily_scheduler()
+        
+    def _start_daily_scheduler(self):
+        """Günlük otomatik indexleme için scheduler başlatır."""
+        if not SCHEDULE_AVAILABLE or schedule is None:
+            self.add_log("⚠️ Schedule kütüphanesi bulunamadı, günlük otomatik indexleme devre dışı")
+            return
+            
+        # Her sabah 07:55'de indexleme yap
+        schedule.every().day.at("07:55").do(self._daily_auto_index)
+        
+        # Scheduler'ı arka planda çalıştır
+        def run_scheduler():
+            while True:
+                if SCHEDULE_AVAILABLE and schedule is not None:
+                    schedule.run_pending()
+                time.sleep(60)  # Her dakika kontrol et
+        
+        scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+        scheduler_thread.start()
+        self.add_log("📅 Günlük otomatik indexleme scheduler'ı başlatıldı (her sabah 07:55)")
+    
+    def _daily_auto_index(self):
+        """Günlük otomatik indexleme işlemi."""
+        self.add_log("🌅 Günlük otomatik indexleme başlatılıyor...")
+        self.build_search_index_background("daily_auto")
+    
+    def build_search_index_background(self, trigger_source="manual"):
+        """Arka planda search index oluşturur (async, non-blocking)."""
+        if self.indexing_progress['running']:
+            self.add_log(f"⚠️ Index zaten çalışıyor, {trigger_source} tetikleyicisi atlandı")
+            return False
+        
+        base_folder_str = self.get_schemini_folder()
+        if not base_folder_str or not os.path.exists(base_folder_str):
+            self.add_log(f"❌ Schemini klasörü bulunamadı, {trigger_source} indexlemesi atlandı")
+            return False
+        
+        self.add_log(f"🔄 Arka plan indexlemesi başlatılıyor (tetikleyici: {trigger_source})")
+        
+        def background_index():
+            try:
+                self._build_index_thread(base_folder_str)
+                self.add_log(f"✅ Arka plan indexlemesi tamamlandı (tetikleyici: {trigger_source})")
+            except Exception as e:
+                self.add_log(f"❌ Arka plan indexlemesi başarısız (tetikleyici: {trigger_source}): {str(e)}")
+        
+        thread = threading.Thread(target=background_index, daemon=True)
+        thread.start()
+        return True
     def _load_completion_info(self):
         """Load last completed index information from persistent storage."""
         try:
@@ -66,18 +128,68 @@ class WebSettingsManager(WebBaseManager):
                 except Exception:
                     pass
     
-    def _save_completion_info(self, completion_time, file_count):
-        """Save completion information to persistent storage."""
+    def _save_completion_info(self, completion_time, file_count, base_folder=None, index_type="full"):
+        """Save completion information to persistent storage with enhanced metadata."""
         try:
             completion_data = {
                 'last_completed': completion_time,
-                'last_completed_files': file_count
+                'last_completed_files': file_count,
+                'last_index_type': index_type,  # "full" or "incremental"
+                'base_folder': base_folder,
+                'last_full_index': completion_time if index_type == "full" else self._get_last_full_index_time(),
+                'version': '2.0'  # For future compatibility
             }
             with open(self.index_completion_file, 'w', encoding='utf-8') as f:
-                json.dump(completion_data, f)
+                json.dump(completion_data, f, indent=2)
         except Exception:
             # Silent error handling - completion info is not critical
             pass
+    
+    def _get_last_full_index_time(self):
+        """Get the timestamp of the last full index."""
+        try:
+            if self.index_completion_file.exists():
+                with open(self.index_completion_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('last_full_index', data.get('last_completed', 0))
+        except Exception:
+            pass
+        return 0
+    
+    def _should_do_incremental_index(self, base_folder_str):
+        """Check if incremental indexing should be used instead of full rebuild."""
+        try:
+            # Check if completion file exists and has valid data
+            if not self.index_completion_file.exists():
+                return False, "No completion file found"
+            
+            with open(self.index_completion_file, 'r', encoding='utf-8') as f:
+                completion_data = json.load(f)
+            
+            # Check if index file exists
+            if not self.index_file.exists():
+                return False, "No existing index file found"
+            
+            last_completed = completion_data.get('last_completed', 0)
+            if last_completed <= 0:
+                return False, "Invalid last completion time"
+            
+            # Check if base folder matches
+            if completion_data.get('base_folder') != base_folder_str:
+                return False, "Base folder changed"
+            
+            # Check if it's been more than 7 days since last full index (force full rebuild)
+            last_full_index = completion_data.get('last_full_index', last_completed)
+            current_time = time.time()
+            days_since_full = (current_time - last_full_index) / (24 * 3600)
+            
+            if days_since_full > 7:
+                return False, f"Last full index was {days_since_full:.1f} days ago, forcing full rebuild"
+            
+            return True, f"Incremental index possible, last completed: {datetime.datetime.fromtimestamp(last_completed).strftime('%Y-%m-%d %H:%M:%S')}"
+            
+        except Exception as e:
+            return False, f"Error checking incremental eligibility: {str(e)}"
         
     def load_config(self):
         """Load configuration from file"""
@@ -377,7 +489,7 @@ class WebSettingsManager(WebBaseManager):
         return False
 
     def _build_index_thread(self, base_folder_str):
-        """The actual indexing logic that runs in a thread."""
+        """The actual indexing logic that runs in a thread with incremental support."""
         import time
         
         start_time = time.time()
@@ -391,113 +503,305 @@ class WebSettingsManager(WebBaseManager):
         self.indexing_progress['total_files_found'] = 0
         
         try:
-            # Phase 1: Discover all files
-            self.indexing_progress['status'] = "Discovering files..."
-            all_paths = []
-            processed_dirs = 0
-            total_dirs = 0
+            # Check if incremental indexing is possible
+            can_do_incremental, reason = self._should_do_incremental_index(base_folder_str)
             
-            # First count directories for better progress tracking
-            for root, dirs, _ in os.walk(base_folder_str):
-                total_dirs += 1
-            
-            # Now scan files with progress updates
-            for root, dirs, files in os.walk(base_folder_str):
-                if not self.indexing_progress['running']:  # Check for cancellation
+            if can_do_incremental:
+                self.add_log(f"🔄 Starting incremental indexing: {reason}")
+                success = self._build_incremental_index(base_folder_str, start_time)
+                if success:
                     return
-                    
-                processed_dirs += 1
-                dir_progress = int((processed_dirs / max(1, total_dirs)) * 50)  # First 50% for discovery
-                self.indexing_progress['percentage'] = dir_progress
-                self.indexing_progress['status'] = f"Scanning directories... ({processed_dirs}/{total_dirs})"
-                
-                # Add files from current directory
-                for name in files:
-                    all_paths.append(os.path.join(root, name))
-                
-                # Update elapsed time
-                self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
-                
-                # Estimate total time (rough estimation based on directory scanning)
-                if processed_dirs > 10:  # After processing some directories
-                    elapsed = time.time() - start_time
-                    estimated_total = (elapsed / processed_dirs) * total_dirs * 2  # *2 for writing phase
-                    self.indexing_progress['estimated_total_time'] = int(estimated_total)
-                
-                # Small delay to prevent overwhelming the system and allow for cancellation
-                time.sleep(0.001)
+                else:
+                    self.add_log("❌ Incremental indexing failed, falling back to full rebuild")
+            else:
+                self.add_log(f"🔄 Starting full indexing: {reason}")
             
-            total_files = len(all_paths)
-            self.indexing_progress['total_files_found'] = total_files
-            self.indexing_progress['current_phase'] = "writing"
-            self.indexing_progress['percentage'] = 50
-            self.indexing_progress['status'] = f"Found {total_files:,} files. Writing index..."
+            # Fall back to full indexing
+            self._build_full_index(base_folder_str, start_time)
             
-            # Update time estimation based on file count
-            elapsed = time.time() - start_time
-            # Assume writing takes about as much time as discovery for large file counts
-            estimated_total = elapsed * 2
-            self.indexing_progress['estimated_total_time'] = int(estimated_total)
-            
-            # Phase 2: Write index file
-            # Write to a temporary file first
-            temp_index_file = self.index_file.with_suffix('.tmp')
-            
-            # Update progress during writing (simulate progress for large files)
-            chunk_size = max(1, total_files // 10)  # 10 progress updates during writing
-            
-            with open(temp_index_file, 'w', encoding='utf-8') as f:
-                f.write('[')
-                for i, path in enumerate(all_paths):
-                    if not self.indexing_progress['running']:  # Check for cancellation
-                        return
-                        
-                    if i > 0:
-                        f.write(',')
-                    f.write(json.dumps(path))
-                    
-                    # Update progress periodically
-                    if i % chunk_size == 0 or i == total_files - 1:
-                        write_progress = 50 + int((i / max(1, total_files)) * 50)
-                        self.indexing_progress['percentage'] = write_progress
-                        self.indexing_progress['files_processed'] = i + 1
-                        self.indexing_progress['status'] = f"Writing index... ({i+1:,}/{total_files:,})"
-                        self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
-                        
-                        # Update time estimation
-                        if i > 0:
-                            elapsed = time.time() - start_time
-                            estimated_total = (elapsed / i) * total_files + elapsed
-                            self.indexing_progress['estimated_total_time'] = int(estimated_total)
-                f.write(']')
-
-            # Atomically replace the old index file
-            os.replace(temp_index_file, self.index_file)
-
-            # Final completion
-            end_time = time.time()
-            total_elapsed = int(end_time - start_time)
-            
-            self.indexing_progress['status'] = f"Index build complete. {total_files:,} files indexed in {total_elapsed}s."
-            self.indexing_progress['percentage'] = 100
-            self.indexing_progress['current_phase'] = "complete"
-            self.indexing_progress['elapsed_time'] = total_elapsed
-            self.indexing_progress['estimated_total_time'] = total_elapsed
-            
-            # Only update completion info for successful 100% completion
-            self.indexing_progress['last_completed'] = end_time
-            self.indexing_progress['last_completed_files'] = total_files
-            self.indexing_progress['last_updated'] = self.index_file.stat().st_mtime
-            
-            # Save completion info to persistent storage
-            self._save_completion_info(end_time, total_files)
-
         except Exception as e:
             self.indexing_progress['error'] = f"Failed to build index: {str(e)}"
             self.indexing_progress['status'] = "Error during indexing."
             self.indexing_progress['current_phase'] = "error"
         finally:
             self.indexing_progress['running'] = False
+    
+    def _build_incremental_index(self, base_folder_str, start_time):
+        """Build incremental index by updating only changed files."""
+        try:
+            # Load existing index
+            with open(self.index_file, 'r', encoding='utf-8') as f:
+                existing_index = json.load(f)
+            
+            # Load completion info to get last index time
+            with open(self.index_completion_file, 'r', encoding='utf-8') as f:
+                completion_data = json.load(f)
+            
+            last_completed = completion_data.get('last_completed', 0)
+            
+            self.add_log(f"🔍 Incremental scan starting from: {datetime.datetime.fromtimestamp(last_completed).strftime('%Y-%m-%d %H:%M:%S')}")
+            self.indexing_progress['status'] = "Checking existing files for changes..."
+            self.indexing_progress['current_phase'] = "incremental_scan"
+            
+            # Check existing files for modifications and find new files
+            modified_files = []
+            valid_existing_files = []
+            new_files = []
+            
+            # Phase 1: Check existing index files (quick check)
+            total_existing = len(existing_index)
+            for i, file_path in enumerate(existing_index):
+                if not self.indexing_progress['running']:
+                    return False
+                
+                # Update progress
+                if i % 100 == 0 or i == total_existing - 1:
+                    progress = int((i / max(1, total_existing)) * 30)  # 30% for existing files
+                    self.indexing_progress['percentage'] = progress
+                    self.indexing_progress['status'] = f"Checking existing files... ({i+1}/{total_existing})"
+                    self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
+                
+                try:
+                    if os.path.exists(file_path):
+                        file_stat = os.stat(file_path)
+                        if file_stat.st_mtime > last_completed:
+                            modified_files.append(file_path)
+                            self.add_log(f"📝 Modified: {os.path.basename(file_path)}")
+                        else:
+                            valid_existing_files.append(file_path)
+                    # If file doesn't exist, it will be removed from index automatically
+                except (OSError, IOError):
+                    # If we can't stat the file, skip it (it will be removed from index)
+                    pass
+            
+            # Phase 2: Scan for new files (only if there were recent changes)
+            self.indexing_progress['percentage'] = 30
+            self.indexing_progress['status'] = "Scanning for new files..."
+            
+            # Create set of existing paths for fast lookup
+            existing_paths_set = set(existing_index)
+            
+            # Quick scan: only scan directories that might have new files
+            # We'll scan all directories but optimize by checking timestamps
+            total_dirs = 0
+            processed_dirs = 0
+            
+            # Count directories first
+            for root, dirs, _ in os.walk(base_folder_str):
+                total_dirs += 1
+            
+            # Scan for new files
+            for root, dirs, files in os.walk(base_folder_str):
+                if not self.indexing_progress['running']:
+                    return False
+                
+                processed_dirs += 1
+                
+                # Update progress
+                if processed_dirs % 10 == 0 or processed_dirs == total_dirs:
+                    dir_progress = 30 + int((processed_dirs / max(1, total_dirs)) * 30)  # 30%-60% for new files
+                    self.indexing_progress['percentage'] = dir_progress
+                    self.indexing_progress['status'] = f"Scanning for new files... ({processed_dirs}/{total_dirs})"
+                    self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
+                
+                # Check directory modification time for optimization
+                try:
+                    dir_stat = os.stat(root)
+                    if dir_stat.st_mtime <= last_completed:
+                        # Directory hasn't been modified, skip detailed file check
+                        continue
+                except (OSError, IOError):
+                    # If we can't stat directory, check files anyway
+                    pass
+                
+                # Check files in this directory
+                for name in files:
+                    file_path = os.path.join(root, name)
+                    
+                    # Skip if already in existing index
+                    if file_path in existing_paths_set:
+                        continue
+                    
+                    try:
+                        # This is a new file
+                        file_stat = os.stat(file_path)
+                        new_files.append(file_path)
+                        if len(new_files) <= 10:  # Log first 10 new files
+                            self.add_log(f"📄 New file: {os.path.basename(file_path)}")
+                        elif len(new_files) == 11:
+                            self.add_log(f"📄 ... and {len(new_files)-10} more new files")
+                    except (OSError, IOError):
+                        # If we can't stat the file, skip it
+                        pass
+            
+            # Calculate totals
+            total_changes = len(modified_files) + len(new_files)
+            
+            # Check if there are any changes
+            if total_changes == 0:
+                self.add_log("✅ No file changes detected, index is up to date")
+                self.indexing_progress['percentage'] = 100
+                self.indexing_progress['status'] = f"Index is up to date ({len(valid_existing_files)} files)"
+                self.indexing_progress['current_phase'] = "complete"
+                self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
+                
+                # Update completion time even if no changes
+                end_time = time.time()
+                self.indexing_progress['last_completed'] = end_time
+                self.indexing_progress['last_completed_files'] = len(valid_existing_files)
+                self._save_completion_info(end_time, len(valid_existing_files), base_folder_str, "incremental")
+                return True
+            
+            self.add_log(f"📊 Changes detected:")
+            self.add_log(f"   • Modified files: {len(modified_files)}")
+            self.add_log(f"   • New files: {len(new_files)}")
+            self.add_log(f"   • Unchanged files: {len(valid_existing_files)}")
+            
+            # Create new index: valid existing + modified + new files
+            new_index = valid_existing_files + modified_files + new_files
+            
+            self.indexing_progress['percentage'] = 80
+            self.indexing_progress['status'] = f"Updating index with {total_changes} changes..."
+            self.indexing_progress['current_phase'] = "writing"
+            
+            # Write updated index to temporary file
+            temp_index_file = self.index_file.with_suffix('.tmp')
+            
+            with open(temp_index_file, 'w', encoding='utf-8') as f:
+                json.dump(new_index, f)
+            
+            # Atomically replace the old index file
+            os.replace(temp_index_file, self.index_file)
+            
+            # Final completion
+            end_time = time.time()
+            total_elapsed = int(end_time - start_time)
+            total_files = len(new_index)
+            
+            self.indexing_progress['status'] = f"Incremental index complete. {total_changes} files updated, {total_files:,} total files in {total_elapsed}s."
+            self.indexing_progress['percentage'] = 100
+            self.indexing_progress['current_phase'] = "complete"
+            self.indexing_progress['elapsed_time'] = total_elapsed
+            self.indexing_progress['estimated_total_time'] = total_elapsed
+            
+            # Update completion info
+            self.indexing_progress['last_completed'] = end_time
+            self.indexing_progress['last_completed_files'] = total_files
+            self.indexing_progress['last_updated'] = self.index_file.stat().st_mtime
+            
+            # Save completion info
+            self._save_completion_info(end_time, total_files, base_folder_str, "incremental")
+            
+            self.add_log(f"✅ Incremental indexing completed successfully")
+            return True
+            
+        except Exception as e:
+            self.add_log(f"❌ Incremental indexing failed: {str(e)}")
+            return False
+    
+    def _build_full_index(self, base_folder_str, start_time):
+        """Build full index from scratch."""
+        # Phase 1: Discover all files
+        self.indexing_progress['status'] = "Discovering files..."
+        self.indexing_progress['current_phase'] = "full_scan"
+        all_paths = []
+        processed_dirs = 0
+        total_dirs = 0
+        
+        # First count directories for better progress tracking
+        for root, dirs, _ in os.walk(base_folder_str):
+            total_dirs += 1
+        
+        # Now scan files with progress updates
+        for root, dirs, files in os.walk(base_folder_str):
+            if not self.indexing_progress['running']:  # Check for cancellation
+                return
+                
+            processed_dirs += 1
+            dir_progress = int((processed_dirs / max(1, total_dirs)) * 50)  # First 50% for discovery
+            self.indexing_progress['percentage'] = dir_progress
+            self.indexing_progress['status'] = f"Scanning directories... ({processed_dirs}/{total_dirs})"
+            
+            # Add files from current directory
+            for name in files:
+                all_paths.append(os.path.join(root, name))
+            
+            # Update elapsed time
+            self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
+            
+            # Estimate total time (rough estimation based on directory scanning)
+            if processed_dirs > 10:  # After processing some directories
+                elapsed = time.time() - start_time
+                estimated_total = (elapsed / processed_dirs) * total_dirs * 2  # *2 for writing phase
+                self.indexing_progress['estimated_total_time'] = int(estimated_total)
+            
+            # Small delay to prevent overwhelming the system and allow for cancellation
+            time.sleep(0.001)
+        
+        total_files = len(all_paths)
+        self.indexing_progress['total_files_found'] = total_files
+        self.indexing_progress['current_phase'] = "writing"
+        self.indexing_progress['percentage'] = 50
+        self.indexing_progress['status'] = f"Found {total_files:,} files. Writing index..."
+        
+        # Update time estimation based on file count
+        elapsed = time.time() - start_time
+        # Assume writing takes about as much time as discovery for large file counts
+        estimated_total = elapsed * 2
+        self.indexing_progress['estimated_total_time'] = int(estimated_total)
+        
+        # Phase 2: Write index file
+        # Write to a temporary file first
+        temp_index_file = self.index_file.with_suffix('.tmp')
+        
+        # Update progress during writing (simulate progress for large files)
+        chunk_size = max(1, total_files // 10)  # 10 progress updates during writing
+        
+        with open(temp_index_file, 'w', encoding='utf-8') as f:
+            f.write('[')
+            for i, path in enumerate(all_paths):
+                if not self.indexing_progress['running']:  # Check for cancellation
+                    return
+                    
+                if i > 0:
+                    f.write(',')
+                f.write(json.dumps(path))
+                
+                # Update progress periodically
+                if i % chunk_size == 0 or i == total_files - 1:
+                    write_progress = 50 + int((i / max(1, total_files)) * 50)
+                    self.indexing_progress['percentage'] = write_progress
+                    self.indexing_progress['files_processed'] = i + 1
+                    self.indexing_progress['status'] = f"Writing index... ({i+1:,}/{total_files:,})"
+                    self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
+                    
+                    # Update time estimation
+                    if i > 0:
+                        elapsed = time.time() - start_time
+                        estimated_total = (elapsed / i) * total_files + elapsed
+                        self.indexing_progress['estimated_total_time'] = int(estimated_total)
+            f.write(']')
+
+        # Atomically replace the old index file
+        os.replace(temp_index_file, self.index_file)
+
+        # Final completion
+        end_time = time.time()
+        total_elapsed = int(end_time - start_time)
+        
+        self.indexing_progress['status'] = f"Full index build complete. {total_files:,} files indexed in {total_elapsed}s."
+        self.indexing_progress['percentage'] = 100
+        self.indexing_progress['current_phase'] = "complete"
+        self.indexing_progress['elapsed_time'] = total_elapsed
+        self.indexing_progress['estimated_total_time'] = total_elapsed
+        
+        # Only update completion info for successful 100% completion
+        self.indexing_progress['last_completed'] = end_time
+        self.indexing_progress['last_completed_files'] = total_files
+        self.indexing_progress['last_updated'] = self.index_file.stat().st_mtime
+        
+        # Save completion info to persistent storage
+        self._save_completion_info(end_time, total_files, base_folder_str, "full")
 
     # --- User Management Methods ---
     def get_all_users(self):

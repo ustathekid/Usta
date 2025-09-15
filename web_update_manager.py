@@ -330,10 +330,25 @@ class WebUpdateManager(WebBaseManager):
             self.add_log(f"   - Errors: {hata_sayisi}")
             self.add_log(f"   - Success rate: {success_rate_percentage}%")
             self.add_log("=" * 60)
+            
+            # Update işlemi başarıyla tamamlandıysa otomatik index alma başlat
+            if eslenen_sayisi > 0:  # Eğer en az bir dosya güncellendiyse
+                self.add_log("🔄 Update işlemi tamamlandı, otomatik indexleme başlatılıyor...")
+                self._trigger_auto_indexing()
+            
             self.set_completed()
 
         except Exception as e:
             self.set_error(f"Update operation failed: {str(e)}")
+    
+    def _trigger_auto_indexing(self):
+        """Update işlemi sonrası otomatik indexleme tetikler."""
+        try:
+            from web_settings_manager import WebSettingsManager
+            settings_manager = WebSettingsManager()
+            settings_manager.build_search_index_background("post_update")
+        except Exception as e:
+            self.add_log(f"⚠️ Otomatik indexleme başlatılamadı: {str(e)}")
 
     def extract_file_pattern(self, filename):
         import re
