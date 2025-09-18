@@ -36,5 +36,15 @@
       "email": "kevser.haciosmanoglu@sdfgroup.com",
       "role": "user"
     }
-  ]
+  ],
+  "auto_indexing": {
+    "enabled": true,
+    "primary_time": "07:55",
+    "secondary_enabled": true,
+    "secondary_time": "23:19",
+    "frequency": "daily",
+    "weekday": "monday",
+    "last_run": null,
+    "last_run_secondary": 1758226748.0618181
+  }
 }

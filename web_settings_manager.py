@@ -8,6 +8,7 @@ import json
 import threading
 import time
 import datetime
+import re
 from pathlib import Path
 from web_base_manager import WebBaseManager
 
@@ -15,9 +16,11 @@ from web_base_manager import WebBaseManager
 try:
     import schedule
     SCHEDULE_AVAILABLE = True
+    print("✅ Schedule library imported successfully")
 except ImportError:
     SCHEDULE_AVAILABLE = False
     schedule = None
+    print("⚠️ Schedule kütüphanesi bulunamadı, günlük otomatik indexleme devre dışı")
 try:
     from werkzeug.security import generate_password_hash, check_password_hash
     WERKZEUG_AVAILABLE = True
@@ -39,9 +42,9 @@ class WebSettingsManager(WebBaseManager):
     def __init__(self):
         super().__init__()
         self._index_lock = threading.Lock()
-        self.config_file = Path("schemini_config.json")
-        self.index_file = Path("search_index.json")
-        self.index_completion_file = Path("index_completion.json")
+        self.config_file = Path("databases/schemini_config.json")
+        self.index_file = Path("databases/indexs/search_index.json")
+        self.index_completion_file = Path("databases/indexs/index_completion.json")
         self.schemini_klasoru = ""
         self.indexing_progress = {
             "running": False,
@@ -59,17 +62,43 @@ class WebSettingsManager(WebBaseManager):
             "elapsed_time": 0
         }
         
+        # Load configuration first
+        config = self.load_config()
+        
+        # Load completion info at startup
+        self._load_completion_info()
+        
         # Günlük otomatik indexleme için scheduler başlat
         self._start_daily_scheduler()
         
     def _start_daily_scheduler(self):
-        """Günlük otomatik indexleme için scheduler başlatır."""
+        """Günlük otomatik indexleme için scheduler başlatır - dual schedule desteği ile."""
         if not SCHEDULE_AVAILABLE or schedule is None:
             self.add_log("⚠️ Schedule kütüphanesi bulunamadı, günlük otomatik indexleme devre dışı")
             return
+        
+        # Clear existing jobs first
+        schedule.clear()
+        
+        # Get auto indexing settings
+        auto_settings = self.get_auto_indexing_settings()
+        
+        if not auto_settings['enabled']:
+            self.add_log("📅 Günlük otomatik indexleme devre dışı")
+            return
             
-        # Her sabah 07:55'de indexleme yap
-        schedule.every().day.at("07:55").do(self._daily_auto_index)
+        # Schedule primary indexing (always enabled if auto-indexing is on)
+        primary_time = auto_settings.get('primary_time', '07:55')
+        schedule.every().day.at(primary_time).do(self._daily_auto_index, schedule_type='primary')
+        self.add_log(f"📅 Birincil otomatik indexleme ayarlandı: {primary_time}")
+        
+        # Schedule secondary indexing if enabled
+        if auto_settings.get('secondary_enabled', False):
+            secondary_time = auto_settings.get('secondary_time', '14:00')
+            schedule.every().day.at(secondary_time).do(self._daily_auto_index, schedule_type='secondary')
+            self.add_log(f"📅 İkincil otomatik indexleme ayarlandı: {secondary_time}")
+        else:
+            self.add_log("⏸️ İkincil otomatik indexleme devre dışı")
         
         # Scheduler'ı arka planda çalıştır
         def run_scheduler():
@@ -80,12 +109,28 @@ class WebSettingsManager(WebBaseManager):
         
         scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
         scheduler_thread.start()
-        self.add_log("📅 Günlük otomatik indexleme scheduler'ı başlatıldı (her sabah 07:55)")
     
-    def _daily_auto_index(self):
-        """Günlük otomatik indexleme işlemi."""
-        self.add_log("🌅 Günlük otomatik indexleme başlatılıyor...")
-        self.build_search_index_background("daily_auto")
+    def _daily_auto_index(self, schedule_type='primary'):
+        """Günlük otomatik indexleme işlemi - primary veya secondary."""
+        if schedule_type == 'primary':
+            self.add_log("🌅 Birincil günlük otomatik indexleme başlatılıyor...")
+        else:
+            self.add_log("🌇 İkincil günlük otomatik indexleme başlatılıyor...")
+            
+        success = self.build_search_index_background(f"daily_auto_{schedule_type}")
+        
+        # Update last run time for the specific schedule type
+        if success:
+            config = self.load_config()
+            if 'auto_indexing' not in config:
+                config['auto_indexing'] = {}
+            
+            if schedule_type == 'primary':
+                config['auto_indexing']['last_run'] = time.time()
+            else:
+                config['auto_indexing']['last_run_secondary'] = time.time()
+                
+            self.save_config(config)
     
     def build_search_index_background(self, trigger_source="manual"):
         """Arka planda search index oluşturur (async, non-blocking)."""
@@ -141,6 +186,18 @@ class WebSettingsManager(WebBaseManager):
             }
             with open(self.index_completion_file, 'w', encoding='utf-8') as f:
                 json.dump(completion_data, f, indent=2)
+                
+            # After successful indexing, build functional groups database
+            # Build for both full and incremental indexes to keep data fresh
+            if base_folder:
+                self.add_log("🎯 Index completed successfully! Building functional groups database...")
+                functional_groups_success = self._build_functional_groups_after_index(base_folder)
+                
+                if functional_groups_success:
+                    self.add_log("✅ Functional groups database integrated successfully!")
+                else:
+                    self.add_log("⚠️ Functional groups database creation failed")
+                    
         except Exception:
             # Silent error handling - completion info is not critical
             pass
@@ -415,6 +472,71 @@ class WebSettingsManager(WebBaseManager):
             'log_level': 'info'
         })
     
+    def get_auto_indexing_settings(self):
+        """Get auto indexing settings"""
+        config = self.load_config()
+        auto_settings = config.get('auto_indexing', {})
+        
+        # Default settings with dual scheduling support
+        defaults = {
+            'enabled': False,
+            'primary_time': '07:55',      # First index time (morning)
+            'secondary_enabled': False,   # Enable second index
+            'secondary_time': '14:00',    # Second index time (afternoon)
+            'frequency': 'daily',         # daily, weekly, custom
+            'weekday': 'monday',          # for weekly frequency
+            'last_run': None,
+            'last_run_secondary': None    # Track secondary runs separately
+        }
+        
+        # For backward compatibility, migrate old 'time' setting to 'primary_time'
+        if 'time' in auto_settings and 'primary_time' not in auto_settings:
+            auto_settings['primary_time'] = auto_settings['time']
+            del auto_settings['time']
+        
+        return {**defaults, **auto_settings}
+    
+    def update_auto_indexing_settings(self, settings):
+        """Update auto indexing settings with dual schedule support"""
+        try:
+            config = self.load_config()
+            
+            # Validate time formats
+            if 'primary_time' in settings:
+                try:
+                    datetime.datetime.strptime(settings['primary_time'], '%H:%M')
+                except ValueError:
+                    self.set_error("Invalid primary time format. Use HH:MM format.")
+                    return False
+            
+            if 'secondary_time' in settings and settings.get('secondary_enabled', False):
+                try:
+                    datetime.datetime.strptime(settings['secondary_time'], '%H:%M')
+                except ValueError:
+                    self.set_error("Invalid secondary time format. Use HH:MM format.")
+                    return False
+            
+            # Validate that secondary time is different from primary time
+            if (settings.get('secondary_enabled', False) and 
+                'primary_time' in settings and 'secondary_time' in settings):
+                if settings['primary_time'] == settings['secondary_time']:
+                    self.set_error("Secondary time must be different from primary time.")
+                    return False
+            
+            # Update config
+            current_settings = self.get_auto_indexing_settings()
+            config['auto_indexing'] = {**current_settings, **settings}
+            
+            if self.save_config(config):
+                # Restart scheduler with new settings
+                self._start_daily_scheduler()
+                return True
+            return False
+            
+        except Exception as e:
+            self.set_error(f"Failed to update auto indexing settings: {str(e)}")
+            return False
+    
     def export_settings(self, export_path):
         """Export settings to file"""
         try:
@@ -454,6 +576,10 @@ class WebSettingsManager(WebBaseManager):
 
     def get_index_progress(self):
         """Get the current progress of the indexing operation."""
+        # Load completion info if not already loaded
+        if not self.indexing_progress['last_completed'] and self.index_completion_file.exists():
+            self._load_completion_info()
+        
         # Check if index file exists and update last_updated if needed
         if self.index_file.exists() and not self.indexing_progress['last_updated']:
             try:
@@ -527,7 +653,7 @@ class WebSettingsManager(WebBaseManager):
             self.indexing_progress['running'] = False
     
     def _build_incremental_index(self, base_folder_str, start_time):
-        """Build incremental index by updating only changed files."""
+        """Build incremental index by scanning only modified directories."""
         try:
             # Load existing index
             with open(self.index_file, 'r', encoding='utf-8') as f:
@@ -538,101 +664,112 @@ class WebSettingsManager(WebBaseManager):
                 completion_data = json.load(f)
             
             last_completed = completion_data.get('last_completed', 0)
+            last_completed_dt = datetime.datetime.fromtimestamp(last_completed)
             
-            self.add_log(f"🔍 Incremental scan starting from: {datetime.datetime.fromtimestamp(last_completed).strftime('%Y-%m-%d %H:%M:%S')}")
-            self.indexing_progress['status'] = "Checking existing files for changes..."
+            self.add_log(f"🔍 Smart incremental scan starting from: {last_completed_dt.strftime('%Y-%m-%d %H:%M:%S')}")
+            self.indexing_progress['status'] = "Scanning for changed directories..."
             self.indexing_progress['current_phase'] = "incremental_scan"
-            
-            # Check existing files for modifications and find new files
-            modified_files = []
-            valid_existing_files = []
-            new_files = []
-            
-            # Phase 1: Check existing index files (quick check)
-            total_existing = len(existing_index)
-            for i, file_path in enumerate(existing_index):
-                if not self.indexing_progress['running']:
-                    return False
-                
-                # Update progress
-                if i % 100 == 0 or i == total_existing - 1:
-                    progress = int((i / max(1, total_existing)) * 30)  # 30% for existing files
-                    self.indexing_progress['percentage'] = progress
-                    self.indexing_progress['status'] = f"Checking existing files... ({i+1}/{total_existing})"
-                    self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
-                
-                try:
-                    if os.path.exists(file_path):
-                        file_stat = os.stat(file_path)
-                        if file_stat.st_mtime > last_completed:
-                            modified_files.append(file_path)
-                            self.add_log(f"📝 Modified: {os.path.basename(file_path)}")
-                        else:
-                            valid_existing_files.append(file_path)
-                    # If file doesn't exist, it will be removed from index automatically
-                except (OSError, IOError):
-                    # If we can't stat the file, skip it (it will be removed from index)
-                    pass
-            
-            # Phase 2: Scan for new files (only if there were recent changes)
-            self.indexing_progress['percentage'] = 30
-            self.indexing_progress['status'] = "Scanning for new files..."
             
             # Create set of existing paths for fast lookup
             existing_paths_set = set(existing_index)
             
-            # Quick scan: only scan directories that might have new files
-            # We'll scan all directories but optimize by checking timestamps
+            # Lists for tracking changes
+            new_files = []
+            modified_files = []
+            valid_existing_files = list(existing_index)  # Start with all existing files
+            
+            # Phase 1: Smart directory scanning - only scan directories modified after last index
+            self.indexing_progress['percentage'] = 10
+            self.indexing_progress['status'] = "Finding directories with recent changes..."
+            
+            modified_directories = []
             total_dirs = 0
             processed_dirs = 0
             
-            # Count directories first
+            # First pass: find directories modified after last_completed
             for root, dirs, _ in os.walk(base_folder_str):
                 total_dirs += 1
-            
-            # Scan for new files
-            for root, dirs, files in os.walk(base_folder_str):
+                
                 if not self.indexing_progress['running']:
                     return False
                 
-                processed_dirs += 1
-                
-                # Update progress
-                if processed_dirs % 10 == 0 or processed_dirs == total_dirs:
-                    dir_progress = 30 + int((processed_dirs / max(1, total_dirs)) * 30)  # 30%-60% for new files
-                    self.indexing_progress['percentage'] = dir_progress
-                    self.indexing_progress['status'] = f"Scanning for new files... ({processed_dirs}/{total_dirs})"
-                    self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
-                
-                # Check directory modification time for optimization
                 try:
                     dir_stat = os.stat(root)
-                    if dir_stat.st_mtime <= last_completed:
-                        # Directory hasn't been modified, skip detailed file check
-                        continue
+                    if dir_stat.st_mtime > last_completed:
+                        modified_directories.append(root)
+                        if len(modified_directories) <= 5:  # Log first few directories
+                            self.add_log(f"� Changed directory: {os.path.relpath(root, base_folder_str)}")
+                        elif len(modified_directories) == 6:
+                            self.add_log(f"📁 ... and {len(modified_directories)-5} more directories with changes")
                 except (OSError, IOError):
-                    # If we can't stat directory, check files anyway
-                    pass
+                    # If we can't stat directory, add it to be safe
+                    modified_directories.append(root)
+            
+            self.add_log(f"🎯 Found {len(modified_directories)} directories with recent changes out of {total_dirs} total")
+            
+            # Phase 2: Scan only the modified directories for new/changed files
+            self.indexing_progress['percentage'] = 30
+            self.indexing_progress['status'] = f"Scanning {len(modified_directories)} changed directories..."
+            
+            for i, directory in enumerate(modified_directories):
+                if not self.indexing_progress['running']:
+                    return False
                 
-                # Check files in this directory
-                for name in files:
-                    file_path = os.path.join(root, name)
-                    
-                    # Skip if already in existing index
-                    if file_path in existing_paths_set:
-                        continue
-                    
-                    try:
-                        # This is a new file
-                        file_stat = os.stat(file_path)
-                        new_files.append(file_path)
-                        if len(new_files) <= 10:  # Log first 10 new files
-                            self.add_log(f"📄 New file: {os.path.basename(file_path)}")
-                        elif len(new_files) == 11:
-                            self.add_log(f"📄 ... and {len(new_files)-10} more new files")
-                    except (OSError, IOError):
-                        # If we can't stat the file, skip it
-                        pass
+                # Update progress
+                dir_progress = 30 + int((i / max(1, len(modified_directories))) * 40)  # 30%-70%
+                self.indexing_progress['percentage'] = dir_progress
+                self.indexing_progress['status'] = f"Scanning changed directories... ({i+1}/{len(modified_directories)})"
+                self.indexing_progress['elapsed_time'] = int(time.time() - start_time)
+                
+                try:
+                    # Get all files in this directory (not recursive - os.walk handles recursion)
+                    if os.path.isdir(directory):
+                        for file_name in os.listdir(directory):
+                            file_path = os.path.join(directory, file_name)
+                            
+                            # Skip subdirectories (they'll be handled by os.walk)
+                            if os.path.isdir(file_path):
+                                continue
+                            
+                            try:
+                                file_stat = os.stat(file_path)
+                                
+                                if file_path in existing_paths_set:
+                                    # File exists in index, check if modified
+                                    if file_stat.st_mtime > last_completed:
+                                        modified_files.append(file_path)
+                                        # Remove from valid_existing_files and add to modified
+                                        if file_path in valid_existing_files:
+                                            valid_existing_files.remove(file_path)
+                                else:
+                                    # This is a new file
+                                    new_files.append(file_path)
+                                    
+                            except (OSError, IOError):
+                                # If we can't stat the file, skip it
+                                continue
+                                
+                except (OSError, IOError):
+                    # If we can't list directory, skip it
+                    continue
+            
+            # Phase 3: Quick validation - remove deleted files from existing list
+            self.indexing_progress['percentage'] = 70
+            self.indexing_progress['status'] = "Validating existing files..."
+            
+            # Only check files that might have been deleted (quick existence check)
+            validated_existing = []
+            check_count = 0
+            for file_path in valid_existing_files:
+                check_count += 1
+                if check_count % 1000 == 0:  # Update progress every 1000 files
+                    self.indexing_progress['status'] = f"Validating existing files... ({check_count}/{len(valid_existing_files)})"
+                
+                if os.path.exists(file_path):
+                    validated_existing.append(file_path)
+                # If file doesn't exist, it's automatically excluded
+            
+            valid_existing_files = validated_existing
             
             # Calculate totals
             total_changes = len(modified_files) + len(new_files)
@@ -652,17 +789,19 @@ class WebSettingsManager(WebBaseManager):
                 self._save_completion_info(end_time, len(valid_existing_files), base_folder_str, "incremental")
                 return True
             
-            self.add_log(f"📊 Changes detected:")
+            self.add_log(f"📊 Smart incremental analysis results:")
             self.add_log(f"   • Modified files: {len(modified_files)}")
             self.add_log(f"   • New files: {len(new_files)}")
             self.add_log(f"   • Unchanged files: {len(valid_existing_files)}")
+            self.add_log(f"   • Total changes: {total_changes}")
+            
+            # Phase 4: Create new index
+            self.indexing_progress['percentage'] = 80
+            self.indexing_progress['status'] = f"Building new index with {total_changes} changes..."
+            self.indexing_progress['current_phase'] = "writing"
             
             # Create new index: valid existing + modified + new files
             new_index = valid_existing_files + modified_files + new_files
-            
-            self.indexing_progress['percentage'] = 80
-            self.indexing_progress['status'] = f"Updating index with {total_changes} changes..."
-            self.indexing_progress['current_phase'] = "writing"
             
             # Write updated index to temporary file
             temp_index_file = self.index_file.with_suffix('.tmp')
@@ -678,7 +817,7 @@ class WebSettingsManager(WebBaseManager):
             total_elapsed = int(end_time - start_time)
             total_files = len(new_index)
             
-            self.indexing_progress['status'] = f"Incremental index complete. {total_changes} files updated, {total_files:,} total files in {total_elapsed}s."
+            self.indexing_progress['status'] = f"Smart incremental index complete! {total_changes} files updated, {total_files:,} total files in {total_elapsed}s."
             self.indexing_progress['percentage'] = 100
             self.indexing_progress['current_phase'] = "complete"
             self.indexing_progress['elapsed_time'] = total_elapsed
@@ -692,7 +831,7 @@ class WebSettingsManager(WebBaseManager):
             # Save completion info
             self._save_completion_info(end_time, total_files, base_folder_str, "incremental")
             
-            self.add_log(f"✅ Incremental indexing completed successfully")
+            self.add_log(f"✅ Smart incremental indexing completed successfully")
             return True
             
         except Exception as e:
@@ -962,3 +1101,247 @@ class WebSettingsManager(WebBaseManager):
             except Exception:
                 # Consider logging the exception here
                 return False
+
+    # --- Functional Groups Methods ---
+    def _extract_9_codes_from_filename(self, filename: str):
+        """Extract 9.x codes from PDF filename"""
+        codes = []
+        
+        # Pattern for 9.x codes (with or without I prefix)
+        patterns = [
+            r'\b(I?9\.[A-Z0-9]+\.[0-9]+\.[0-9A-Z_]+)\b',  # Full 9.x codes
+            r'\b(I?9\.[A-Z0-9]+\.[0-9]+\.[0-9A-Z]+)\b',   # Without underscore suffix
+        ]
+        
+        for pattern in patterns:
+            matches = re.findall(pattern, filename, re.IGNORECASE)
+            codes.extend(matches)
+        
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_codes = []
+        for code in codes:
+            code_upper = code.upper()
+            if code_upper not in seen:
+                seen.add(code_upper)
+                unique_codes.append(code_upper)
+        
+        return unique_codes
+
+    def _scan_functional_groups(self, schemini_path: Path):
+        """Scan Schemini folder and build functional groups database"""
+        self.add_log(f"🎯 Building functional groups database...")
+        
+        functional_groups_db = {
+            "metadata": {
+                "created_at": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "description": "Functional Groups Database for Schemini Management",
+                "total_groups": 0,
+                "total_departments": 0,
+                "total_pdfs": 0
+            },
+            "departments": {},
+            "functional_groups": {}
+        }
+        
+        departments_found = set()
+        functional_groups_found = set()
+        total_pdfs = 0
+        
+        # Scan each department folder
+        for dept_path in schemini_path.iterdir():
+            if not dept_path.is_dir() or dept_path.name.startswith('.'):
+                continue
+                
+            dept_name = dept_path.name
+            departments_found.add(dept_name)
+            self.add_log(f"📁 Processing department: {dept_name}")
+            
+            dept_models = []
+            dept_functional_groups = set()
+            
+            # Recursively scan for model folders and functional groups
+            def scan_directory_recursive(current_path: Path, depth: int = 0):
+                """Recursively scan directories for functional groups"""
+                if depth > 5:  # Prevent infinite recursion
+                    return
+                    
+                for item_path in current_path.iterdir():
+                    if not item_path.is_dir() or item_path.name.startswith('.'):
+                        continue
+                    
+                    # Check if this folder name is numeric (potential functional group)
+                    if item_path.name.isdigit():
+                        fg_code = item_path.name
+                        
+                        # Check if this folder contains PDFs
+                        pdf_files = list(item_path.rglob('*.pdf'))
+                        if pdf_files:
+                            functional_groups_found.add(fg_code)
+                            dept_functional_groups.add(fg_code)
+                            
+                            # Get model name from parent path structure
+                            model_name = "Unknown"
+                            if item_path.parent != dept_path:
+                                # Try to determine model name from path
+                                relative_path = item_path.relative_to(dept_path)
+                                if len(relative_path.parts) > 1:
+                                    model_name = str(relative_path.parent)
+                                else:
+                                    model_name = "Root"
+                            
+                            # Collect PDFs and extract 9.x codes
+                            pdfs_in_group = []
+                            nine_codes_in_group = set()
+                            
+                            for pdf_path in pdf_files:
+                                pdf_name = pdf_path.name
+                                pdf_rel_path = str(pdf_path.relative_to(schemini_path))
+                                
+                                # Extract 9.x codes from filename
+                                codes_found = self._extract_9_codes_from_filename(pdf_name)
+                                nine_codes_in_group.update(codes_found)
+                                
+                                pdf_info = {
+                                    "filename": pdf_name,
+                                    "path": pdf_rel_path,
+                                    "nine_codes": codes_found,
+                                    "department": dept_name,
+                                    "model": model_name,
+                                    "functional_group": fg_code
+                                }
+                                pdfs_in_group.append(pdf_info)
+                                
+                            total_pdfs_ref[0] += len(pdfs_in_group)
+                            
+                            # Add to functional groups database
+                            if fg_code not in functional_groups_db["functional_groups"]:
+                                functional_groups_db["functional_groups"][fg_code] = {
+                                    "code": fg_code,
+                                    "name": f"Functional Group {fg_code}",
+                                    "departments": {},
+                                    "total_pdfs": 0,
+                                    "total_nine_codes": 0,
+                                    "unique_nine_codes": []
+                                }
+                            
+                            # Add department info to functional group
+                            if dept_name not in functional_groups_db["functional_groups"][fg_code]["departments"]:
+                                functional_groups_db["functional_groups"][fg_code]["departments"][dept_name] = {
+                                    "models": [],
+                                    "pdfs": [],
+                                    "pdf_count": 0
+                                }
+                            
+                            # Add model and PDFs to functional group
+                            functional_groups_db["functional_groups"][fg_code]["departments"][dept_name]["models"].append({
+                                "name": model_name,
+                                "path": str(item_path.parent.relative_to(schemini_path)),
+                                "pdf_count": len(pdfs_in_group)
+                            })
+                            
+                            functional_groups_db["functional_groups"][fg_code]["departments"][dept_name]["pdfs"].extend(pdfs_in_group)
+                            functional_groups_db["functional_groups"][fg_code]["departments"][dept_name]["pdf_count"] += len(pdfs_in_group)
+                            functional_groups_db["functional_groups"][fg_code]["total_pdfs"] += len(pdfs_in_group)
+                            
+                            # Add unique 9.x codes to functional group
+                            existing_codes = set(functional_groups_db["functional_groups"][fg_code]["unique_nine_codes"])
+                            new_codes = nine_codes_in_group - existing_codes
+                            functional_groups_db["functional_groups"][fg_code]["unique_nine_codes"].extend(sorted(new_codes))
+                            functional_groups_db["functional_groups"][fg_code]["total_nine_codes"] = len(functional_groups_db["functional_groups"][fg_code]["unique_nine_codes"])
+                            
+                            # Add to dept_models if not already added
+                            model_found = False
+                            for existing_model in dept_models:
+                                if existing_model["name"] == model_name:
+                                    existing_model["functional_groups"].append({
+                                        "code": fg_code,
+                                        "pdf_count": len(pdfs_in_group),
+                                        "nine_codes": sorted(nine_codes_in_group)
+                                    })
+                                    model_found = True
+                                    break
+                            
+                            if not model_found:
+                                dept_models.append({
+                                    "name": model_name,
+                                    "path": str(item_path.parent.relative_to(schemini_path)),
+                                    "functional_groups": [{
+                                        "code": fg_code,
+                                        "pdf_count": len(pdfs_in_group),
+                                        "nine_codes": sorted(nine_codes_in_group)
+                                    }]
+                                })
+                    else:
+                        # Continue recursive search
+                        scan_directory_recursive(item_path, depth + 1)
+            
+            # Use a reference to modify total_pdfs from inner function
+            total_pdfs_ref = [total_pdfs]
+            scan_directory_recursive(dept_path)
+            total_pdfs = total_pdfs_ref[0]
+            
+            # Add department info
+            if dept_models:
+                functional_groups_db["departments"][dept_name] = {
+                    "name": dept_name,
+                    "models": dept_models,
+                    "functional_groups": sorted(dept_functional_groups),
+                    "total_models": len(dept_models),
+                    "total_functional_groups": len(dept_functional_groups)
+                }
+        
+        # Update metadata
+        functional_groups_db["metadata"]["total_groups"] = len(functional_groups_found)
+        functional_groups_db["metadata"]["total_departments"] = len(departments_found)
+        functional_groups_db["metadata"]["total_pdfs"] = total_pdfs
+        
+        self.add_log(f"✅ Functional groups scan completed!")
+        self.add_log(f"📊 Found {len(departments_found)} departments")
+        self.add_log(f"🎯 Found {len(functional_groups_found)} functional groups") 
+        self.add_log(f"📄 Found {total_pdfs} PDFs")
+        
+        return functional_groups_db
+
+    def _save_functional_groups_db(self, db_data):
+        """Save functional groups database to JSON file"""
+        try:
+            output_path = Path('databases/functional_groups.json')
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            self.add_log(f"💾 Saving functional groups database...")
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(db_data, f, indent=2, ensure_ascii=False)
+            
+            self.add_log(f"✅ Functional groups database saved to: {output_path}")
+            return True
+            
+        except Exception as e:
+            self.add_log(f"❌ Error saving functional groups database: {str(e)}")
+            return False
+
+    def _build_functional_groups_after_index(self, base_folder_str):
+        """Build functional groups database after successful indexing"""
+        try:
+            self.add_log("🔄 Starting functional groups analysis...")
+            schemini_path = Path(base_folder_str)
+            
+            if not schemini_path.exists() or not schemini_path.is_dir():
+                self.add_log("❌ Invalid Schemini folder path")
+                return False
+            
+            # Scan and build functional groups database
+            functional_groups_data = self._scan_functional_groups(schemini_path)
+            
+            # Save the database
+            success = self._save_functional_groups_db(functional_groups_data)
+            
+            if success:
+                self.add_log("🎉 Functional groups database created successfully!")
+            
+            return success
+            
+        except Exception as e:
+            self.add_log(f"❌ Error building functional groups: {str(e)}")
+            return False

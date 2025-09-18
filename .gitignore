@@ -6,6 +6,7 @@ __pycache__/
 .Python
 *.log
 logs/*.log
+system_logs/
 instance/
 .pytest_cache/
 .mypy_cache/

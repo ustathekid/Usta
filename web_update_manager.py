@@ -109,7 +109,6 @@ class WebUpdateManager(WebBaseManager):
     def _index_main_folder_fast(self, ana_klasor_path: Path, section_paths: list[Path] | None = None):
         """Build filename sets and mappings in a single pass over the main folder."""
         ana_dosya_isimleri = set()
-        ana_dosya_patterns: dict[str, list[Path]] = {}
         ana_dosya_mapping: dict[str, list[Path]] = {}
         total_files = 0
         bases = section_paths if section_paths else [ana_klasor_path]
@@ -121,16 +120,12 @@ class WebUpdateManager(WebBaseManager):
                 if name_lower not in ana_dosya_mapping:
                     ana_dosya_mapping[name_lower] = []
                 ana_dosya_mapping[name_lower].append(p)
-                pattern = self.extract_file_pattern(p.name)
-                if pattern not in ana_dosya_patterns:
-                    ana_dosya_patterns[pattern] = []
-                ana_dosya_patterns[pattern].append(p)
                 total_files += 1
                 if total_files % 2000 == 0:
                     self.update_progress(self.progress.get('percentage', 0), status=f"Indexing reference folder... {total_files} files")
             except Exception:
                 continue
-        return ana_dosya_isimleri, ana_dosya_patterns, ana_dosya_mapping, total_files
+        return ana_dosya_isimleri, ana_dosya_mapping, total_files
 
     def _update_thread(self, ana_klasor, guncelleme_klasoru):
         try:
@@ -173,7 +168,7 @@ class WebUpdateManager(WebBaseManager):
             else:
                 self.add_internal_log(f"   📁 Using full reference folder: {ana_klasor_path}")
             
-            ana_dosya_isimleri, ana_dosya_patterns, ana_dosya_mapping, main_count = self._index_main_folder_fast(ana_klasor_path, section_paths)
+            ana_dosya_isimleri, ana_dosya_mapping, main_count = self._index_main_folder_fast(ana_klasor_path, section_paths)
             
             # Initialize settings manager for index updates
             try:
@@ -244,9 +239,8 @@ class WebUpdateManager(WebBaseManager):
 
                 try:
                     dosya_adi_lower = guncelleme_dosyasi.name.lower()
-                    target_pattern = self.extract_file_pattern(guncelleme_dosyasi.name)
                     
-                    self.add_internal_log(f"🔍 Processing: {guncelleme_dosyasi.name} (pattern: {target_pattern})")
+                    self.add_internal_log(f"🔍 Processing: {guncelleme_dosyasi.name}")
                     
                     match_locations = []
                     
@@ -257,27 +251,22 @@ class WebUpdateManager(WebBaseManager):
                                 match_locations.append(file_path)
                                 self.add_internal_log(f"✅ Exact match found: {file_path}")
                     
-                    # Try I-prefix variants
-                    if dosya_adi_lower.startswith('i') and dosya_adi_lower[1:] in ana_dosya_isimleri and dosya_adi_lower[1:] in ana_dosya_mapping:
-                        for file_path in ana_dosya_mapping[dosya_adi_lower[1:]]:
-                            if file_path not in match_locations:
-                                match_locations.append(file_path)
-                                self.add_internal_log(f"✅ I-prefix match found: {file_path}")
+                    # Try I-prefix variants only if no exact match found
+                    if not match_locations:
+                        if dosya_adi_lower.startswith('i') and dosya_adi_lower[1:] in ana_dosya_isimleri and dosya_adi_lower[1:] in ana_dosya_mapping:
+                            for file_path in ana_dosya_mapping[dosya_adi_lower[1:]]:
+                                if file_path not in match_locations:
+                                    match_locations.append(file_path)
+                                    self.add_internal_log(f"✅ I-prefix match found: {file_path}")
+                        
+                        i_prefixed_name = 'i' + dosya_adi_lower
+                        if i_prefixed_name in ana_dosya_isimleri and i_prefixed_name in ana_dosya_mapping:
+                            for file_path in ana_dosya_mapping[i_prefixed_name]:
+                                if file_path not in match_locations:
+                                    match_locations.append(file_path)
+                                    self.add_internal_log(f"✅ I-prefix variant match found: {file_path}")
                     
-                    i_prefixed_name = 'i' + dosya_adi_lower
-                    if i_prefixed_name in ana_dosya_isimleri and i_prefixed_name in ana_dosya_mapping:
-                        for file_path in ana_dosya_mapping[i_prefixed_name]:
-                            if file_path not in match_locations:
-                                match_locations.append(file_path)
-                                self.add_internal_log(f"✅ I-prefix variant match found: {file_path}")
-                    
-                    # Try pattern matching
-                    if target_pattern in ana_dosya_patterns:
-                        matched_files = ana_dosya_patterns[target_pattern]
-                        for matched_file in matched_files:
-                            if matched_file not in match_locations:
-                                match_locations.append(matched_file)
-                                self.add_internal_log(f"✅ Pattern match found: {matched_file}")
+                    # Pattern matching removed to prevent multi-page file conflicts
 
                     if match_locations:
                         eslenen_sayisi += 1  # Unique file matched
@@ -349,12 +338,3 @@ class WebUpdateManager(WebBaseManager):
             settings_manager.build_search_index_background("post_update")
         except Exception as e:
             self.add_log(f"⚠️ Otomatik indexleme başlatılamadı: {str(e)}")
-
-    def extract_file_pattern(self, filename):
-        import re
-        name = filename.lower()
-        if name.endswith('.pdf'):
-            name = re.sub(r'_\d+\.pdf$', '.pdf', name)
-            if name.startswith('i') and len(name) > 1 and name[1].isdigit():
-                name = name[1:]
-        return name

@@ -56,7 +56,7 @@ class WebFileAddManager(WebBaseManager):
             import json
             from pathlib import Path
             
-            mix_json_path = Path('mix.json')
+            mix_json_path = Path('databases/mix.json')
             if mix_json_path.exists():
                 with open(mix_json_path, 'r', encoding='utf-8') as f:
                     mix_data = json.load(f)

@@ -1,0 +1,1208 @@
+{% extends "base.html" %}
+
+{% block title %}Functional Groups - Schemini Manager{% endblock %}
+
+{% block content %}
+<style>
+/* Functional Groups Layout Styles */
+.functional-groups-container {
+    display: flex;
+    height: calc(100vh - 200px);
+    min-height: 500px;
+    max-height: calc(100vh - 200px);
+    gap: 10px;
+    overflow: hidden;
+}
+
+/* Left Sidebar - Functional Groups List */
+.functional-groups-sidebar {
+    width: 180px;
+    background: rgba(33, 37, 41, 0.95);
+    border-radius: 8px;
+    border: 2px solid rgba(23, 162, 184, 0.5);
+    overflow-y: auto;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.functional-groups-sidebar h5 {
+    color: #ffffff !important;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Group Search Styles */
+.group-search-container {
+    margin-bottom: 12px;
+}
+
+.group-search-container .input-group {
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.group-search-container .input-group-text {
+    background: rgba(73, 80, 87, 0.9);
+    border: none;
+    color: #adb5bd;
+}
+
+.group-search-container .form-control {
+    background: rgba(73, 80, 87, 0.9);
+    border: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.group-search-container .form-control::placeholder {
+    color: #adb5bd;
+    opacity: 0.8;
+}
+
+.group-search-container .form-control:focus {
+    background: rgba(73, 80, 87, 1);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.group-help-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px 8px;
+    color: #6c757d;
+    text-align: center;
+}
+
+.group-help-text i {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    opacity: 0.7;
+}
+
+.functional-group-item {
+    display: block;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    background: rgba(52, 58, 64, 0.8);
+    color: #e9ecef;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    transition: background-color 0.2s ease;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.functional-group-item:hover {
+    background: rgba(23, 162, 184, 0.8);
+    color: #ffffff;
+    border-color: #17a2b8;
+    text-decoration: none;
+}
+
+.functional-group-item.active {
+    background: #17a2b8;
+    color: #ffffff;
+    border-color: #138496;
+}
+
+/* Main Content Area */
+.functional-groups-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(33, 37, 41, 0.95);
+    border-radius: 10px;
+    border: 2px solid rgba(23, 162, 184, 0.5);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    max-height: 100%;
+}
+
+/* Search Filters */
+.search-filters {
+    padding: 12px;
+    background: rgba(52, 58, 64, 0.9);
+    border-bottom: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.search-filters .input-group {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-filters .input-group-text {
+    background: rgba(73, 80, 87, 0.9);
+    border: none;
+    color: #adb5bd;
+}
+
+.search-filters .form-control {
+    background: rgba(73, 80, 87, 0.9);
+    border: none;
+    color: #ffffff;
+    font-size: 1.0rem;
+}
+
+.search-filters .form-control::placeholder {
+    color: #adb5bd;
+    opacity: 0.8;
+}
+
+.search-filters .form-control:focus {
+    background: rgba(73, 80, 87, 1);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.search-filters .btn-outline-secondary {
+    background: rgba(108, 117, 125, 0.8);
+    border: none;
+    color: #adb5bd;
+}
+
+.search-filters .btn-outline-secondary:hover {
+    background: rgba(220, 53, 69, 0.8);
+    color: #ffffff;
+}
+
+.search-results-count {
+    margin-top: 6px;
+    padding-left: 8px;
+}
+
+/* Inline Search Filters */
+.search-filters-inline .input-group {
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.search-filters-inline .input-group-text {
+    background: rgba(73, 80, 87, 0.9);
+    border: none;
+    color: #adb5bd;
+    padding: 0.25rem 0.5rem;
+}
+
+.search-filters-inline .form-control {
+    background: rgba(73, 80, 87, 0.9);
+    border: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.search-filters-inline .form-control::placeholder {
+    color: #adb5bd;
+    opacity: 0.8;
+}
+
+.search-filters-inline .form-control:focus {
+    background: rgba(73, 80, 87, 1);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.search-filters-inline .btn {
+    background: rgba(108, 117, 125, 0.8);
+    border: none;
+    color: #adb5bd;
+    padding: 0.25rem 0.5rem;
+}
+
+.search-filters-inline .btn:hover {
+    background: rgba(220, 53, 69, 0.8);
+    color: #ffffff;
+}
+
+/* Department Filters */
+.department-filters {
+    padding: 12px;
+    background: rgba(52, 58, 64, 0.8);
+    border-bottom: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.department-filters h6 {
+    color: #ffffff !important;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1.0rem;
+}
+
+.department-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.department-chip {
+    padding: 8px 12px 8px 32px;
+    background: rgba(108, 117, 125, 0.8);
+    color: #e9ecef;
+    border: 1px solid rgba(108, 117, 125, 0.5);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.department-chip::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 3px;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.department-chip.selected::before {
+    background: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.department-chip.selected::after {
+    content: '✓';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.department-chip:hover {
+    background: rgba(23, 162, 184, 0.8);
+    border-color: #17a2b8;
+}
+
+.department-chip.selected {
+    background: rgba(23, 162, 184, 0.3);
+    border-color: #17a2b8;
+    color: #ffffff;
+}
+
+.department-chip.selected:hover {
+    background: rgba(23, 162, 184, 0.5);
+}
+
+.department-chip.inactive {
+    background: rgba(73, 80, 87, 0.5);
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.department-chip.inactive::before {
+    border-color: #6c757d;
+}
+
+.department-chip.inactive:hover {
+    background: rgba(73, 80, 87, 0.5);
+    border-color: rgba(108, 117, 125, 0.5);
+}
+
+/* PDF Grid */
+.pdf-grid-container {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.pdf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.pdf-item {
+    background: rgba(52, 58, 64, 0.9);
+    border-radius: 8px;
+    border: 2px solid rgba(108, 117, 125, 0.3);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pdf-item:hover {
+    border-color: #17a2b8;
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.2);
+}
+
+.pdf-thumbnail {
+    width: 100%;
+    height: 220px;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.pdf-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.pdf-thumbnail .pdf-icon {
+    font-size: 4rem;
+    color: #dc3545;
+}
+
+.page-count-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(23, 162, 184, 0.9);
+    color: white;
+    padding: 3px 7px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.pdf-info {
+    padding: 8px 10px;
+    background: rgba(33, 37, 41, 0.9);
+}
+
+.pdf-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e9ecef;
+    margin-bottom: 2px;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+.pdf-department {
+    color: #5bc0de;
+    font-weight: 500;
+}
+
+/* Loading States */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #6c757d;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(23, 162, 184, 0.2);
+    border-top: 4px solid #17a2b8;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #6c757d;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .functional-groups-container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .functional-groups-sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 150px;
+    }
+    
+    .pdf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .department-chips {
+        flex-direction: column;
+    }
+    
+    .department-chip {
+        text-align: center;
+    }
+    
+    .pdf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .functional-groups-container {
+        height: calc(100vh - 140px);
+    }
+}
+
+/* Custom Scrollbar */
+.functional-groups-sidebar::-webkit-scrollbar,
+.pdf-grid-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.functional-groups-sidebar::-webkit-scrollbar-track,
+.pdf-grid-container::-webkit-scrollbar-track {
+    background: rgba(52, 58, 64, 0.5);
+    border-radius: 3px;
+}
+
+.functional-groups-sidebar::-webkit-scrollbar-thumb,
+.pdf-grid-container::-webkit-scrollbar-thumb {
+    background: rgba(23, 162, 184, 0.6);
+    border-radius: 3px;
+}
+
+.functional-groups-sidebar::-webkit-scrollbar-thumb:hover,
+.pdf-grid-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(23, 162, 184, 0.8);
+}
+</style>
+
+<div class="container-fluid px-0">
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="card bg-secondary page-full-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <h2 class="card-title mb-0 me-3">
+                                <i class="bi bi-diagram-3 me-2"></i>
+                                Functional Groups
+                            </h2>
+                            <p class="card-text mb-0 text-muted" style="line-height: 1.5; padding-top: 2px;">Browse PDFs by functional groups and departments</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="functional-groups-container">
+                        <!-- Left Sidebar - Functional Groups -->
+                        <div class="functional-groups-sidebar">
+                            <h5><i class="bi bi-collection me-2"></i>Groups</h5>
+                            
+                            <!-- Group Search Input -->
+                            <div class="group-search-container">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="groupSearch" 
+                                           placeholder="Enter group number (e.g., 10)"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            
+                            <!-- Group Results -->
+                            <div id="functionalGroupsList">
+                                <div class="empty-state">
+                                    <i class="bi bi-search"></i>
+                                    <div>Search for a functional group to get started</div>
+                                    <small class="text-muted">Type a number to find matching groups</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Main Content Area -->
+                        <div class="functional-groups-main">
+                            <!-- Department Filters -->
+                            <div class="department-filters" id="departmentFiltersSection" style="display: none;">
+                                <div class="d-flex align-items-start justify-content-between mb-3">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-2"><i class="bi bi-funnel me-2"></i>Filter by Department</h6>
+                                        <div class="department-chips" id="departmentFilters">
+                                            <!-- Department chips will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Search Bar for 9-digit codes -->
+                                    <div class="search-filters-inline ms-3">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-search"></i>
+                                            </span>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="ninecodeSearch" 
+                                                   placeholder="Search by 9.x"
+                                                   autocomplete="off"
+                                                   style="max-width: 200px;">
+                                            <button class="btn btn-outline-secondary btn-sm" 
+                                                    type="button" 
+                                                    id="clearSearch"
+                                                    title="Clear search">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="search-results-count" id="searchResultsCount" style="display: none;">
+                                    <small class="text-muted"></small>
+                                </div>
+                            </div>
+                            
+                            <!-- PDF Grid -->
+                            <div class="pdf-grid-container">
+                                <div id="pdfGrid" class="pdf-grid">
+                                    <div class="empty-state">
+                                        <i class="bi bi-arrow-left"></i>
+                                        <div>Select a functional group to view PDFs</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Functional Groups Management
+class FunctionalGroupsManager {
+    constructor() {
+        this.functionalGroups = [];
+        this.departments = [];
+        this.selectedGroup = null;
+        this.selectedDepartments = new Set();
+        this.allPdfs = [];
+        this.filteredPdfs = [];
+        this.searchQuery = '';
+        this.groupSearchQuery = '';
+        
+        this.initializeEventListeners();
+        this.loadFunctionalGroups();
+    }
+    
+    initializeEventListeners() {
+        // Department filter clicks
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('department-chip')) {
+                this.toggleDepartment(e.target.dataset.department);
+            }
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('ninecodeSearch');
+        const clearButton = document.getElementById('clearSearch');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchQuery = e.target.value.trim();
+                this.filterPdfs();
+            });
+            
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.searchQuery = e.target.value.trim();
+                    this.filterPdfs();
+                }
+            });
+        }
+        
+        if (clearButton) {
+            clearButton.addEventListener('click', () => {
+                this.searchQuery = '';
+                searchInput.value = '';
+                this.filterPdfs();
+                searchInput.focus();
+            });
+        }
+        
+        // Group search functionality
+        const groupSearchInput = document.getElementById('groupSearch');
+        if (groupSearchInput) {
+            groupSearchInput.addEventListener('input', (e) => {
+                this.groupSearchQuery = e.target.value.trim();
+                
+                // If search box is cleared, reset everything
+                if (this.groupSearchQuery === '') {
+                    this.clearAllFilters();
+                    return;
+                }
+                
+                this.filterAndRenderGroups();
+            });
+            
+            groupSearchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    // Auto-select first matching group if available
+                    const visibleGroups = this.getFilteredGroups();
+                    if (visibleGroups.length > 0) {
+                        this.selectGroup(visibleGroups[0].code);
+                    }
+                }
+            });
+        }
+    }
+    
+    filterPdfs() {
+        // This method is called from search events - delegate to main filter method
+        this.filterAndRenderPdfs();
+    }
+    
+    async loadFunctionalGroups() {
+        try {
+            const response = await fetch('/api/functional-groups');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.functionalGroups = data.groups || [];
+                this.departments = data.departments || [];
+                // Don't modify initial HTML content - it's already set properly
+                this.clearDepartmentFilters();
+            } else {
+                this.showError('Failed to load functional groups: ' + (data.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error loading functional groups:', error);
+            this.showError('Error loading functional groups: ' + error.message);
+        }
+    }
+    
+    getFilteredGroups() {
+        const groupSearchInput = document.getElementById('groupSearch');
+        
+        // Safety check: if element doesn't exist yet, return empty array
+        if (!groupSearchInput) {
+            return [];
+        }
+        
+        const searchTerm = groupSearchInput.value.trim().toLowerCase();
+        
+        // Don't show any groups if no search term
+        if (!searchTerm) {
+            return [];
+        }
+        
+        const filtered = this.functionalGroups.filter(group => {
+            const groupCode = group.code.toLowerCase();
+            return groupCode.startsWith(searchTerm);
+        }).sort((a, b) => {
+            // Sort numerically if both are numbers, otherwise alphabetically
+            const aNum = parseInt(a.code);
+            const bNum = parseInt(b.code);
+            if (!isNaN(aNum) && !isNaN(bNum)) {
+                return aNum - bNum;
+            }
+            return a.code.localeCompare(b.code);
+        });
+        
+        return filtered;
+    }
+
+    filterAndRenderGroups() {
+        const filteredGroups = this.getFilteredGroups();
+        
+        // Check if currently selected group is still in filtered results
+        if (this.selectedGroup && !filteredGroups.find(g => g.code === this.selectedGroup)) {
+            // Selected group is no longer in results, clear selection
+            this.selectedGroup = null;
+            this.clearDepartmentFilters();
+            this.allPdfs = [];
+            this.filteredPdfs = [];
+            // Show initial state in PDF grid
+            const container = document.getElementById('pdfGrid');
+            if (container) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-arrow-left"></i>
+                        <div>Select a functional group to view PDFs</div>
+                    </div>
+                `;
+            }
+        }
+        
+        this.renderFunctionalGroups(filteredGroups);
+        
+        // Department filters should only appear after a group is actually selected
+        // Not just when searching
+        if (!this.selectedGroup) {
+            this.clearDepartmentFilters();
+        }
+    }
+
+    clearDepartmentFilters() {
+        const departmentFiltersContainer = document.getElementById('departmentFilters');
+        const section = document.getElementById('departmentFiltersSection');
+        
+        if (departmentFiltersContainer) {
+            departmentFiltersContainer.innerHTML = '';
+        }
+        
+        // Hide the department filters section
+        if (section) {
+            section.style.display = 'none';
+        }
+    }
+    
+    clearAllFilters() {
+        // Clear search input
+        const groupSearchInput = document.getElementById('groupSearch');
+        if (groupSearchInput) {
+            groupSearchInput.value = '';
+        }
+        
+        // Clear selected group
+        this.selectedGroup = null;
+        document.querySelectorAll('.functional-group-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Clear department filters
+        this.clearDepartmentFilters();
+        
+        // Clear PDFs
+        this.allPdfs = [];
+        this.filteredPdfs = [];
+        // Show initial state in PDF grid
+        const pdfContainer = document.getElementById('pdfGrid');
+        if (pdfContainer) {
+            pdfContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-arrow-left"></i>
+                    <div>Select a functional group to view PDFs</div>
+                </div>
+            `;
+        }
+        
+        // Show empty state for groups
+        this.renderInitialEmptyState();
+    }
+    
+    renderInitialEmptyState() {
+        const container = document.getElementById('functionalGroupsList');
+        if (container) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-search"></i>
+                    <div>Search for a functional group to get started</div>
+                    <small class="text-muted">Type a number to find matching groups</small>
+                </div>
+            `;
+        }
+    }
+    
+    renderFunctionalGroups(groupsToRender = null) {
+        const container = document.getElementById('functionalGroupsList');
+        const groups = groupsToRender || this.functionalGroups;
+        
+        if (groups.length === 0) {
+            const groupSearchInput = document.getElementById('groupSearch');
+            const searchTerm = groupSearchInput ? groupSearchInput.value.trim() : '';
+            
+            if (searchTerm) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-search"></i>
+                        <div>No groups found for "${searchTerm}"</div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-search"></i>
+                        <div>Search for a functional group to get started</div>
+                        <small class="text-muted">Type a number to find matching groups</small>
+                    </div>
+                `;
+            }
+            return;
+        }
+        
+        container.innerHTML = groups.map(group => {
+            const isSelected = this.selectedGroup === group.code;
+            return `
+                <div class="functional-group-item ${isSelected ? 'active' : ''}" data-group="${group.code}" onclick="functionalGroupsManager.selectGroup('${group.code}')">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            ${group.code}
+                            ${group.count ? `<small class="text-muted d-block">${group.count} PDFs</small>` : ''}
+                        </div>
+                        ${isSelected ? `<button class="btn btn-sm btn-outline-danger ms-2" onclick="event.stopPropagation(); functionalGroupsManager.clearAllFilters();" title="Clear selection">
+                            <i class="bi bi-x"></i>
+                        </button>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        // If there's a selected group but it's not in the filtered results, show it separately
+        if (this.selectedGroup && !groups.find(g => g.code === this.selectedGroup)) {
+            const selectedGroupData = this.functionalGroups.find(g => g.code === this.selectedGroup);
+            if (selectedGroupData) {
+                const selectedGroupHtml = `
+                    <div class="functional-group-item active" data-group="${selectedGroupData.code}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Selected: ${selectedGroupData.code}</strong>
+                                ${selectedGroupData.count ? `<small class="text-muted d-block">${selectedGroupData.count} PDFs</small>` : ''}
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger ms-2" onclick="event.stopPropagation(); functionalGroupsManager.clearAllFilters();" title="Clear selection">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = selectedGroupHtml + '<hr class="my-2">' + container.innerHTML;
+            }
+        }
+    }
+    
+    renderDepartmentFilters() {
+        const container = document.getElementById('departmentFilters');
+        const section = document.getElementById('departmentFiltersSection');
+        
+        // Show the department filters section
+        if (section) {
+            section.style.display = 'block';
+        }
+        
+        if (this.departments.length === 0) {
+            container.innerHTML = '<div class="text-muted">No departments available</div>';
+            return;
+        }
+        
+        // Start with NO departments selected (basamaklı yapı)
+        this.selectedDepartments = new Set();
+        
+        container.innerHTML = this.departments.map(dept => `
+            <div class="department-chip" data-department="${dept.code}">
+                ${dept.name}
+                <small>(${dept.count ? dept.count : '0'})</small>
+            </div>
+        `).join('');
+    }
+    
+    toggleDepartment(deptCode) {
+        const chip = document.querySelector(`[data-department="${deptCode}"]`);
+        
+        // Don't allow toggling inactive departments
+        if (chip.classList.contains('inactive')) {
+            return;
+        }
+        
+        if (this.selectedDepartments.has(deptCode)) {
+            this.selectedDepartments.delete(deptCode);
+            chip.classList.remove('selected');
+        } else {
+            this.selectedDepartments.add(deptCode);
+            chip.classList.add('selected');
+        }
+        
+        // Use requestAnimationFrame for smooth filtering
+        requestAnimationFrame(() => {
+            this.filterAndRenderPdfs();
+        });
+    }
+    
+    async selectGroup(groupCode) {
+        // Update UI
+        document.querySelectorAll('.functional-group-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        const selectedItem = document.querySelector(`[data-group="${groupCode}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('active');
+        }
+        
+        this.selectedGroup = groupCode;
+        
+        // Don't show department filters yet - wait for PDF data loading
+        // this.renderDepartmentFilters();
+        
+        await this.loadGroupPdfs(groupCode);
+    }
+    
+    async loadGroupPdfs(groupCode) {
+        try {
+            this.showLoading();
+            
+            const response = await fetch(`/api/functional-groups/${encodeURIComponent(groupCode)}/pdfs`);
+            const data = await response.json();
+            
+            if (data.success) {
+                this.allPdfs = data.pdfs || [];
+                // Update department filters with group-specific counts
+                if (data.department_counts) {
+                    this.updateDepartmentFiltersWithCounts(data.department_counts);
+                }
+                // Hide loading before rendering PDFs for better UX
+                this.hideLoading();
+                this.filterAndRenderPdfs();
+            } else {
+                this.hideLoading();
+                this.showError('Failed to load PDFs: ' + (data.message || 'Unknown error'));
+            }
+        } catch (error) {
+            this.hideLoading();
+            console.error('Error loading group PDFs:', error);
+            this.showError('Error loading PDFs: ' + error.message);
+        }
+    }
+    
+    updateDepartmentFiltersWithCounts(departmentCounts) {
+        const container = document.getElementById('departmentFilters');
+        const section = document.getElementById('departmentFiltersSection');
+        
+        // Show the department filters section
+        if (section) {
+            section.style.display = 'block';
+        }
+        
+        // Separate departments with and without PDFs
+        const departmentsWithPdfs = [];
+        const departmentsWithoutPdfs = [];
+        
+        this.departments.forEach(dept => {
+            const count = departmentCounts[dept.code] || 0;
+            if (count > 0) {
+                departmentsWithPdfs.push({...dept, count});
+            } else {
+                departmentsWithoutPdfs.push({...dept, count});
+            }
+        });
+        
+        // Auto-select all departments with PDFs
+        this.selectedDepartments = new Set(departmentsWithPdfs.map(dept => dept.code));
+        
+        // Render departments: matching ones first (left), then non-matching (right)
+        const renderDepartment = (dept, hasNoPdfs = false) => {
+            const isSelected = this.selectedDepartments.has(dept.code);
+            let classes = 'department-chip';
+            if (hasNoPdfs) classes += ' inactive';
+            if (isSelected && !hasNoPdfs) classes += ' selected';
+            
+            return `
+                <div class="${classes}" data-department="${dept.code}" ${hasNoPdfs ? 'title="No PDFs in this functional group"' : ''}>
+                    ${dept.name}
+                    <small>(${dept.count})</small>
+                </div>
+            `;
+        };
+        
+        const leftColumn = departmentsWithPdfs.map(dept => renderDepartment(dept, false)).join('');
+        const rightColumn = departmentsWithoutPdfs.map(dept => renderDepartment(dept, true)).join('');
+        
+        container.innerHTML = `
+            <div class="d-flex gap-4">
+                <div class="flex-fill">
+                    <small class="text-muted d-block mb-2">Available (${departmentsWithPdfs.length})</small>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${leftColumn}
+                    </div>
+                </div>
+                <div class="flex-fill">
+                    <small class="text-muted d-block mb-2">No content (${departmentsWithoutPdfs.length})</small>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${rightColumn}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Auto-trigger PDF loading since departments are selected
+        this.filterAndRenderPdfs();
+    }
+    
+    filterAndRenderPdfs() {
+        // Filter PDFs based on selected departments and search query
+        this.filteredPdfs = this.allPdfs.filter(pdf => {
+            // Check department filter
+            const departmentMatch = pdf.all_departments ? 
+                pdf.all_departments.some(dept => this.selectedDepartments.has(dept)) :
+                this.selectedDepartments.has(pdf.department);
+            
+            // Check search query filter
+            let searchMatch = true;
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                searchMatch = 
+                    // Search in PDF name/base_name
+                    (pdf.name && pdf.name.toLowerCase().includes(query)) ||
+                    (pdf.base_name && pdf.base_name.toLowerCase().includes(query)) ||
+                    // Search in 9-digit codes
+                    (pdf.nine_codes && pdf.nine_codes.some(code => 
+                        code.toLowerCase().includes(query)
+                    )) ||
+                    // Search in model name
+                    (pdf.model && pdf.model.toLowerCase().includes(query)) ||
+                    // Search in mix code and name
+                    (pdf.mix_code && pdf.mix_code.toLowerCase().includes(query)) ||
+                    (pdf.mix_name && pdf.mix_name.toLowerCase().includes(query));
+            }
+            
+            return departmentMatch && searchMatch;
+        });
+        
+        this.updateSearchResultsCount();
+        this.renderPdfGrid();
+    }
+    
+    renderPdfGrid() {
+        const container = document.getElementById('pdfGrid');
+        
+        // Check if no departments are selected
+        if (this.selectedGroup && this.selectedDepartments.size === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-funnel"></i>
+                    <div>Please select at least one department to view PDFs</div>
+                    <small class="text-muted mt-2">Use the department filters above to make your selection</small>
+                </div>
+            `;
+            return;
+        }
+        
+        if (this.filteredPdfs.length === 0 && this.selectedGroup) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-file-pdf"></i>
+                    <div>No PDFs found for the selected filters</div>
+                </div>
+            `;
+            return;
+        }
+        
+        if (!this.selectedGroup) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-arrow-left"></i>
+                    <div>Select a functional group to view PDFs</div>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = this.filteredPdfs.map(pdf => `
+            <div class="pdf-item" onclick="functionalGroupsManager.openPdf('${pdf.token}', ${pdf.is_multipage || false})" 
+                 title="Used in departments: ${pdf.all_departments ? pdf.all_departments.join(', ') : pdf.department_name}">
+                <div class="pdf-thumbnail">
+                    ${pdf.thumbnail ? 
+                        `<img src="${pdf.thumbnail}" alt="PDF thumbnail" loading="lazy" onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.3s">` :
+                        `<i class="bi bi-file-pdf pdf-icon"></i>`
+                    }
+                    ${pdf.pages > 1 ? `<div class="page-count-badge">${pdf.pages} pages</div>` : ''}
+                </div>
+                <div class="pdf-info">
+                    <div class="pdf-title">${pdf.name}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    updateSearchResultsCount() {
+        const resultsCount = document.getElementById('searchResultsCount');
+        const searchInput = document.getElementById('ninecodeSearch');
+        
+        if (resultsCount && searchInput) {
+            if (this.searchQuery && this.searchQuery.length > 0) {
+                const totalPdfs = this.allPdfs.length;
+                const filteredCount = this.filteredPdfs.length;
+                resultsCount.style.display = 'block';
+                resultsCount.innerHTML = `<small class="text-muted">Found ${filteredCount} of ${totalPdfs} PDFs matching "${this.searchQuery}"</small>`;
+            } else {
+                resultsCount.style.display = 'none';
+            }
+        }
+    }
+    
+    showLoading() {
+        const container = document.getElementById('pdfGrid');
+        container.innerHTML = `
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <div>Loading PDFs...</div>
+            </div>
+        `;
+    }
+    
+    hideLoading() {
+        // Loading will be replaced by renderPdfs() or showError()
+        // This function exists for consistency but actual hiding happens in renderPdfs()
+    }
+    
+    showError(message) {
+        const container = document.getElementById('pdfGrid');
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="bi bi-exclamation-triangle text-warning"></i>
+                <div>${message}</div>
+            </div>
+        `;
+    }
+    
+    openPdf(token, isMultipage = false) {
+        if (token) {
+            if (isMultipage) {
+                // For multi-page PDFs, use the merged PDF endpoint
+                window.open(`/api/merged-pdf?g=${encodeURIComponent(token)}`, '_blank');
+            } else {
+                // For single page PDFs, use the regular PDF endpoint
+                window.open(`/api/serve-pdf/${token}`, '_blank');
+            }
+        }
+    }
+}
+
+// Initialize the manager when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    window.functionalGroupsManager = new FunctionalGroupsManager();
+});
+</script>
+{% endblock %}

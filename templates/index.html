@@ -84,6 +84,70 @@
 {% endblock %}
 
 {% block extra_js %}
+<style>
+/* Page Navigation Controls */
+.page-navigation-controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(33, 37, 41, 0.9);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.page-nav-info {
+    color: #e9ecef;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.page-nav-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.page-nav-buttons .btn {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-color: rgba(108, 117, 125, 0.5);
+}
+
+.page-nav-buttons .btn:hover:not(:disabled) {
+    background-color: rgba(23, 162, 184, 0.8);
+    border-color: #17a2b8;
+}
+
+.page-nav-buttons .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .page-navigation-controls {
+        bottom: 60px; /* Above mobile drawer */
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .page-nav-buttons .btn {
+        font-size: 0.75rem;
+        padding: 3px 6px;
+    }
+    
+    .page-nav-info {
+        font-size: 0.8rem;
+    }
+}
+</style>
 <script>
 // ScheminiManager utility object
 const ScheminiManager = {
@@ -249,6 +313,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     let currentModalData = null; // Store modal data for component search
     let currentSelectedGroup = null; // For component search group selection
     let currentGroupPdfs = []; // PDFs in currently selected group
+    
+    // Page navigation state for multi-page documents
+    let currentPageIndex = 0;
+    let currentPageCount = 0;
 
     function updateNavigation() {
         // Navigation controls removed - no action needed
@@ -365,7 +433,21 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <div class="pdf-viewer-container">
                                 <div class="pdf-display-area">
                                     ${hasDocuments ? 
-                                        '<iframe class="pdf-viewer-frame" id="professionalPdfFrame"></iframe>' :
+                                        `<iframe class="pdf-viewer-frame" id="professionalPdfFrame"></iframe>
+                                         <!-- Page Navigation Controls -->
+                                         <div class="page-navigation-controls" id="pageNavigationControls" style="display: none;">
+                                             <div class="page-nav-info">
+                                                 <span id="currentPageDisplay">Page 1 of 1</span>
+                                             </div>
+                                             <div class="page-nav-buttons">
+                                                 <button class="btn btn-sm btn-outline-light me-2" id="prevPageBtn" onclick="navigatePage(-1)">
+                                                     <i class="bi bi-chevron-left"></i> Previous
+                                                 </button>
+                                                 <button class="btn btn-sm btn-outline-light" id="nextPageBtn" onclick="navigatePage(1)">
+                                                     Next <i class="bi bi-chevron-right"></i>
+                                                 </button>
+                                             </div>
+                                         </div>` :
                                         '<div class="pdf-loading"><div class="spinner-border"></div><span>No PDF available</span></div>'
                                     }
                                 </div>
@@ -391,7 +473,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                                                     return `
                                                         <div class="mix-item-compact" data-mix="${k}" title="${mixNames[k] || ''}">
                                                             <div class="mix-code-compact">${label}</div>
-                                                            <div class="mix-count-compact">${mixCounts[k]} Doc${mixCounts[k] > 1 ? 's' : ''}</div>
                                                         </div>
                                                     `;
                                                 }).join('') :
@@ -530,8 +611,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         currentDocIndex = 0;
         currentDocument = currentMixDocs[0] || null;
         
+        // Reset page navigation when selecting new mix
+        currentPageIndex = 0;
+        currentPageCount = 0;
+        
         // Load first document
         if (currentDocument) {
+            console.log('Loading document:', currentDocument.base_name, 'with pages:', currentDocument.pages);
             loadDocumentInModal(currentDocument);
             showDocumentInfoInModal();
         }
@@ -539,34 +625,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Note: Navigation controls removed - no updateModalNavigation() needed
     }
     
-    // Modal-specific document loading (controls removed - clean PDF viewing)
+    // Modal-specific document loading (now with individual page navigation)
     function loadDocumentInModal(pdfDoc) {
         const frame = document.getElementById('professionalPdfFrame');
         if (frame && pdfDoc && pdfDoc.pages && pdfDoc.pages.length > 0) {
-            let pdfUrl;
+            // Initialize page navigation for multi-page documents
+            currentPageIndex = 0;
+            currentPageCount = pdfDoc.pages.length;
             
-            // Always use Fit Page mode (no user controls)
-            const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            // Aggressive mobile scaling for better fit
-            // Mobile: use page-width so PDF touches left/right edges; desktop keep Fit
-            const viewMode = isMobile ? 'page-width' : 'Fit';
-            const zoomLevel = isMobile ? '50' : '75'; // Reduced zoom for mobile
-            const toolbar = '0'; // Hide toolbar for cleaner view
-            
-            const isComponentCtx = !!pdfDoc.component_code; // retained for potential future logic
-            const baseSingleUrl = `/api/pdf-file?f=${encodeURIComponent(toToken(pdfDoc.pages[0]))}`;
-
-            if (pdfDoc.pages.length === 1) {
-                // Highlight feature disabled for component search per latest requirement.
-                pdfUrl = `${baseSingleUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}&navpanes=0`;
-            } else {
-                // Multiple pages - merged view
-                const mergedUrl = `/api/merged-pdf?g=${encodeURIComponent(toGroupToken(pdfDoc.pages))}`;
-                pdfUrl = `${mergedUrl}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}&navpanes=0`;
-            }
-            frame.src = pdfUrl;
+            // Always load the first page initially
+            loadCurrentPageInModal(pdfDoc);
 
             // On mobile ensure full PDF (all corners) stays visible irrespective of drawer state
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
             if (isMobile) {
                 function applyMobileWidthFit(){
                     try {
@@ -593,6 +664,25 @@ document.addEventListener('DOMContentLoaded', async function() {
                 modalTitle.textContent = pdfDoc.base_name || '—';
             }
         }
+    }
+    
+    // Load current page of the document
+    function loadCurrentPageInModal(pdfDoc) {
+        const frame = document.getElementById('professionalPdfFrame');
+        if (!frame || !pdfDoc || !pdfDoc.pages || currentPageIndex >= pdfDoc.pages.length) return;
+        
+        const currentPagePath = pdfDoc.pages[currentPageIndex];
+        console.log(`Loading page ${currentPageIndex + 1} of ${pdfDoc.pages.length}:`, currentPagePath);
+        
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const viewMode = isMobile ? 'page-width' : 'Fit';
+        const zoomLevel = isMobile ? '50' : '75';
+        const toolbar = '0';
+        
+        const pdfUrl = `/api/pdf-file?f=${encodeURIComponent(toToken(currentPagePath))}#view=${viewMode}&zoom=${zoomLevel}&toolbar=${toolbar}&navpanes=0`;
+        frame.src = pdfUrl;
+        
+        console.log('PDF URL:', pdfUrl);
     }
 
     // Mobile bottom drawer toggle logic
@@ -651,8 +741,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     function showDocumentInfoInModal() {
         const infoPanel = document.getElementById('documentInfoPanel');
         const infoContent = document.getElementById('documentInfoContent');
-    const groupPanel = document.getElementById('groupDocumentsPanel');
-    const groupList = document.getElementById('groupDocsList');
+        const groupPanel = document.getElementById('groupDocumentsPanel');
+        const groupList = document.getElementById('groupDocsList');
         
         if (infoPanel && infoContent && currentDocument) {
             const firstPage = (currentDocument.pages && currentDocument.pages[0]) ? currentDocument.pages[0] : '';
@@ -696,6 +786,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             infoContent.innerHTML = infoHtml;
             infoPanel.style.display = 'block';
 
+            // Show/hide page navigation controls based on page count
+            updatePageNavigationDisplay();
+
             // Populate group documents list if currentDocument.group_docs provided
             if (groupPanel && groupList) {
                 if (currentDocument.group_docs && Array.isArray(currentDocument.group_docs) && currentDocument.group_docs.length) {
@@ -710,6 +803,50 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
     }
+    
+    // Update page navigation display
+    function updatePageNavigationDisplay() {
+        const navControls = document.getElementById('pageNavigationControls');
+        const currentPageDisplay = document.getElementById('currentPageDisplay');
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        
+        if (!navControls || !currentDocument) return;
+        
+        if (currentPageCount > 1) {
+            // Show navigation for multi-page documents
+            navControls.style.display = 'flex';
+            if (currentPageDisplay) {
+                // Show which specific page file we're viewing
+                const pageFileName = currentDocument.pages[currentPageIndex];
+                const baseName = pageFileName.split('\\').pop().split('/').pop();
+                currentPageDisplay.textContent = `${baseName} (${currentPageIndex + 1}/${currentPageCount})`;
+            }
+            if (prevBtn) {
+                prevBtn.disabled = currentPageIndex === 0;
+            }
+            if (nextBtn) {
+                nextBtn.disabled = currentPageIndex >= currentPageCount - 1;
+            }
+        } else {
+            // Hide navigation for single-page documents
+            navControls.style.display = 'none';
+        }
+    }
+    
+    // Navigate between pages of the current document
+    window.navigatePage = function(direction) {
+        if (!currentDocument || currentPageCount <= 1) return;
+        
+        const newPageIndex = currentPageIndex + direction;
+        console.log(`Navigating from page ${currentPageIndex + 1} to page ${newPageIndex + 1}`);
+        
+        if (newPageIndex >= 0 && newPageIndex < currentPageCount) {
+            currentPageIndex = newPageIndex;
+            loadCurrentPageInModal(currentDocument);
+            updatePageNavigationDisplay();
+        }
+    };
 
     function buildResults(code, data) {
         // Hide search panel and enter search results mode

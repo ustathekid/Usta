@@ -96,21 +96,26 @@
     transition: background-color 0.2s ease;
 }
 
-.mgroup-chip.selected {
-    background-color: #007bff;
-    color: white;
+.mgroup-chip.selected,
+.mgroup-chip.selected:focus,
+.mgroup-chip.selected:active {
+    /* New unified green selection effect */
+    background-color: #28a745 !important; /* Bootstrap success green */
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.35);
 }
 
 .checkbox-group {
     max-height: 180px;
     overflow-y: auto;
-    border: 1px solid #495057;
+    border: none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 8px 4px;
 }
 
 .form-check {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    padding-left: 1.25rem;
 }
 
 .form-check-input:checked {
@@ -137,6 +142,17 @@
     max-height: 200px;
 }
 
+/* Exception for part codes card - let textarea handle the scrolling */
+#step4Card .card-body {
+    overflow: visible;
+    max-height: none;
+}
+
+/* Optimize Step 1 (department) card for better fit */
+#step1Card .card-body {
+    padding: 0.5rem 0.75rem;
+}
+
 /* Step status improvements */
 .step-status {
     font-size: 0.875rem;
@@ -156,15 +172,9 @@
     font-weight: 600;
 }
 
-/* Remove the old not selector rule */
-
-.mgroup-chip.selected {
-    background-color: #17a2b8;
-    box-shadow: 0 2px 8px rgba(23, 162, 184, 0.4);
-}
-
+/* Remove old styles and apply new hover for green selection */
 .mgroup-chip.selected:hover {
-    background-color: #138496;
+    background-color: #218838; /* darker green on hover */
 }
 
 .mix-chip {
@@ -181,14 +191,51 @@
     transition: background-color 0.2s ease;
 }
 
-.mix-chip.selected {
-    background-color: #ffc107;
-    color: #212529;
-    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+.mix-chip.selected,
+.mix-chip.selected:focus,
+.mix-chip.selected:active {
+    /* New unified green selection effect */
+    background-color: #28a745 !important; /* Bootstrap success green */
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.35);
 }
 
 .mix-chip.selected:hover {
-    background-color: #e0a800;
+    background-color: #218838; /* darker green on hover */
+}
+
+/* New persistent green highlight for sections when selected */
+.step-card.section-green {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    background: rgba(40, 167, 69, 0.06);
+}
+
+/* Enhanced styling for part codes textarea */
+#partCodes {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    resize: vertical;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+#partCodes:focus {
+    background-color: #fff;
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    outline: 0;
+}
+
+#partCodes::placeholder {
+    color: #6c757d;
+    font-style: italic;
 }
 
 .operation-details {
@@ -367,11 +414,15 @@
         <div class="col-12">
             <div class="card bg-secondary page-full-card page-flex">
                 <div class="card-header">
-                    <h2 class="card-title mb-0">
-                        <i class="fas fa-industry me-2"></i>
-                        Material Usage Analysis
-                    </h2>
-                    <p class="card-text mt-2 mb-0">Analyze part codes usage across departments and machine groups</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <h2 class="card-title mb-0 me-3">
+                                <i class="fas fa-industry me-2"></i>
+                                Material Usage Analysis
+                            </h2>
+                            <p class="card-text mb-0 text-muted">Analyze part codes usage across departments and Mgroups</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body content-area">
                     <!-- Status Alerts -->
@@ -453,7 +504,7 @@
                                             <div class="flex-grow-1">
                                                 <h5 class="card-title mb-0">
                                                     <i class="fas fa-cogs me-2"></i>
-                                                    Machine Groups
+                                                    MGroups
                                                 </h5>
                                                 <small class="text-muted">Select MGroups (<span id="mgroupCount">0</span> selected)</small>
                                             </div>
@@ -495,16 +546,8 @@
                                         </div>
                                     </div>
                                     <div class="card-body py-2">
-                                        <div class="mb-2">
-                                            <button type="button" class="btn btn-outline-info btn-sm" id="pasteClipboardBtn" disabled title="Click to paste part codes from clipboard">
-                                                <i class="fas fa-paste me-1"></i>Paste from Clipboard
-                                            </button>
-                                            <small class="form-text text-muted d-block mt-1">
-                                                Or use Ctrl+V to paste directly
-                                            </small>
-                                        </div>
                                         <textarea class="form-control" id="partCodes" name="partCodes" 
-                                                  rows="5" placeholder="Complete previous steps first..." disabled></textarea>
+                                                  rows="8" placeholder="Complete previous steps first..." disabled></textarea>
                                         <div class="form-text">
                                             Enter one part code per line
                                         </div>
@@ -556,7 +599,7 @@
                                             <div class="col-md-6">
                                                 <div class="detail-item">
                                                     <i class="fas fa-cogs text-info me-2"></i>
-                                                    <strong>Machine Groups:</strong>
+                                                    <strong>MGroups:</strong>
                                                     <div class="ms-4 text-muted" id="detailMGroups">-</div>
                                                 </div>
                                             </div>
@@ -588,33 +631,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Post-operation content -->
-                                    <div id="postOperationDetails" style="display: none;">
-                                        <div class="row g-3 justify-content-center">
-                                            <div class="col-12">
-                                                <div class="alert alert-info border-0 text-center" style="background: rgba(13, 202, 240, 0.1); color: #212529;">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <i class="fas fa-info-circle me-2 fs-5" style="color: #0dcaf0;"></i>
-                                                        <div>
-                                                            <strong>Analysis Results:</strong>
-                                                            <div class="mt-1 small">
-                                                                Review the analysis results below. You can download the log file or explore different result views using the tabs.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div id="operationResultsSummary" class="summary-bar text-center"></div>
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <button type="button" class="btn btn-outline-info btn-sm" id="downloadLogBtn" disabled>
-                                                    <i class="fas fa-download me-2"></i>
-                                                    Download Log
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!-- Post-operation content removed per requirements -->
                                     
                                     <!-- Results will be shown directly in step 4 -->
                                     
@@ -642,6 +659,12 @@
                                                         </button>
                                                     </li>
                                                 </ul>
+                                                <div class="ms-auto">
+                                                    <button type="button" class="btn btn-outline-info btn-sm" id="downloadLogBtn" disabled>
+                                                        <i class="fas fa-download me-2"></i>
+                                                        Download Log
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="tab-content" id="resultsTabContent">
@@ -765,92 +788,35 @@ $(document).ready(function() {
         startAnalysis();
     });
 
-    // Paste clipboard button
-    $('#pasteClipboardBtn').on('click', async function() {
-        const partCodesTextarea = $('#partCodes');
-        const button = $(this);
-        
-        // Disable button temporarily
-        button.prop('disabled', true);
-        const originalText = button.html();
-        button.html('<i class="fas fa-spinner fa-spin me-1"></i>Pasting...');
-        
-        try {
-            // Method 1: Modern Clipboard API
-            if (navigator.clipboard && navigator.clipboard.readText) {
-                console.log('Using Clipboard API...');
-                const text = await navigator.clipboard.readText();
-                
-                if (text && text.trim()) {
-                    partCodesTextarea.val(text.trim());
-                    partCodesTextarea.trigger('input');
-                    showAlert('Part codes pasted from clipboard successfully!', 'success');
-                    return;
-                } else {
-                    throw new Error('Clipboard is empty');
-                }
-            } else {
-                throw new Error('Clipboard API not available');
-            }
-        } catch (err) {
-            console.log('Clipboard API failed, trying fallback methods...');
-            
-            try {
-                // Method 2: Focus and attempt programmatic paste
-                partCodesTextarea.focus();
-                
-                // Try to trigger paste event
-                const pasteEvent = new Event('paste', { bubbles: true, cancelable: true });
-                if (partCodesTextarea[0].dispatchEvent(pasteEvent)) {
-                    console.log('Paste event dispatched');
-                }
-                
-                // Method 3: Try execCommand as last resort
-                if (document.execCommand) {
-                    const result = document.execCommand('paste');
-                    if (result) {
-                        console.log('execCommand paste successful');
-                        partCodesTextarea.trigger('input');
-                        showAlert('Content pasted! Please verify the part codes.', 'success');
-                        return;
-                    }
-                }
-                
-                // If all methods fail, guide the user
-                throw new Error('All paste methods failed');
-                
-            } catch (fallbackErr) {
-                console.log('All automated methods failed, guiding user...');
-                
-                // Focus and select the textarea for manual paste
-                partCodesTextarea.focus();
-                partCodesTextarea.select();
-                
-                // Show helpful instructions
-                showAlert('Please paste your part codes using Ctrl+V (Windows) or Cmd+V (Mac) into the highlighted text area.', 'info');
-            }
-        } finally {
-            // Re-enable button
-            setTimeout(() => {
-                button.prop('disabled', false);
-                button.html(originalText);
-            }, 1000);
-        }
-    });
-
-    // Part codes change
+    // Part codes change - with bullet point display
     $('#partCodes').on('input', function() {
         const partCodesText = $(this).val().trim();
         if (partCodesText) {
             // Split by lines, trim each code, filter empty lines, and remove duplicates
-            const allCodes = partCodesText.split('\n').map(code => code.trim()).filter(code => code.length > 0);
+            const allCodes = partCodesText.split('\n')
+                .map(code => code.trim())
+                .filter(code => code.length > 0)
+                .map(code => code.replace(/^[•\-\d]+[\.\-\s]*/, '')) // Remove existing bullets/numbers
+                .filter(code => code.length > 0); // Filter again after cleaning
+            
             partCodesData = [...new Set(allCodes)]; // Remove duplicates using Set
             console.log(`✅ DEBUG: Parsed ${allCodes.length} total codes, ${partCodesData.length} unique codes`);
+            
+            // Update textarea with bullet display
+            updateBulletDisplay();
         } else {
             partCodesData = [];
         }
         checkFormValidity();
     });
+
+    // Function to update bullet point display
+    function updateBulletDisplay() {
+        if (partCodesData.length > 0) {
+            const bulletText = partCodesData.map(code => `• ${code}`).join('\n');
+            $('#partCodes').val(bulletText);
+        }
+    }
 
     // Clear all button
     $('#clearAllBtn').on('click', function() {
@@ -1039,7 +1005,7 @@ $(document).ready(function() {
             
             mixCount.text(selectedMixes.length);
             
-            // Update machine groups based on selected mixes
+            // Update Mgroups based on selected mixes
             if (selectedMixes.length > 0) {
                 loadMGroupsForMixes(selectedMixes);
                 $('#step3Card').removeClass('disabled').addClass('active');
@@ -1074,7 +1040,7 @@ $(document).ready(function() {
             
             mixCount.text(selectedMixes.length);
             
-            // Update machine groups
+            // Update Mgroups
             if (selectedMixes.length > 0) {
                 loadMGroupsForMixes(selectedMixes);
                 $('#step3Card').removeClass('disabled').addClass('active');
@@ -1101,11 +1067,11 @@ $(document).ready(function() {
             return;
         }
 
-        // Get machine groups for the selected department
+        // Get Mgroups for the selected department
         const deptMGroups = departmentMGroups[selectedDepartment] || [];
         
         if (deptMGroups.length === 0) {
-            mgroupsList.html('<div class="text-center text-muted">No machine groups available for selected department</div>');
+            mgroupsList.html('<div class="text-center text-muted">No Mgroups available for selected department</div>');
             selectedMGroups = [];
             mgroupCount.text('0');
             toggleBtn.hide();
@@ -1178,6 +1144,9 @@ $(document).ready(function() {
         
         // Update step states
         updateStepStates(hasDepartment, hasMixes, hasMGroups, hasPartCodes, isValid);
+
+        // Update persistent green highlight for sections
+        updateGreenSections();
         
         // Enable/disable confirm button
         $('#confirmStartBtn').prop('disabled', !isValid || analysisInProgress);
@@ -1188,6 +1157,24 @@ $(document).ready(function() {
             $('#operationDetailsSection').show();
         } else {
             $('#operationDetailsSection').hide();
+        }
+    }
+
+    // Persist green highlight on sections when there is any selection
+    function updateGreenSections() {
+        const step2Card = $('#step2Card'); // MIX selection
+        const step3Card = $('#step3Card'); // MGroups selection
+
+        if (selectedMixes.length > 0) {
+            step2Card.addClass('section-green');
+        } else {
+            step2Card.removeClass('section-green');
+        }
+
+        if (selectedMGroups.length > 0) {
+            step3Card.addClass('section-green');
+        } else {
+            step3Card.removeClass('section-green');
         }
     }
 
@@ -1202,7 +1189,6 @@ $(document).ready(function() {
         const step4Card = $('#step4Card');
         const step4Status = $('#step4Status');
         const partCodesTextarea = $('#partCodes');
-        const pasteBtn = $('#pasteClipboardBtn');
 
         // Step 1: Department Selection
         if (hasDepartment) {
@@ -1249,12 +1235,10 @@ $(document).ready(function() {
             step4Card.removeClass('disabled').addClass('active');
             step4Status.html('<i class="fas fa-arrow-right-circle me-1"></i>Enter codes').addClass('active');
             partCodesTextarea.prop('disabled', false).attr('placeholder', 'Enter part codes, one per line...');
-            pasteBtn.prop('disabled', false);
         } else if (hasMixes && hasDepartment) {
             step4Card.addClass('disabled').removeClass('active completed');
             step4Status.html('<i class="fas fa-pause-circle me-1"></i>Waiting').removeClass('completed active');
             partCodesTextarea.prop('disabled', true).attr('placeholder', 'Complete previous steps first...');
-            pasteBtn.prop('disabled', true);
         }
 
         // Step 4: Part Codes Entry
@@ -1310,7 +1294,6 @@ $(document).ready(function() {
     function resetOperationDetails() {
         $('#operationDetailsTitle').text('Operation Details');
         $('#preOperationDetails').show();
-        $('#postOperationDetails').hide();
         $('#resultsSection').hide();
     }
 
@@ -1454,22 +1437,7 @@ $(document).ready(function() {
         // Update operation details to show results
         $('#operationDetailsTitle').text('Operation Results');
         $('#preOperationDetails').hide();
-        $('#postOperationDetails').show();
         $('#operationDetailsSection').show();
-        
-        // Show operation summary with unique counts
-        const uniqueTotal = results.total_parts || 0;
-        const uniqueFound = results.found_parts || 0;
-        const uniqueNotFound = results.not_found_parts || 0;
-        const successRate = uniqueTotal > 0 ? ((uniqueFound / uniqueTotal) * 100).toFixed(1) : 0;
-        
-        // Create summary chips similar to scan page
-        $('#operationResultsSummary').html(`
-            <span class="summary-chip bg-info"><i class="fas fa-list-ol"></i> Total <span class="value">${uniqueTotal}</span></span>
-            <span class="summary-chip bg-success"><i class="fas fa-check-circle"></i> Found <span class="value">${uniqueFound}</span></span>
-            <span class="summary-chip bg-danger"><i class="fas fa-times-circle"></i> Not Found <span class="value">${uniqueNotFound}</span></span>
-            <span class="summary-chip bg-warning text-dark"><i class="fas fa-percentage"></i> Success Rate <span class="value">${successRate}%</span></span>
-        `);
         
         // Show detailed results in tabs
         $('#resultsSection').show();
@@ -1702,19 +1670,36 @@ $(document).ready(function() {
     }
 
     function showAlert(message, type) {
+        // Map Bootstrap alert types to our global notification types
+        const typeMap = {
+            'success': 'success',
+            'info': 'info',
+            'warning': 'warning',
+            'danger': 'error',
+            'error': 'error'
+        };
+        const notifType = typeMap[type] || 'info';
+
+        // Prefer global ScheminiManager.showNotification if available
+        if (window.ScheminiManager && typeof window.ScheminiManager.showNotification === 'function') {
+            window.ScheminiManager.showNotification(message, notifType, 5000);
+            return;
+        }
+        // Fallback to direct global showNotification if exposed
+        if (typeof window.showNotification === 'function') {
+            window.showNotification(message, notifType, 5000);
+            return;
+        }
+        // Last-resort fallback: inline alert (will be removed soon)
         const alertClass = `alert-${type}`;
         const alertHtml = `
-            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+            <div class="alert ${alertClass} alert-dismissible fade show position-fixed end-0" style="top: 80px; right: 20px; z-index:1060; min-width:320px;" role="alert">
                 ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         `;
-        $('#status-container').html(alertHtml);
-        
-        // Auto-dismiss after 5 seconds
-        setTimeout(() => {
-            $('.alert').alert('close');
-        }, 5000);
+        $('body').append(alertHtml);
+        setTimeout(() => { $('.alert').alert('close'); }, 5000);
     }
 
     function clearLog() {

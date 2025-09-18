@@ -8,3 +8,4 @@ PyMuPDF>=1.24.0
 pytesseract>=0.3.10 # (optional fallback OCR – requires local Tesseract installation)
 Pillow>=10.0.0 # for image handling if OCR fallback used
 schedule>=1.2.0 # for daily automatic indexing
+psutil>=5.9.0 # for system resource monitoring
