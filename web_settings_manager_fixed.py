@@ -117,6 +117,59 @@ class WebSettingsManager(WebBaseManager):
         scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
         scheduler_thread.start()
     
+    def _find_changed_directories_optimized(self, base_folder_str, existing_index, last_completed):
+        """Optimized method to find directories with changes since last_completed."""
+        modified_directories = []
+        
+        # Step 1: Quick check of known directories from existing index
+        existing_directories = set()
+        for file_path in existing_index:
+            dir_path = os.path.dirname(file_path)
+            existing_directories.add(dir_path)
+        existing_directories.add(base_folder_str)
+        
+        self.add_log(f"🔍 Quick scan: Checking {len(existing_directories)} known directories...")
+        
+        # Check known directories first
+        for directory in existing_directories:
+            if not self.indexing_progress['running']:
+                return []
+            try:
+                if os.path.exists(directory):
+                    dir_stat = os.stat(directory)
+                    if dir_stat.st_mtime > last_completed:
+                        modified_directories.append(directory)
+                modified_directories.append(directory)
+        
+        # Step 2: Limited depth scan for new directories (only if few changes detected)
+        if len(modified_directories) <= 20:
+            self.add_log(f"🔎 Limited deep scan (max 3 levels) for new directories...")
+            
+            def limited_walk(path, max_depth=3, current_depth=0):
+                if current_depth >= max_depth or not self.indexing_progress['running']:
+                    return
+                try:
+                    for item in os.listdir(path):
+                        item_path = os.path.join(path, item)
+                        if os.path.isdir(item_path) and item_path not in existing_directories:
+                            try:
+                                dir_stat = os.stat(item_path)
+                                if dir_stat.st_mtime > last_completed:
+                                    modified_directories.append(item_path)
+                                if current_depth < 2:  # Recurse only 2 levels
+                                    limited_walk(item_path, max_depth, current_depth + 1)
+                                modified_directories.append(item_path)
+                    pass
+            
+            limited_walk(base_folder_str)
+        else:
+            self.add_log(f"⚡ Many changes detected ({len(modified_directories)}), skipping deep scan...")
+        
+        # Remove duplicates and return
+        modified_directories = list(set(modified_directories))
+        self.add_log(f"🎯 Found {len(modified_directories)} directories with changes (optimized scan)")
+        return modified_directories
+    
     def _restart_scheduler_silently(self):
         """Scheduler'ı sessizce yeniden başlatır (log mesajı olmadan)."""
         if not SCHEDULE_AVAILABLE or schedule is None:
@@ -708,32 +761,26 @@ class WebSettingsManager(WebBaseManager):
             modified_files = []
             valid_existing_files = list(existing_index)  # Start with all existing files
             
-            # Phase 1: Smart directory scanning - only scan directories modified after last index
+            # Phase 1: Optimized directory scanning
             self.indexing_progress['percentage'] = 10
             self.indexing_progress['status'] = "Finding directories with recent changes..."
             
-            modified_directories = []
-            total_dirs = 0
-            processed_dirs = 0
+            # Use optimized method to find changed directories
+            modified_directories = self._find_changed_directories_optimized(
+                base_folder_str, existing_index, last_completed
+            )
             
-            # First pass: find directories modified after last_completed
-            for root, dirs, _ in os.walk(base_folder_str):
-                total_dirs += 1
-                
-                if not self.indexing_progress['running']:
-                    return False
-                
-                try:
-                    dir_stat = os.stat(root)
+            # SKIP OLD SLOW METHOD - use optimized directory discovery above
+            
+            # Phase 2: Scan only the modified directories for new/changed files
+            self.indexing_progress['percentage'] = 30
+            self.indexing_progress['status'] = f"Scanning {len(modified_directories)} changed directories..."
+            
+            for i, directory in enumerate(modified_directories):
                     if dir_stat.st_mtime > last_completed:
-                        modified_directories.append(root)
                         if len(modified_directories) <= 5:  # Log first few directories
-                            self.add_log(f"� Changed directory: {os.path.relpath(root, base_folder_str)}")
                         elif len(modified_directories) == 6:
                             self.add_log(f"📁 ... and {len(modified_directories)-5} more directories with changes")
-                except (OSError, IOError):
-                    # If we can't stat directory, add it to be safe
-                    modified_directories.append(root)
             
             self.add_log(f"🎯 Found {len(modified_directories)} directories with recent changes out of {total_dirs} total")
             
@@ -775,11 +822,9 @@ class WebSettingsManager(WebBaseManager):
                                     # This is a new file
                                     new_files.append(file_path)
                                     
-                            except (OSError, IOError):
                                 # If we can't stat the file, skip it
                                 continue
                                 
-                except (OSError, IOError):
                     # If we can't list directory, skip it
                     continue
             
@@ -879,7 +924,6 @@ class WebSettingsManager(WebBaseManager):
         
         # First count directories for better progress tracking
         for root, dirs, _ in os.walk(base_folder_str):
-            total_dirs += 1
         
         # Now scan files with progress updates
         for root, dirs, files in os.walk(base_folder_str):

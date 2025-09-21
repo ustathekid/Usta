@@ -788,33 +788,42 @@ $(document).ready(function() {
         startAnalysis();
     });
 
-    // Part codes change - with bullet point display
+    // Part codes change - clean text without bullets
     $('#partCodes').on('input', function() {
         const partCodesText = $(this).val().trim();
+        console.log('🔍 DEBUG: Raw input text:', JSON.stringify(partCodesText));
+        
         if (partCodesText) {
             // Split by lines, trim each code, filter empty lines, and remove duplicates
             const allCodes = partCodesText.split('\n')
-                .map(code => code.trim())
-                .filter(code => code.length > 0)
-                .map(code => code.replace(/^[•\-\d]+[\.\-\s]*/, '')) // Remove existing bullets/numbers
+                .map(code => {
+                    const original = code;
+                    const trimmed = code.trim();
+                    const cleaned = trimmed.replace(/^[•\-]\s*/, ''); // Only remove bullet points and dashes at the beginning
+                    console.log('🔍 DEBUG: Code processing:', {original, trimmed, cleaned});
+                    return cleaned;
+                })
                 .filter(code => code.length > 0); // Filter again after cleaning
             
             partCodesData = [...new Set(allCodes)]; // Remove duplicates using Set
             console.log(`✅ DEBUG: Parsed ${allCodes.length} total codes, ${partCodesData.length} unique codes`);
+            console.log('✅ DEBUG: Final partCodesData:', partCodesData);
             
-            // Update textarea with bullet display
-            updateBulletDisplay();
+            // Update textarea with clean codes (no bullets)
+            updateCleanDisplay();
         } else {
             partCodesData = [];
         }
         checkFormValidity();
     });
 
-    // Function to update bullet point display
-    function updateBulletDisplay() {
+    // Function to update clean display without bullets
+    function updateCleanDisplay() {
+        console.log('🔍 DEBUG: updateCleanDisplay called with partCodesData:', partCodesData);
         if (partCodesData.length > 0) {
-            const bulletText = partCodesData.map(code => `• ${code}`).join('\n');
-            $('#partCodes').val(bulletText);
+            const cleanText = partCodesData.join('\n');
+            console.log('🔍 DEBUG: Setting textarea value to:', JSON.stringify(cleanText));
+            $('#partCodes').val(cleanText);
         }
     }
 

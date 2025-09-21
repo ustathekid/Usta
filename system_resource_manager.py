@@ -25,6 +25,11 @@ class SystemResourceManager:
         self.max_memory_usage_percent = 80  # Alert if memory usage > 80%
         self.max_disk_usage_percent = 85  # Alert if disk usage > 85%
         
+        # Warning throttling to reduce spam
+        self.last_memory_warning = 0
+        self.last_disk_warning = 0
+        self.warning_interval = 300  # 5 minutes between warnings
+        
         self.cleanup_thread = None
         self.monitoring_active = False
         
@@ -170,20 +175,26 @@ class SystemResourceManager:
     def monitor_system_resources(self):
         """Monitor system memory and disk usage"""
         try:
-            # Memory monitoring
+            current_time = time.time()
+            
+            # Memory monitoring with throttling
             memory = psutil.virtual_memory()
             memory_percent = memory.percent
             
-            if memory_percent > self.max_memory_usage_percent:
+            if (memory_percent > self.max_memory_usage_percent and 
+                current_time - self.last_memory_warning > self.warning_interval):
                 print(f"⚠️ High memory usage: {memory_percent:.1f}%")
+                self.last_memory_warning = current_time
                 self._trigger_memory_cleanup()
                 
-            # Disk monitoring
+            # Disk monitoring with throttling
             disk = psutil.disk_usage('.')
             disk_percent = disk.percent
             
-            if disk_percent > self.max_disk_usage_percent:
+            if (disk_percent > self.max_disk_usage_percent and 
+                current_time - self.last_disk_warning > self.warning_interval):
                 print(f"⚠️ High disk usage: {disk_percent:.1f}%")
+                self.last_disk_warning = current_time
                 self._trigger_disk_cleanup()
                 
         except Exception as e:

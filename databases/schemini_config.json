@@ -7,6 +7,14 @@
     "auto_backup": true,
     "log_level": "info"
   },
+  "email_settings": {
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "sender_email": "cafertayyarusta@gmail.com",
+    "sender_name": "Schemini Management System",
+    "sender_password": "qgud daye lpeh wfxp",
+    "enabled": true
+  },
   "reference_folder_by_user": {
     "admin": "C:\\Users\\cafer.usta\\Desktop\\SCHEMINI_1808 - 6",
     "cafer.usta": "C:\\Users\\cafer.usta\\Desktop\\SCHEMINI_1808 - 6"
@@ -26,7 +34,7 @@
     },
     {
       "username": "cafer.usta",
-      "password_hash": "scrypt:32768:8:1$NGa0KtArNswwH0RJ$923c4700905d365eb265b57abe7969e83a48b2d1749ec25aa12ffa4083285ab7da7e4db6fed18feeedff9324db54326f1976b66ff82786eeef391dd66d8947a4",
+      "password_hash": "scrypt:32768:8:1$TKXlXFHTrXfml8IA$8d2fb272cd3d328e326c322eccc45e870ab6e78779c92d04828e848a31d0c5469a3232b4a1694f6de4c35c9315b449c3e671b431bf81b4c316960253f8f3c7b0",
       "email": "cafer.usta@sdfgroup.com",
       "role": "admin"
     },
@@ -39,12 +47,12 @@
   ],
   "auto_indexing": {
     "enabled": true,
-    "primary_time": "07:55",
+    "primary_time": "08:23",
     "secondary_enabled": true,
     "secondary_time": "23:19",
     "frequency": "daily",
     "weekday": "monday",
-    "last_run": null,
-    "last_run_secondary": 1758226748.0618181
+    "last_run": 1758259390.7289634,
+    "last_run_secondary": 1758485949.8869097
   }
 }

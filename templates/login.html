@@ -12,7 +12,7 @@
             </h3>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ url_for('login') }}">
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
                 <div class="mb-4">
                     <label for="username" class="form-label visually-hidden">Username</label>
                     <div class="input-group">
@@ -28,13 +28,270 @@
                         <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                 </div>
+                
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
                     </button>
                 </div>
+                
+                <div class="text-center mt-3">
+                    <a href="#" class="text-muted" id="forgotPasswordLink">
+                        <i class="bi bi-question-circle me-1"></i>Forgot your password?
+                    </a>
+                </div>
             </form>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" style="display: none;">
+                <h5 class="mb-3">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Reset Password
+                </h5>
+                <form id="resetPasswordForm">
+                    <div class="mb-3">
+                        <label for="resetEmail" class="form-label">Email or Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                            <input type="text" class="form-control" id="resetEmail" name="resetEmail" placeholder="Enter your email or username" required>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-send me-2"></i>Send Reset Code
+                        </button>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="#" class="text-muted" id="backToLoginLink">
+                            <i class="bi bi-arrow-left me-1"></i>Back to Login
+                        </a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Verification Code Form -->
+            <div id="verificationForm" style="display: none;">
+                <h5 class="mb-3">
+                    <i class="bi bi-shield-check me-2"></i>Enter Verification Code
+                </h5>
+                <p class="text-muted mb-3">We've sent a verification code to your email address.</p>
+                <form id="verifyCodeForm">
+                    <div class="mb-3">
+                        <label for="verificationCode" class="form-label">Verification Code</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                            <input type="text" class="form-control" id="verificationCode" name="verificationCode" placeholder="Enter 6-digit code" maxlength="6" required>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle me-2"></i>Verify Code
+                        </button>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="#" class="text-muted" id="resendCodeLink">
+                            <i class="bi bi-arrow-repeat me-1"></i>Resend Code
+                        </a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- New Password Form -->
+            <div id="newPasswordForm" style="display: none;">
+                <h5 class="mb-3">
+                    <i class="bi bi-lock me-2"></i>Set New Password
+                </h5>
+                <form id="setNewPasswordForm">
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password" minlength="6" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" minlength="6" required>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const verificationForm = document.getElementById('verificationForm');
+    const newPasswordForm = document.getElementById('newPasswordForm');
+    
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    const backToLoginLink = document.getElementById('backToLoginLink');
+    const resendCodeLink = document.getElementById('resendCodeLink');
+    
+    let currentUserEmail = '';
+    
+    // Show forgot password form
+    forgotPasswordLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        loginForm.style.display = 'none';
+        forgotPasswordForm.style.display = 'block';
+    });
+    
+    // Back to login
+    backToLoginLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showLoginForm();
+    });
+    
+    // Reset password request
+    document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('resetEmail').value;
+        
+        try {
+            const response = await fetch('/api/forgot-password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email: email})
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                currentUserEmail = email;
+                forgotPasswordForm.style.display = 'none';
+                verificationForm.style.display = 'block';
+                showNotification(result.message || 'Verification code sent to your email', 'success');
+            } else {
+                showNotification(result.message || 'Error sending reset code', 'error');
+            }
+        } catch (error) {
+            showNotification('Network error. Please try again.', 'error');
+        }
+    });
+    
+    // Verify code
+    document.getElementById('verifyCodeForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const code = document.getElementById('verificationCode').value;
+        
+        try {
+            const response = await fetch('/api/verify-reset-code', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email: currentUserEmail, code: code})
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                verificationForm.style.display = 'none';
+                newPasswordForm.style.display = 'block';
+                showNotification('Code verified successfully', 'success');
+            } else {
+                showNotification(result.message || 'Invalid verification code', 'error');
+            }
+        } catch (error) {
+            showNotification('Network error. Please try again.', 'error');
+        }
+    });
+    
+    // Set new password
+    document.getElementById('setNewPasswordForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (newPassword !== confirmPassword) {
+            showNotification('Passwords do not match', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/api/reset-password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email: currentUserEmail, newPassword: newPassword})
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification('Password updated successfully! Please login with your new password.', 'success');
+                setTimeout(() => {
+                    showLoginForm();
+                }, 2000);
+            } else {
+                showNotification(result.message || 'Error updating password', 'error');
+            }
+        } catch (error) {
+            showNotification('Network error. Please try again.', 'error');
+        }
+    });
+    
+    // Resend code
+    resendCodeLink.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        try {
+            const response = await fetch('/api/forgot-password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email: currentUserEmail})
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification('New verification code sent', 'success');
+            } else {
+                showNotification('Error resending code', 'error');
+            }
+        } catch (error) {
+            showNotification('Network error. Please try again.', 'error');
+        }
+    });
+    
+    function showLoginForm() {
+        loginForm.style.display = 'block';
+        forgotPasswordForm.style.display = 'none';
+        verificationForm.style.display = 'none';
+        newPasswordForm.style.display = 'none';
+        currentUserEmail = '';
+        
+        // Clear all forms
+        document.getElementById('resetEmail').value = '';
+        document.getElementById('verificationCode').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+    }
+    
+    function showNotification(message, type) {
+        // Simple notification function
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.querySelector('.login-card .card-body').insertBefore(notification, document.querySelector('.login-card .card-body').firstChild);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+});
+</script>
 {% endblock %}

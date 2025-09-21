@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 """
 Web Material Usage Manager Module
-Handles material usage analysis across workcenters and part codes
+Handles mat        except Exception as e:
+            debug_mode = os.environ.get('DEBUG_MODE', '').lower() == 'true'
+            if debug_mode:
+                print(f"❌ DEBUG: Error loading workcenters data: {str(e)}")
+            self.add_log(f"❌ Error loading mgroups data: {str(e)}")
+            return {
+                'department_mgroups': {},
+                'mgroup_names': {},
+                'department_folders': {},
+                'bull_files_filter': []
+            }ge analysis across workcenters and part codes
 """
 import os
 import json
@@ -38,10 +48,14 @@ class WebMaterialUsageManager(WebBaseManager):
         """Load MGroups data from mgroups.json"""
         try:
             mgroups_json = Path('databases/mgroups.json')
-            print(f"🔍 DEBUG: Looking for mgroups.json at: {mgroups_json.absolute()}")
+            debug_mode = os.environ.get('DEBUG_MODE', '').lower() == 'true'
+            
+            if debug_mode:
+                print(f"🔍 DEBUG: Looking for mgroups.json at: {mgroups_json.absolute()}")
             
             if mgroups_json.exists():
-                print("✅ DEBUG: mgroups.json found, loading...")
+                if debug_mode:
+                    print("✅ DEBUG: mgroups.json found, loading...")
                 with open(mgroups_json, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                 
@@ -52,13 +66,15 @@ class WebMaterialUsageManager(WebBaseManager):
                     'bull_files_filter': data.get('bull_files_filter', [])
                 }
                 
-                print(f"✅ DEBUG: Loaded {len(result['department_mgroups'])} departments from JSON")
-                print(f"✅ DEBUG: Department keys: {list(result['department_mgroups'].keys())}")
-                print(f"✅ DEBUG: Loaded {len(result['mgroup_names'])} mgroup names")
+                if debug_mode:
+                    print(f"✅ DEBUG: Loaded {len(result['department_mgroups'])} departments from JSON")
+                    print(f"✅ DEBUG: Department keys: {list(result['department_mgroups'].keys())}")
+                    print(f"✅ DEBUG: Loaded {len(result['mgroup_names'])} mgroup names")
                 
                 return result
             else:
-                print("❌ DEBUG: mgroups.json not found")
+                if debug_mode:
+                    print("❌ DEBUG: mgroups.json not found")
                 self.add_log("❌ mgroups.json not found")
                 return {
                     'department_mgroups': {},
@@ -698,10 +714,12 @@ class WebMaterialUsageManager(WebBaseManager):
             departments = self.workcenters_data.get('department_mgroups', {})
             mgroup_names = self.workcenters_data.get('mgroup_names', {})
             
-            # Debug logging
-            print(f"🔍 DEBUG: Loaded {len(departments)} departments")
-            print(f"🔍 DEBUG: Department keys: {list(departments.keys())}")
-            print(f"🔍 DEBUG: Loaded {len(mgroup_names)} mgroup names")
+            # Debug logging only in debug mode
+            debug_mode = os.environ.get('DEBUG_MODE', '').lower() == 'true'
+            if debug_mode:
+                print(f"🔍 DEBUG: Loaded {len(departments)} departments")
+                print(f"🔍 DEBUG: Department keys: {list(departments.keys())}")
+                print(f"🔍 DEBUG: Loaded {len(mgroup_names)} mgroup names")
             
             result = {
                 'success': True,
@@ -709,11 +727,13 @@ class WebMaterialUsageManager(WebBaseManager):
                 'mgroup_names': mgroup_names
             }
             
-            print(f"🔍 DEBUG: Returning result with {len(result['departments'])} departments")
+            if debug_mode:
+                print(f"🔍 DEBUG: Returning result with {len(result['departments'])} departments")
             return result
             
         except Exception as e:
-            print(f"❌ DEBUG: Error in get_departments_and_mgroups: {str(e)}")
+            if debug_mode:
+                print(f"❌ DEBUG: Error in get_departments_and_mgroups: {str(e)}")
             return {
                 'success': False,
                 'message': str(e),

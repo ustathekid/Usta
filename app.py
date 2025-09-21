@@ -17,8 +17,13 @@ import datetime
 import shutil
 import platform
 import socket
+import smtplib
+import random
+import string
 from pathlib import Path
 from werkzeug.utils import secure_filename
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import base64
 from urllib.parse import unquote
 import psutil
@@ -27,14 +32,18 @@ from PyPDF2 import PdfMerger
 import io
 try:
     import fitz  # PyMuPDF
-    print(f"✅ PyMuPDF successfully imported, version: {fitz.version}")
+    # Quiet import - version info only in debug mode
+    if os.environ.get('DEBUG_MODE', '').lower() == 'true':
+        print(f"✅ PyMuPDF successfully imported, version: {fitz.version}")
 except ImportError as e:
     print(f"❌ PyMuPDF import failed: {e}")
     fitz = None
 try:
     import pytesseract
     from PIL import Image
-    print("✅ pytesseract and PIL successfully imported")
+    # Quiet import - only show errors
+    if os.environ.get('DEBUG_MODE', '').lower() == 'true':
+        print("✅ pytesseract and PIL successfully imported")
 except ImportError as e:
     print(f"❌ pytesseract/PIL import failed: {e}")
     pytesseract = None
@@ -139,6 +148,216 @@ def logout():
     session.clear()
     flash('You were logged out', 'info')
     return redirect(url_for('login'))
+
+# Store verification codes temporarily (in production, use Redis or database)
+verification_codes = {}
+
+@app.route('/api/forgot-password', methods=['POST'])
+def forgot_password():
+    """Send password reset verification code"""
+    try:
+        data = request.get_json()
+        email_or_username = data.get('email', '').strip()
+        
+        if not email_or_username:
+            return jsonify({'success': False, 'message': 'Email or username is required'})
+        
+        # Find user by email or username
+        user_data = None
+        if settings_manager:
+            # Try to find by username first
+            user_data = settings_manager.get_user_by_username(email_or_username)
+            if not user_data:
+                # Try to find by email
+                all_users = settings_manager.get_all_users()
+                for user in all_users:
+                    if user.get('email', '').lower() == email_or_username.lower():
+                        user_data = user
+                        break
+        
+        if not user_data:
+            return jsonify({'success': False, 'message': 'No account found with this email or username'})
+        
+        user_email = user_data.get('email')
+        if not user_email:
+            return jsonify({'success': False, 'message': 'No email address associated with this account'})
+        
+        # Generate 6-digit verification code
+        verification_code = ''.join(random.choices(string.digits, k=6))
+        
+        # Store verification code (expires in 10 minutes)
+        verification_codes[email_or_username] = {
+            'code': verification_code,
+            'email': user_email,
+            'username': user_data['username'],
+            'expires': datetime.datetime.now() + datetime.timedelta(minutes=10)
+        }
+        
+        # Send email with verification code
+        try:
+            send_verification_email(user_email, verification_code, user_data['username'])
+            return jsonify({
+                'success': True,
+                'message': f'Verification code sent to {user_email}'
+            })
+        except Exception as e:
+            logger.error(f"Failed to send email: {str(e)}")
+            
+            # Check if we're in demo mode (no email configured)
+            config = settings_manager.load_config() if settings_manager else {}
+            email_config = config.get('email_settings', {})
+            
+            if not email_config.get('enabled', False) or not email_config.get('sender_password'):
+                # Demo mode: show verification code in response
+                return jsonify({
+                    'success': True,
+                    'message': f'Demo Mode: Verification code is {verification_code}',
+                    'demo_mode': True
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'message': 'Failed to send verification email. Please try again later.'
+                })
+            
+    except Exception as e:
+        logger.error(f"Forgot password error: {str(e)}")
+        return jsonify({'success': False, 'message': 'Internal server error'})
+
+@app.route('/api/verify-reset-code', methods=['POST'])
+def verify_reset_code():
+    """Verify the password reset code"""
+    try:
+        data = request.get_json()
+        email_or_username = data.get('email', '').strip()
+        code = data.get('code', '').strip()
+        
+        if not email_or_username or not code:
+            return jsonify({'success': False, 'message': 'Email and code are required'})
+        
+        # Check if verification code exists and is valid
+        stored_data = verification_codes.get(email_or_username)
+        if not stored_data:
+            return jsonify({'success': False, 'message': 'No verification code found. Please request a new one.'})
+        
+        # Check if code has expired
+        if datetime.datetime.now() > stored_data['expires']:
+            del verification_codes[email_or_username]
+            return jsonify({'success': False, 'message': 'Verification code has expired. Please request a new one.'})
+        
+        # Check if code matches
+        if stored_data['code'] != code:
+            return jsonify({'success': False, 'message': 'Invalid verification code'})
+        
+        # Mark as verified (extend expiry for password reset)
+        verification_codes[email_or_username]['verified'] = True
+        verification_codes[email_or_username]['expires'] = datetime.datetime.now() + datetime.timedelta(minutes=5)
+        
+        return jsonify({'success': True, 'message': 'Code verified successfully'})
+        
+    except Exception as e:
+        logger.error(f"Verify reset code error: {str(e)}")
+        return jsonify({'success': False, 'message': 'Internal server error'})
+
+@app.route('/api/reset-password', methods=['POST'])
+def reset_password():
+    """Reset user password"""
+    try:
+        data = request.get_json()
+        email_or_username = data.get('email', '').strip()
+        new_password = data.get('newPassword', '').strip()
+        
+        if not email_or_username or not new_password:
+            return jsonify({'success': False, 'message': 'Email and new password are required'})
+        
+        if len(new_password) < 6:
+            return jsonify({'success': False, 'message': 'Password must be at least 6 characters long'})
+        
+        # Check if code was verified
+        stored_data = verification_codes.get(email_or_username)
+        if not stored_data or not stored_data.get('verified'):
+            return jsonify({'success': False, 'message': 'Please verify your code first'})
+        
+        # Check if verification has expired
+        if datetime.datetime.now() > stored_data['expires']:
+            del verification_codes[email_or_username]
+            return jsonify({'success': False, 'message': 'Verification has expired. Please start over.'})
+        
+        # Update password
+        username = stored_data['username']
+        if settings_manager and settings_manager.update_user_password(username, new_password):
+            # Clean up verification code
+            del verification_codes[email_or_username]
+            
+            logger.info(f"Password reset successful for user: {username}")
+            return jsonify({'success': True, 'message': 'Password updated successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to update password'})
+            
+    except Exception as e:
+        logger.error(f"Reset password error: {str(e)}")
+        return jsonify({'success': False, 'message': 'Internal server error'})
+
+def send_verification_email(to_email, verification_code, username):
+    """Send verification email"""
+    try:
+        # Get email configuration from settings
+        config = settings_manager.load_config() if settings_manager else {}
+        email_config = config.get('email_settings', {})
+        
+        if not email_config.get('enabled', False):
+            raise Exception("Email service is not enabled")
+        
+        smtp_server = email_config.get('smtp_server', 'smtp.gmail.com')
+        smtp_port = email_config.get('smtp_port', 587)
+        sender_email = email_config.get('sender_email')
+        sender_name = email_config.get('sender_name', 'Schemini Management')
+        sender_password = email_config.get('sender_password')
+        
+        if not sender_email or not sender_password:
+            raise Exception("Email credentials not configured")
+        
+        # Create message
+        message = MIMEMultipart("alternative")
+        message["Subject"] = "Schemini - Password Reset Verification Code"
+        message["From"] = f"{sender_name} <{sender_email}>"
+        message["To"] = to_email
+        
+        # Create the HTML content
+        html = f"""
+        <html>
+          <body>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #0d6efd;">Schemini Password Reset</h2>
+              <p>Hello {username},</p>
+              <p>You have requested to reset your password. Please use the following verification code:</p>
+              <div style="background-color: #f8f9fa; padding: 20px; text-align: center; margin: 20px 0; border-radius: 5px;">
+                <h1 style="color: #0d6efd; margin: 0; font-size: 32px; letter-spacing: 8px;">{verification_code}</h1>
+              </div>
+              <p>This code will expire in 10 minutes.</p>
+              <p>If you didn't request this password reset, please ignore this email.</p>
+              <hr style="margin: 30px 0;">
+              <p style="color: #6c757d; font-size: 12px;">
+                This is an automated message from Schemini Management System.
+              </p>
+            </div>
+          </body>
+        </html>
+        """
+        
+        # Convert to MIMEText object
+        part = MIMEText(html, "html")
+        message.attach(part)
+        
+        # Send email
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, to_email, message.as_string())
+            
+    except Exception as e:
+        logger.error(f"Email sending error: {str(e)}")
+        raise
 
 @app.route('/scan')
 @login_required
@@ -3813,20 +4032,11 @@ def api_force_cleanup():
 
 
 if __name__ == '__main__':
-    # Create necessary directories
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('templates', exist_ok=True)
-    os.makedirs('static/css', exist_ok=True)
-    os.makedirs('static/js', exist_ok=True)
-    
-    # Run Flask app
-    print("🚀 Starting Schemini Management Web Server...")
-    print("📱 Access the application at: http://localhost:5000")
-    print("🔧 Manager: Cafer T. Usta")
-    
+    # Run the Flask app with specified parameters
     app.run(
         host='0.0.0.0',  # Allow external connections
-        port=5001,
-        debug=True,
-        threaded=True
+        port=5000,
+        debug=True,     # Disable debug mode for cleaner output
+        threaded=True,
+        use_reloader=False  # Disable auto-reload to prevent restart messages
     )
