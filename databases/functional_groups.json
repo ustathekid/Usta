@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "created_at": "2025-09-19 09:05:28",
+    "created_at": "2025-09-26 15:57:14",
     "description": "Functional Groups Database for Schemini Management",
     "total_groups": 61,
     "total_departments": 8,
-    "total_pdfs": 8976
+    "total_pdfs": 9164
   },
   "departments": {
     "Cabin": {
@@ -2776,6 +2776,13 @@
           "path": "Cabin\\F - 2018-06\\PB345 F",
           "functional_groups": [
             {
+              "code": "59",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.Y7259.71.0"
+              ]
+            },
+            {
               "code": "64",
               "pdf_count": 1,
               "nine_codes": [
@@ -2784,45 +2791,66 @@
             },
             {
               "code": "65",
-              "pdf_count": 1,
+              "pdf_count": 2,
               "nine_codes": [
-                "9.LU065.02.0"
+                "9.LU065.02.0",
+                "9.NL965.10.0"
               ]
             },
             {
               "code": "68",
-              "pdf_count": 2,
+              "pdf_count": 4,
               "nine_codes": [
                 "9.NL968.00.0",
+                "9.NL968.01.0",
+                "9.NL968.02.0",
                 "9.NL968.03.0"
               ]
             },
             {
+              "code": "71",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.GD971.00.0"
+              ]
+            },
+            {
               "code": "76",
-              "pdf_count": 6,
+              "pdf_count": 8,
               "nine_codes": [
                 "9.NL976.02.0",
                 "9.NL976.10.0",
                 "I9.21076.25.0",
+                "I9.56676.25.0",
                 "I9.56676.26.0",
+                "I9.BJ876.70.0",
                 "I9.U6276.60.0",
                 "I9.U6676.70.0"
               ]
             },
             {
               "code": "78",
-              "pdf_count": 1,
+              "pdf_count": 2,
               "nine_codes": [
+                "9.NL678.00.0",
                 "9.NL978.00.0"
               ]
             },
             {
               "code": "84",
-              "pdf_count": 3,
+              "pdf_count": 4,
               "nine_codes": [
                 "9.62084.40.0",
+                "9.AW784.19.0",
                 "9.DL784.25.0",
                 "9.LX484.07.0"
+              ]
+            },
+            {
+              "code": "85",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.NL985.70.0"
               ]
             }
           ]
@@ -4579,12 +4607,25 @@
               ]
             },
             {
-              "code": "82",
-              "pdf_count": 3,
+              "code": "23",
+              "pdf_count": 2,
               "nine_codes": [
+                "9.JT323.00.0",
+                "9.KX023.00.0"
+              ]
+            },
+            {
+              "code": "82",
+              "pdf_count": 8,
+              "nine_codes": [
+                "9.GN682.01.0",
+                "9.LB082.02.0",
                 "9.LB282.01.0",
                 "9.LB382.02.0",
-                "9.LB982.02.0"
+                "9.LB682.02.0",
+                "9.LB982.02.0",
+                "9.LJ082.02.0",
+                "9.LJ382.02.0"
               ]
             }
           ]
@@ -8613,8 +8654,9 @@
           "functional_groups": [
             {
               "code": "26",
-              "pdf_count": 1,
+              "pdf_count": 2,
               "nine_codes": [
+                "9.NL426.00.0",
                 "9.NL726.00.0"
               ]
             },
@@ -8623,6 +8665,21 @@
               "pdf_count": 1,
               "nine_codes": [
                 "9.NN131.00.0"
+              ]
+            },
+            {
+              "code": "36",
+              "pdf_count": 2,
+              "nine_codes": [
+                "9.CK736.20.0",
+                "9.H5936.00.0"
+              ]
+            },
+            {
+              "code": "42",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.BX742.03.0"
               ]
             },
             {
@@ -8635,9 +8692,10 @@
             },
             {
               "code": "46",
-              "pdf_count": 1,
+              "pdf_count": 2,
               "nine_codes": [
-                "9.JT946.41.0"
+                "9.JT946.41.0",
+                "9.NL446.36.0"
               ]
             },
             {
@@ -8660,12 +8718,19 @@
             },
             {
               "code": "63",
-              "pdf_count": 4,
+              "pdf_count": 11,
               "nine_codes": [
+                "9.E6163.00.0",
+                "9.NK963.03.0",
+                "9.NL663.05.0",
+                "9.NL963.01.0",
+                "9.NL963.02.0",
                 "9.NL963.05.0",
                 "9.NN163.01.0",
                 "9.NN163.02.0",
-                "9.NN163.04.0"
+                "9.NN163.03.0",
+                "9.NN163.04.0",
+                "I9.J1263.02.0"
               ]
             },
             {
@@ -8676,9 +8741,20 @@
               ]
             },
             {
-              "code": "66",
-              "pdf_count": 8,
+              "code": "65",
+              "pdf_count": 2,
               "nine_codes": [
+                "9.NL965.01.0",
+                "9.NL965.10.0"
+              ]
+            },
+            {
+              "code": "66",
+              "pdf_count": 13,
+              "nine_codes": [
+                "9.LB266.05.0",
+                "9.NL666.03.0_1",
+                "9.NL666.03.0_2",
                 "9.NL966.01.0",
                 "9.NL966.03.0_1",
                 "9.NL966.03.0_2",
@@ -8686,7 +8762,16 @@
                 "9.NN166.04.0",
                 "9.NN166.05.0",
                 "9.NN166.06.0",
-                "9.NN166.12.0"
+                "9.NN166.10.0",
+                "9.NN166.12.0",
+                "I9.EE266.02.0"
+              ]
+            },
+            {
+              "code": "68",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.NL968.06.0"
               ]
             },
             {
@@ -8706,18 +8791,36 @@
             },
             {
               "code": "76",
-              "pdf_count": 2,
+              "pdf_count": 3,
               "nine_codes": [
+                "9.NL976.00.0",
                 "9.NL976.02.0",
                 "9.NN176.00.0"
               ]
             },
             {
               "code": "82",
-              "pdf_count": 12,
+              "pdf_count": 32,
               "nine_codes": [
                 "9.LB282.10.0",
+                "9.NK982.01.0",
+                "9.NK982.06.0",
+                "9.NK982.40.0",
+                "9.NL282.06.0",
+                "9.NL282.08.0",
+                "9.NL282.16.0",
+                "9.NL282.40.0",
+                "9.NL682.06.0",
+                "9.NL682.40.0",
+                "9.NL882.08.0",
                 "9.NL982.06.0",
+                "9.NL982.07.0",
+                "9.NL982.08.0",
+                "9.NL982.16.0",
+                "9.NL982.40.0",
+                "9.NM882.05.0",
+                "9.NM882.13.0",
+                "9.NM882.40.0",
                 "9.NM982.05.0",
                 "9.NM982.13.0",
                 "9.NM982.40.0",
@@ -8727,27 +8830,40 @@
                 "9.NN182.08.0",
                 "9.NN182.13.0",
                 "9.NN182.37.0",
-                "9.NN182.46.0"
+                "9.NN182.42.0",
+                "9.NN182.44.0",
+                "9.NN182.46.0",
+                "9.NN282.44.0"
               ]
             },
             {
               "code": "88",
-              "pdf_count": 3,
+              "pdf_count": 4,
               "nine_codes": [
                 "9.NN188.00.0",
+                "9.NN188.16.0",
                 "9.NN188.28.0",
                 "9.NN188.80.0"
               ]
             },
             {
               "code": "89",
-              "pdf_count": 5,
+              "pdf_count": 7,
               "nine_codes": [
                 "9.NL289.13.0",
                 "9.NN189.03.0",
                 "9.NN189.05.0",
+                "9.NN189.07.0",
+                "9.NN189.08.0",
                 "9.NN189.09.0",
                 "9.NN189.13.0"
+              ]
+            },
+            {
+              "code": "99",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.56699.04.0"
               ]
             }
           ]
@@ -17669,9 +17785,22 @@
             },
             {
               "code": "26",
-              "pdf_count": 1,
+              "pdf_count": 2,
               "nine_codes": [
+                "9.NK926.01.0",
                 "9.NL926.01.0"
+              ]
+            },
+            {
+              "code": "31",
+              "pdf_count": 6,
+              "nine_codes": [
+                "9.U7431.65.0",
+                "9.U7431.70.0",
+                "9.U7631.65.0",
+                "9.U7831.70.0",
+                "9.U7931.65.0",
+                "9.UB031.65.0"
               ]
             },
             {
@@ -17697,16 +17826,29 @@
             },
             {
               "code": "55",
-              "pdf_count": 2,
+              "pdf_count": 13,
               "nine_codes": [
+                "9.72355.11.0",
+                "9.CL355.00.0",
                 "9.E7055.02.0",
-                "9.NN155.22.0"
+                "9.GD955.20.0",
+                "9.GD955.40.0",
+                "9.GD955.41.0",
+                "9.GT555.40.0",
+                "9.NL955.00.0",
+                "9.NN155.20.0",
+                "9.NN155.21.0",
+                "9.NN155.22.0",
+                "9.T5955.90.0",
+                "I9.J1355.00.0"
               ]
             },
             {
               "code": "56",
-              "pdf_count": 3,
+              "pdf_count": 5,
               "nine_codes": [
+                "9.GQ856.00.0",
+                "9.IY056.00.0",
                 "9.OB356.00.0",
                 "9.OB656.00.0_1",
                 "9.OB656.00.0_2"
@@ -17714,16 +17856,34 @@
             },
             {
               "code": "58",
-              "pdf_count": 2,
+              "pdf_count": 3,
               "nine_codes": [
+                "9.50158.10.0",
                 "9.HG058.01.0",
                 "9.HG058.11.0"
               ]
             },
             {
-              "code": "63",
+              "code": "59",
               "pdf_count": 3,
               "nine_codes": [
+                "9.NL959.05.0",
+                "9.NL959.52.0",
+                "9.Y7259.71.0"
+              ]
+            },
+            {
+              "code": "61",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.LJ461.01.0"
+              ]
+            },
+            {
+              "code": "63",
+              "pdf_count": 4,
+              "nine_codes": [
+                "9.NL963.01.0",
                 "9.NL963.06.0",
                 "9.NN163.01.0",
                 "9.NN163.02.0"
@@ -17731,97 +17891,146 @@
             },
             {
               "code": "64",
-              "pdf_count": 2,
+              "pdf_count": 6,
               "nine_codes": [
+                "9.EY964.00.0",
+                "9.NL964.02.0",
+                "9.NL964.03.0",
+                "9.NN164.03.0",
                 "9.NN164.04.0",
                 "9.NN164.05.0"
               ]
             },
             {
               "code": "65",
-              "pdf_count": 1,
+              "pdf_count": 3,
               "nine_codes": [
+                "9.NL965.01.0",
+                "9.NL965.10.0",
                 "9.NN165.10.0"
               ]
             },
             {
               "code": "66",
-              "pdf_count": 2,
+              "pdf_count": 4,
               "nine_codes": [
+                "9.NL666.03.0_1",
+                "9.NL666.03.0_2",
                 "9.NL966.01.0",
                 "9.NN166.06.0"
               ]
             },
             {
               "code": "67",
-              "pdf_count": 2,
+              "pdf_count": 3,
               "nine_codes": [
                 "9.BK167.05.0",
-                "9.F2067.14.0"
+                "9.F2067.14.0",
+                "9.NL967.05.0"
               ]
             },
             {
               "code": "68",
-              "pdf_count": 1,
+              "pdf_count": 3,
               "nine_codes": [
-                "9.NL968.00.0"
+                "9.NK968.06.0",
+                "9.NL968.00.0",
+                "9.NL968.06.0"
               ]
             },
             {
               "code": "71",
-              "pdf_count": 2,
+              "pdf_count": 3,
               "nine_codes": [
                 "9.LJ071.24.0",
-                "9.NL971.01.0"
+                "9.NL971.01.0",
+                "9.T6471.60.0"
               ]
             },
             {
               "code": "72",
-              "pdf_count": 11,
+              "pdf_count": 31,
               "nine_codes": [
                 "9.MX272.07.0",
+                "9.NK772.41.0",
+                "9.NK872.41.0",
+                "9.NK972.00.0",
+                "9.NK972.10.0",
+                "9.NK972.41.0",
+                "9.NL072.41.0",
+                "9.NL172.41.0",
                 "9.NL272.00.0",
                 "9.NL272.01.0",
+                "9.NL272.41.0",
+                "9.NL372.41.0",
+                "9.NL472.41.0",
+                "9.NL572.41.0",
+                "9.NL672.00.0",
+                "9.NL672.41.0",
+                "9.NL772.41.0",
+                "9.NL872.41.0",
+                "9.NL972.00.0",
+                "9.NL972.01.0",
                 "9.NL972.06.0",
                 "9.NL972.10.0_1",
                 "9.NL972.10.0_2",
-                "9.NL972.12.0"
+                "9.NL972.12.0",
+                "9.NL972.30.0",
+                "9.NL972.41.0",
+                "9.NM072.41.0"
               ]
             },
             {
               "code": "73",
-              "pdf_count": 6,
+              "pdf_count": 10,
               "nine_codes": [
+                "9.GN273.15.0",
+                "9.GN273.17.0",
+                "9.GN273.31.0",
                 "9.NL973.01.0",
                 "9.NL973.07.0",
                 "9.NL973.11.0",
                 "9.NL973.12.0",
                 "9.NL973.18.0",
-                "9.NL973.20.0"
+                "9.NL973.20.0",
+                "9.T6473.10.0"
               ]
             },
             {
               "code": "74",
-              "pdf_count": 2,
+              "pdf_count": 3,
               "nine_codes": [
+                "9.NL974.00.0",
                 "9.NL974.03.0",
                 "9.NN174.00.0"
               ]
             },
             {
-              "code": "76",
-              "pdf_count": 4,
+              "code": "75",
+              "pdf_count": 1,
               "nine_codes": [
+                "9.NL975.00.0"
+              ]
+            },
+            {
+              "code": "76",
+              "pdf_count": 7,
+              "nine_codes": [
+                "9.JT376.82.0",
                 "9.NL476.06.0",
+                "9.NL976.00.0",
                 "9.NL976.02.0",
+                "9.NL976.11.0",
                 "9.NL976.30.0",
                 "9.NN176.00.0"
               ]
             },
             {
               "code": "78",
-              "pdf_count": 3,
+              "pdf_count": 5,
               "nine_codes": [
+                "9.NL678.00.0",
+                "9.NL678.02.0",
                 "9.NL978.00.0",
                 "9.NL978.01.0",
                 "9.NL978.02.0"
@@ -17829,36 +18038,49 @@
             },
             {
               "code": "81",
-              "pdf_count": 5,
+              "pdf_count": 9,
               "nine_codes": [
+                "9.NK781.03.0",
+                "9.NK981.01.0",
                 "9.NL981.00.0",
                 "9.NL981.01.0",
                 "9.NL981.03.0",
+                "9.NL981.05.0",
+                "9.NL981.06.0",
                 "9.NL981.20.0",
                 "9.OB681.21.0"
               ]
             },
             {
               "code": "82",
-              "pdf_count": 1,
+              "pdf_count": 6,
               "nine_codes": [
-                "9.NM982.05.0"
+                "9.NL282.08.0",
+                "9.NL882.08.0",
+                "9.NL982.08.0",
+                "9.NM882.05.0",
+                "9.NM982.05.0",
+                "9.NN182.08.0"
               ]
             },
             {
               "code": "83",
-              "pdf_count": 1,
+              "pdf_count": 3,
               "nine_codes": [
+                "9.NL683.11.0",
+                "9.NL983.00.0",
                 "9.NL983.11.0"
               ]
             },
             {
               "code": "84",
-              "pdf_count": 38,
+              "pdf_count": 45,
               "nine_codes": [
                 "9.62084.40.0",
+                "9.AW784.31.0",
                 "9.DL784.25.0",
                 "9.DP284.02.0",
+                "9.EC284.10.0",
                 "9.JR784.07.0",
                 "9.JT384.08.0",
                 "9.JT384.10.0",
@@ -17869,9 +18091,11 @@
                 "9.KW984.06.0",
                 "9.LX484.06.0",
                 "9.LX484.07.0",
+                "9.NB684.07.0",
                 "9.NK784.01.0",
                 "9.NK784.05.0",
                 "9.NK984.01.0",
+                "9.NK984.05.0",
                 "9.NK984.06.0",
                 "9.NL484.01.0",
                 "9.NL484.05.0",
@@ -17886,21 +18110,26 @@
                 "9.NL984.17.0",
                 "9.NL984.21.0",
                 "9.NL984.25.0",
+                "9.NL984.30.0",
                 "9.NL984.31.0",
                 "9.NL984.32.0",
                 "9.NM284.06.0",
                 "9.NN184.00.0",
+                "9.NN184.01.0",
                 "9.NN184.06.0",
                 "9.NN184.09.0",
                 "9.NN184.30.0",
-                "9.NN184.53.0"
+                "9.NN184.53.0",
+                "9.P3784.01.0"
               ]
             },
             {
               "code": "85",
-              "pdf_count": 5,
+              "pdf_count": 7,
               "nine_codes": [
                 "9.EZ285.03.0",
+                "9.JT085.10.0",
+                "9.JT385.10.0",
                 "9.JT385.12.0",
                 "9.JT385.13.0",
                 "9.NL485.24.0",
@@ -17909,8 +18138,11 @@
             },
             {
               "code": "88",
-              "pdf_count": 2,
+              "pdf_count": 5,
               "nine_codes": [
+                "9.NL988.17.0",
+                "9.NL988.30.0",
+                "9.NN188.16.0",
                 "9.NN188.28.0",
                 "9.NN188.80.0"
               ]
@@ -17925,9 +18157,22 @@
             },
             {
               "code": "99",
-              "pdf_count": 1,
+              "pdf_count": 14,
               "nine_codes": [
-                "9.OB699.10.0"
+                "9.BJ899.01.0",
+                "9.DB299.10.0",
+                "9.DB699.00.0",
+                "9.GP499.00.0",
+                "9.GQ899.11.0",
+                "9.KE499.03.0",
+                "9.L1099.50.0",
+                "9.MK599.50.0",
+                "9.MK799.50.0",
+                "9.ML799.50.0",
+                "9.OA899.10.0",
+                "9.OA999.10.0",
+                "9.OB699.10.0",
+                "9.T5999.10.0"
               ]
             }
           ]
@@ -19509,6 +19754,13 @@
               ]
             },
             {
+              "code": "27",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.KE427.02.0"
+              ]
+            },
+            {
               "code": "31",
               "pdf_count": 3,
               "nine_codes": [
@@ -19519,9 +19771,11 @@
             },
             {
               "code": "33",
-              "pdf_count": 6,
+              "pdf_count": 8,
               "nine_codes": [
                 "9.KV233.01.0",
+                "9.LB233.02.0",
+                "9.LB233.03.0",
                 "9.NL233.00.0_1",
                 "9.NL233.00.0_2",
                 "9.NL933.01.0",
@@ -19542,20 +19796,26 @@
             },
             {
               "code": "35",
-              "pdf_count": 3,
+              "pdf_count": 4,
               "nine_codes": [
                 "9.64835.02.0",
                 "9.65035.00.0",
+                "9.EE335.02.0",
                 "9.NL635.01.0"
               ]
             },
             {
               "code": "36",
-              "pdf_count": 3,
+              "pdf_count": 8,
               "nine_codes": [
+                "9.CK736.04.0",
+                "9.H5936.00.0",
                 "9.H6036.06.0",
                 "9.LB236.02.0",
-                "9.NL936.00.0"
+                "9.NL936.00.0",
+                "9.NN136.01.0",
+                "9.NN136.02.0",
+                "9.NN136.03.0"
               ]
             },
             {
@@ -19565,6 +19825,13 @@
                 "9.70538.01.0",
                 "9.NL638.00.0",
                 "9.NN138.00.0"
+              ]
+            },
+            {
+              "code": "39",
+              "pdf_count": 1,
+              "nine_codes": [
+                "9.LB239.00.0"
               ]
             },
             {
@@ -19590,20 +19857,37 @@
             },
             {
               "code": "59",
-              "pdf_count": 2,
+              "pdf_count": 3,
               "nine_codes": [
                 "9.LJ159.20.0",
-                "9.NN159.65.0"
+                "9.NN159.65.0",
+                "9.U7059.20.0"
+              ]
+            },
+            {
+              "code": "65",
+              "pdf_count": 1,
+              "nine_codes": [
+                "I9.72365.00.0"
               ]
             },
             {
               "code": "82",
-              "pdf_count": 7,
+              "pdf_count": 16,
               "nine_codes": [
+                "9.NL282.08.0",
+                "9.NL282.16.0",
+                "9.NL882.08.0",
+                "9.NL982.07.0",
+                "9.NL982.08.0",
+                "9.NL982.14.0",
+                "9.NL982.16.0",
+                "9.NL982.31.0",
                 "9.NN182.00.0",
                 "9.NN182.07.0",
                 "9.NN182.08.0",
                 "9.NN182.14.0",
+                "9.NN182.16.0",
                 "9.NN182.17.0",
                 "9.NN182.38.0",
                 "9.NN182.46.0"
@@ -19748,7 +20032,7 @@
             {
               "name": "F - 2018-06\\PB345 F",
               "path": "Cabin\\F - 2018-06\\PB345 F",
-              "pdf_count": 6
+              "pdf_count": 8
             }
           ],
           "pdfs": [
@@ -21243,10 +21527,30 @@
               "functional_group": "76"
             },
             {
+              "filename": "I9.56676.25.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\76\\I9.56676.25.0.pdf",
+              "nine_codes": [
+                "I9.56676.25.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "76"
+            },
+            {
               "filename": "I9.56676.26.0.pdf",
               "path": "Cabin\\F - 2018-06\\PB345 F\\76\\I9.56676.26.0.pdf",
               "nine_codes": [
                 "I9.56676.26.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "76"
+            },
+            {
+              "filename": "I9.BJ876.70.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\76\\I9.BJ876.70.0.pdf",
+              "nine_codes": [
+                "I9.BJ876.70.0"
               ],
               "department": "Cabin",
               "model": "F - 2018-06\\PB345 F",
@@ -21273,7 +21577,7 @@
               "functional_group": "76"
             }
           ],
-          "pdf_count": 152
+          "pdf_count": 154
         },
         "First Line": {
           "models": [
@@ -21385,7 +21689,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -21800,6 +22104,16 @@
               "functional_group": "76"
             },
             {
+              "filename": "9.NL976.00.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\76\\9.NL976.00.0.pdf",
+              "nine_codes": [
+                "9.NL976.00.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "76"
+            },
+            {
               "filename": "9.NL976.02.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\76\\9.NL976.02.0.pdf",
               "nine_codes": [
@@ -21820,7 +22134,7 @@
               "functional_group": "76"
             }
           ],
-          "pdf_count": 43
+          "pdf_count": 44
         },
         "Massey Ferguson": {
           "models": [
@@ -21984,7 +22298,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 4
+              "pdf_count": 7
             }
           ],
           "pdfs": [
@@ -24057,6 +24371,16 @@
               "functional_group": "76"
             },
             {
+              "filename": "9.JT376.82.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\76\\9.JT376.82.0.pdf",
+              "nine_codes": [
+                "9.JT376.82.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "76"
+            },
+            {
               "filename": "9.NL476.06.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\76\\9.NL476.06.0.pdf",
               "nine_codes": [
@@ -24067,10 +24391,30 @@
               "functional_group": "76"
             },
             {
+              "filename": "9.NL976.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\76\\9.NL976.00.0.pdf",
+              "nine_codes": [
+                "9.NL976.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "76"
+            },
+            {
               "filename": "9.NL976.02.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\76\\9.NL976.02.0.pdf",
               "nine_codes": [
                 "9.NL976.02.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "76"
+            },
+            {
+              "filename": "9.NL976.11.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\76\\9.NL976.11.0.pdf",
+              "nine_codes": [
+                "9.NL976.11.0"
               ],
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
@@ -24097,11 +24441,11 @@
               "functional_group": "76"
             }
           ],
-          "pdf_count": 211
+          "pdf_count": 214
         }
       },
-      "total_pdfs": 410,
-      "total_nine_codes": 125,
+      "total_pdfs": 416,
+      "total_nine_codes": 128,
       "unique_nine_codes": [
         "9.MW276.20.0",
         "9.MW676.20.0",
@@ -24164,6 +24508,7 @@
         "9.HA676.00.0",
         "9.BX176.02.0",
         "I9.CK776.00.0",
+        "9.NL976.00.0",
         "9.NN176.00.0",
         "9.MW976.20.0",
         "9.NJ276.20.0",
@@ -24226,7 +24571,9 @@
         "9.P1176.01.0",
         "9.P1476.01.0",
         "I9.BX176.03.0",
+        "9.JT376.82.0",
         "9.NL476.06.0",
+        "9.NL976.11.0",
         "9.NL976.30.0"
       ]
     },
@@ -24269,7 +24616,7 @@
             {
               "name": "F - 2018-06\\PB345 F",
               "path": "Cabin\\F - 2018-06\\PB345 F",
-              "pdf_count": 1
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -24354,6 +24701,16 @@
               "functional_group": "78"
             },
             {
+              "filename": "9.NL678.00.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\78\\9.NL678.00.0.pdf",
+              "nine_codes": [
+                "9.NL678.00.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "78"
+            },
+            {
               "filename": "9.NL978.00.0.pdf",
               "path": "Cabin\\F - 2018-06\\PB345 F\\78\\9.NL978.00.0.pdf",
               "nine_codes": [
@@ -24364,7 +24721,7 @@
               "functional_group": "78"
             }
           ],
-          "pdf_count": 9
+          "pdf_count": 10
         },
         "Second Line": {
           "models": [
@@ -24401,7 +24758,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 5
             }
           ],
           "pdfs": [
@@ -24636,6 +24993,26 @@
               "functional_group": "78"
             },
             {
+              "filename": "9.NL678.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\78\\9.NL678.00.0.pdf",
+              "nine_codes": [
+                "9.NL678.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "78"
+            },
+            {
+              "filename": "9.NL678.02.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\78\\9.NL678.02.0.pdf",
+              "nine_codes": [
+                "9.NL678.02.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "78"
+            },
+            {
               "filename": "9.NL978.00.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\78\\9.NL978.00.0.pdf",
               "nine_codes": [
@@ -24666,17 +25043,18 @@
               "functional_group": "78"
             }
           ],
-          "pdf_count": 26
+          "pdf_count": 28
         }
       },
-      "total_pdfs": 35,
-      "total_nine_codes": 19,
+      "total_pdfs": 38,
+      "total_nine_codes": 21,
       "unique_nine_codes": [
         "9.MW278.15.0",
         "9.FP778.00.0",
         "9.GN278.00.0",
         "9.GT578.10.0",
         "I9.BX178.09.0",
+        "9.NL678.00.0",
         "9.NL978.00.0",
         "9.MW278.14.0",
         "9.FP778.10.0",
@@ -24689,6 +25067,7 @@
         "9.BX178.10.0",
         "9.BX178.11.0",
         "9.CL378.11.0",
+        "9.NL678.02.0",
         "9.NL978.01.0",
         "9.NL978.02.0"
       ]
@@ -24797,7 +25176,7 @@
             {
               "name": "F - 2018-06\\PB345 F",
               "path": "Cabin\\F - 2018-06\\PB345 F",
-              "pdf_count": 3
+              "pdf_count": 4
             }
           ],
           "pdfs": [
@@ -27522,6 +27901,16 @@
               "functional_group": "84"
             },
             {
+              "filename": "9.AW784.19.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\84\\9.AW784.19.0.pdf",
+              "nine_codes": [
+                "9.AW784.19.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "84"
+            },
+            {
               "filename": "9.DL784.25.0.pdf",
               "path": "Cabin\\F - 2018-06\\PB345 F\\84\\9.DL784.25.0.pdf",
               "nine_codes": [
@@ -27542,7 +27931,7 @@
               "functional_group": "84"
             }
           ],
-          "pdf_count": 274
+          "pdf_count": 275
         },
         "Engine Configuration": {
           "models": [
@@ -28683,7 +29072,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 38
+              "pdf_count": 45
             }
           ],
           "pdfs": [
@@ -32476,6 +32865,16 @@
               "functional_group": "84"
             },
             {
+              "filename": "9.AW784.31.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.AW784.31.0.pdf",
+              "nine_codes": [
+                "9.AW784.31.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
+            },
+            {
               "filename": "9.DL784.25.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.DL784.25.0.pdf",
               "nine_codes": [
@@ -32490,6 +32889,16 @@
               "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.DP284.02.0.pdf",
               "nine_codes": [
                 "9.DP284.02.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
+            },
+            {
+              "filename": "9.EC284.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.EC284.10.0.pdf",
+              "nine_codes": [
+                "9.EC284.10.0"
               ],
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
@@ -32596,6 +33005,16 @@
               "functional_group": "84"
             },
             {
+              "filename": "9.NB684.07.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NB684.07.0.pdf",
+              "nine_codes": [
+                "9.NB684.07.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
+            },
+            {
               "filename": "9.NK784.01.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NK784.01.0.pdf",
               "nine_codes": [
@@ -32620,6 +33039,16 @@
               "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NK984.01.0.pdf",
               "nine_codes": [
                 "9.NK984.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
+            },
+            {
+              "filename": "9.NK984.05.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NK984.05.0.pdf",
+              "nine_codes": [
+                "9.NK984.05.0"
               ],
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
@@ -32766,6 +33195,16 @@
               "functional_group": "84"
             },
             {
+              "filename": "9.NL984.30.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NL984.30.0.pdf",
+              "nine_codes": [
+                "9.NL984.30.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
+            },
+            {
               "filename": "9.NL984.31.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NL984.31.0.pdf",
               "nine_codes": [
@@ -32800,6 +33239,16 @@
               "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NN184.00.0.pdf",
               "nine_codes": [
                 "9.NN184.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
+            },
+            {
+              "filename": "9.NN184.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.NN184.01.0.pdf",
+              "nine_codes": [
+                "9.NN184.01.0"
               ],
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
@@ -32844,9 +33293,19 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "84"
+            },
+            {
+              "filename": "9.P3784.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\84\\9.P3784.01.0.pdf",
+              "nine_codes": [
+                "9.P3784.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "84"
             }
           ],
-          "pdf_count": 416
+          "pdf_count": 423
         },
         "Transmission": {
           "models": [
@@ -33006,8 +33465,8 @@
           "pdf_count": 11
         }
       },
-      "total_pdfs": 788,
-      "total_nine_codes": 229,
+      "total_pdfs": 796,
+      "total_nine_codes": 235,
       "unique_nine_codes": [
         "9.MW284.10.0",
         "9.GR684.05.0",
@@ -33072,6 +33531,7 @@
         "9.Y8184.20.0",
         "9.KG184.07.0",
         "9.HA684.06.0",
+        "9.AW784.19.0",
         "9.EE384.02.0",
         "9.IX084.00.0",
         "9.J9684.09.0",
@@ -33142,7 +33602,6 @@
         "9.DB684.50.0",
         "9.EE384.10.0",
         "9.EE384.12.0",
-        "9.AW784.19.0",
         "9.KE484.50.0",
         "9.MG384.30.0",
         "9.MG384.50.0",
@@ -33200,6 +33659,8 @@
         "I9.DR484.00.0",
         "I9.DR684.00.0",
         "I9.J1284.05.0",
+        "9.AW784.31.0",
+        "9.EC284.10.0",
         "9.JR784.07.0",
         "9.JT384.08.0",
         "9.JT384.10.0",
@@ -33209,9 +33670,11 @@
         "9.JT984.20.0",
         "9.KW984.06.0",
         "9.LX484.06.0",
+        "9.NB684.07.0",
         "9.NK784.01.0",
         "9.NK784.05.0",
         "9.NK984.01.0",
+        "9.NK984.05.0",
         "9.NK984.06.0",
         "9.NL484.01.0",
         "9.NL484.05.0",
@@ -33226,10 +33689,12 @@
         "9.NL984.17.0",
         "9.NL984.21.0",
         "9.NL984.25.0",
+        "9.NL984.30.0",
         "9.NL984.31.0",
         "9.NL984.32.0",
         "9.NM284.06.0",
         "9.NN184.00.0",
+        "9.NN184.01.0",
         "9.NN184.06.0",
         "9.NN184.09.0",
         "9.NN184.30.0",
@@ -33340,6 +33805,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Cabin\\F - 2018-06\\FRTNAT",
               "pdf_count": 3
+            },
+            {
+              "name": "F - 2018-06\\PB345 F",
+              "path": "Cabin\\F - 2018-06\\PB345 F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -34942,9 +35412,19 @@
               "department": "Cabin",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "85"
+            },
+            {
+              "filename": "9.NL985.70.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\85\\9.NL985.70.0.pdf",
+              "nine_codes": [
+                "9.NL985.70.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "85"
             }
           ],
-          "pdf_count": 160
+          "pdf_count": 161
         },
         "First Line": {
           "models": [
@@ -35155,7 +35635,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 5
+              "pdf_count": 7
             }
           ],
           "pdfs": [
@@ -37130,6 +37610,26 @@
               "functional_group": "85"
             },
             {
+              "filename": "9.JT085.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\85\\9.JT085.10.0.pdf",
+              "nine_codes": [
+                "9.JT085.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "85"
+            },
+            {
+              "filename": "9.JT385.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\85\\9.JT385.10.0.pdf",
+              "nine_codes": [
+                "9.JT385.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "85"
+            },
+            {
               "filename": "9.JT385.12.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\85\\9.JT385.12.0.pdf",
               "nine_codes": [
@@ -37170,11 +37670,11 @@
               "functional_group": "85"
             }
           ],
-          "pdf_count": 201
+          "pdf_count": 203
         }
       },
-      "total_pdfs": 367,
-      "total_nine_codes": 107,
+      "total_pdfs": 370,
+      "total_nine_codes": 108,
       "unique_nine_codes": [
         "9.GR685.20.0",
         "9.MW285.05.0",
@@ -37223,6 +37723,7 @@
         "I9.BX185.03.0",
         "I9.EY985.03.0",
         "I9.BX185.01.0",
+        "9.NL985.70.0",
         "I9.T5985.11.0",
         "9.HA685.11.0",
         "9.NJ285.10.0",
@@ -37384,6 +37885,11 @@
             {
               "name": "F - 2018-06\\FRTNAT",
               "path": "Cabin\\F - 2018-06\\FRTNAT",
+              "pdf_count": 1
+            },
+            {
+              "name": "F - 2018-06\\PB345 F",
+              "path": "Cabin\\F - 2018-06\\PB345 F",
               "pdf_count": 1
             }
           ],
@@ -39017,9 +39523,19 @@
               "department": "Cabin",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "71"
+            },
+            {
+              "filename": "9.GD971.00.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\71\\9.GD971.00.0.pdf",
+              "nine_codes": [
+                "9.GD971.00.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "71"
             }
           ],
-          "pdf_count": 163
+          "pdf_count": 164
         },
         "Massey Ferguson": {
           "models": [
@@ -39173,7 +39689,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -39746,12 +40262,22 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "71"
+            },
+            {
+              "filename": "9.T6471.60.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\71\\9.T6471.60.0.pdf",
+              "nine_codes": [
+                "9.T6471.60.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "71"
             }
           ],
-          "pdf_count": 57
+          "pdf_count": 58
         }
       },
-      "total_pdfs": 223,
+      "total_pdfs": 225,
       "total_nine_codes": 59,
       "unique_nine_codes": [
         "9.FP771.90.0",
@@ -40317,7 +40843,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 6
+              "pdf_count": 10
             }
           ],
           "pdfs": [
@@ -42602,6 +43128,36 @@
               "functional_group": "73"
             },
             {
+              "filename": "9.GN273.15.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\73\\9.GN273.15.0.pdf",
+              "nine_codes": [
+                "9.GN273.15.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "73"
+            },
+            {
+              "filename": "9.GN273.17.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\73\\9.GN273.17.0.pdf",
+              "nine_codes": [
+                "9.GN273.17.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "73"
+            },
+            {
+              "filename": "9.GN273.31.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\73\\9.GN273.31.0.pdf",
+              "nine_codes": [
+                "9.GN273.31.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "73"
+            },
+            {
               "filename": "9.NL973.01.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\73\\9.NL973.01.0.pdf",
               "nine_codes": [
@@ -42660,12 +43216,22 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "73"
+            },
+            {
+              "filename": "9.T6473.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\73\\9.T6473.10.0.pdf",
+              "nine_codes": [
+                "9.T6473.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "73"
             }
           ],
-          "pdf_count": 234
+          "pdf_count": 238
         }
       },
-      "total_pdfs": 262,
+      "total_pdfs": 266,
       "total_nine_codes": 102,
       "unique_nine_codes": [
         "9.GR673.00.0",
@@ -43080,7 +43646,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 5
             }
           ],
           "pdfs": [
@@ -44685,6 +45251,26 @@
               "functional_group": "56"
             },
             {
+              "filename": "9.GQ856.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\56\\9.GQ856.00.0.pdf",
+              "nine_codes": [
+                "9.GQ856.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "56"
+            },
+            {
+              "filename": "9.IY056.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\56\\9.IY056.00.0.pdf",
+              "nine_codes": [
+                "9.IY056.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "56"
+            },
+            {
               "filename": "9.OB356.00.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\56\\9.OB356.00.0.pdf",
               "nine_codes": [
@@ -44715,7 +45301,7 @@
               "functional_group": "56"
             }
           ],
-          "pdf_count": 163
+          "pdf_count": 165
         },
         "Transmission": {
           "models": [
@@ -44750,8 +45336,8 @@
           "pdf_count": 2
         }
       },
-      "total_pdfs": 179,
-      "total_nine_codes": 69,
+      "total_pdfs": 181,
+      "total_nine_codes": 70,
       "unique_nine_codes": [
         "9.GS256.03.0",
         "9.DB256.03.0",
@@ -44817,6 +45403,7 @@
         "9.GD756.01.0_2",
         "9.GT556.00.0",
         "I9.DR456.00.0",
+        "9.GQ856.00.0",
         "9.OB356.00.0",
         "9.OB656.00.0_1",
         "9.OB656.00.0_2",
@@ -45518,6 +46105,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Second Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 2
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Second Line\\F - 2018-06\\PB345F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -46080,12 +46672,22 @@
               "department": "Second Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "61"
+            },
+            {
+              "filename": "9.LJ461.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\61\\9.LJ461.01.0.pdf",
+              "nine_codes": [
+                "9.LJ461.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "61"
             }
           ],
-          "pdf_count": 56
+          "pdf_count": 57
         }
       },
-      "total_pdfs": 106,
+      "total_pdfs": 107,
       "total_nine_codes": 27,
       "unique_nine_codes": [
         "9.DB261.01.0",
@@ -46878,7 +47480,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 8
+              "pdf_count": 13
             }
           ],
           "pdfs": [
@@ -48613,6 +49215,36 @@
               "functional_group": "66"
             },
             {
+              "filename": "9.LB266.05.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\66\\9.LB266.05.0.pdf",
+              "nine_codes": [
+                "9.LB266.05.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
+            },
+            {
+              "filename": "9.NL666.03.0_1.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\66\\9.NL666.03.0_1.pdf",
+              "nine_codes": [
+                "9.NL666.03.0_1"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
+            },
+            {
+              "filename": "9.NL666.03.0_2.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\66\\9.NL666.03.0_2.pdf",
+              "nine_codes": [
+                "9.NL666.03.0_2"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
+            },
+            {
               "filename": "9.NL966.01.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\66\\9.NL966.01.0.pdf",
               "nine_codes": [
@@ -48683,6 +49315,16 @@
               "functional_group": "66"
             },
             {
+              "filename": "9.NN166.10.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\66\\9.NN166.10.0.pdf",
+              "nine_codes": [
+                "9.NN166.10.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
+            },
+            {
               "filename": "9.NN166.12.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\66\\9.NN166.12.0.pdf",
               "nine_codes": [
@@ -48691,9 +49333,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "66"
+            },
+            {
+              "filename": "I9.EE266.02.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\66\\I9.EE266.02.0.pdf",
+              "nine_codes": [
+                "I9.EE266.02.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
             }
           ],
-          "pdf_count": 181
+          "pdf_count": 186
         },
         "Second Line": {
           "models": [
@@ -48800,7 +49452,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 4
             }
           ],
           "pdfs": [
@@ -49195,6 +49847,26 @@
               "functional_group": "66"
             },
             {
+              "filename": "9.NL666.03.0_1.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\66\\9.NL666.03.0_1.pdf",
+              "nine_codes": [
+                "9.NL666.03.0_1"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
+            },
+            {
+              "filename": "9.NL666.03.0_2.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\66\\9.NL666.03.0_2.pdf",
+              "nine_codes": [
+                "9.NL666.03.0_2"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "66"
+            },
+            {
               "filename": "9.NL966.01.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\66\\9.NL966.01.0.pdf",
               "nine_codes": [
@@ -49215,7 +49887,7 @@
               "functional_group": "66"
             }
           ],
-          "pdf_count": 41
+          "pdf_count": 43
         },
         "Transmission": {
           "models": [
@@ -49380,8 +50052,8 @@
           "pdf_count": 14
         }
       },
-      "total_pdfs": 291,
-      "total_nine_codes": 106,
+      "total_pdfs": 298,
+      "total_nine_codes": 110,
       "unique_nine_codes": [
         "9.T5966.55.0",
         "9.GN266.03.0",
@@ -49471,6 +50143,9 @@
         "9.J1266.35.0",
         "I9.BX166.04.0",
         "I9.BX166.09.0",
+        "9.LB266.05.0",
+        "9.NL666.03.0_1",
+        "9.NL666.03.0_2",
         "9.NL966.01.0",
         "9.NL966.03.0_1",
         "9.NL966.03.0_2",
@@ -49478,6 +50153,7 @@
         "9.NN166.04.0",
         "9.NN166.05.0",
         "9.NN166.06.0",
+        "9.NN166.10.0",
         "9.NN166.12.0",
         "9.MT566.07.0",
         "9.BG166.06.0",
@@ -49962,7 +50638,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 4
             }
           ],
           "pdfs": [
@@ -51177,6 +51853,16 @@
               "functional_group": "88"
             },
             {
+              "filename": "9.NN188.16.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\88\\9.NN188.16.0.pdf",
+              "nine_codes": [
+                "9.NN188.16.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "88"
+            },
+            {
               "filename": "9.NN188.28.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\88\\9.NN188.28.0.pdf",
               "nine_codes": [
@@ -51197,7 +51883,7 @@
               "functional_group": "88"
             }
           ],
-          "pdf_count": 123
+          "pdf_count": 124
         },
         "Second Line": {
           "models": [
@@ -51309,7 +51995,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 5
             }
           ],
           "pdfs": [
@@ -52564,6 +53250,36 @@
               "functional_group": "88"
             },
             {
+              "filename": "9.NL988.17.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\88\\9.NL988.17.0.pdf",
+              "nine_codes": [
+                "9.NL988.17.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "88"
+            },
+            {
+              "filename": "9.NL988.30.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\88\\9.NL988.30.0.pdf",
+              "nine_codes": [
+                "9.NL988.30.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "88"
+            },
+            {
+              "filename": "9.NN188.16.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\88\\9.NN188.16.0.pdf",
+              "nine_codes": [
+                "9.NN188.16.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "88"
+            },
+            {
               "filename": "9.NN188.28.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\88\\9.NN188.28.0.pdf",
               "nine_codes": [
@@ -52584,7 +53300,7 @@
               "functional_group": "88"
             }
           ],
-          "pdf_count": 127
+          "pdf_count": 130
         },
         "Transmission": {
           "models": [
@@ -52829,8 +53545,8 @@
           "pdf_count": 21
         }
       },
-      "total_pdfs": 304,
-      "total_nine_codes": 80,
+      "total_pdfs": 308,
+      "total_nine_codes": 83,
       "unique_nine_codes": [
         "9.DB288.25.0",
         "9.DB388.25.0",
@@ -52873,6 +53589,7 @@
         "9.S4088.00.0",
         "9.S4488.00.0",
         "9.NN188.00.0",
+        "9.NN188.16.0",
         "9.NN188.28.0",
         "9.NN188.80.0",
         "9.GR688.51.0",
@@ -52903,6 +53620,8 @@
         "9.BX188.17.0",
         "9.BX188.27.0",
         "9.CK788.27.0",
+        "9.NL988.17.0",
+        "9.NL988.30.0",
         "9.BG388.00.0",
         "9.BG388.80.0",
         "9.DF688.25.0",
@@ -53099,7 +53818,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -53242,13 +53961,23 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "67"
+            },
+            {
+              "filename": "9.NL967.05.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\67\\9.NL967.05.0.pdf",
+              "nine_codes": [
+                "9.NL967.05.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "67"
             }
           ],
-          "pdf_count": 14
+          "pdf_count": 15
         }
       },
-      "total_pdfs": 24,
-      "total_nine_codes": 15,
+      "total_pdfs": 25,
+      "total_nine_codes": 16,
       "unique_nine_codes": [
         "9.T5967.11.0",
         "9.IV667.10.0",
@@ -53264,7 +53993,8 @@
         "I9.BK167.00.0",
         "I9.F2067.14.0",
         "9.BK167.05.0",
-        "9.F2067.14.0"
+        "9.F2067.14.0",
+        "9.NL967.05.0"
       ]
     },
     "59": {
@@ -53332,6 +54062,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Cabin\\F - 2018-06\\FRTNAT",
               "pdf_count": 3
+            },
+            {
+              "name": "F - 2018-06\\PB345 F",
+              "path": "Cabin\\F - 2018-06\\PB345 F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -53494,9 +54229,19 @@
               "department": "Cabin",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "59"
+            },
+            {
+              "filename": "9.Y7259.71.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\59\\9.Y7259.71.0.pdf",
+              "nine_codes": [
+                "9.Y7259.71.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "59"
             }
           ],
-          "pdf_count": 16
+          "pdf_count": 17
         },
         "First Line": {
           "models": [
@@ -54686,6 +55431,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Second Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 3
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Second Line\\F - 2018-06\\PB345F",
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -55578,9 +56328,39 @@
               "department": "Second Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "59"
+            },
+            {
+              "filename": "9.NL959.05.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\59\\9.NL959.05.0.pdf",
+              "nine_codes": [
+                "9.NL959.05.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "59"
+            },
+            {
+              "filename": "9.NL959.52.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\59\\9.NL959.52.0.pdf",
+              "nine_codes": [
+                "9.NL959.52.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "59"
+            },
+            {
+              "filename": "9.Y7259.71.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\59\\9.Y7259.71.0.pdf",
+              "nine_codes": [
+                "9.Y7259.71.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "59"
             }
           ],
-          "pdf_count": 89
+          "pdf_count": 92
         },
         "Transmission": {
           "models": [
@@ -55622,7 +56402,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Transmission\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -55825,13 +56605,23 @@
               "department": "Transmission",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "59"
+            },
+            {
+              "filename": "9.U7059.20.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\59\\9.U7059.20.0.pdf",
+              "nine_codes": [
+                "9.U7059.20.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "59"
             }
           ],
-          "pdf_count": 20
+          "pdf_count": 21
         }
       },
-      "total_pdfs": 224,
-      "total_nine_codes": 73,
+      "total_pdfs": 229,
+      "total_nine_codes": 76,
       "unique_nine_codes": [
         "9.GN259.65.0",
         "9.DB259.70.0",
@@ -55890,6 +56680,8 @@
         "9.KG359.65.0",
         "9.KH059.70.0",
         "9.Y5259.61.0",
+        "9.NL959.05.0",
+        "9.NL959.52.0",
         "9.FP259.51.0",
         "I9.FP359.51.0",
         "I9.EC759.02.0",
@@ -55905,7 +56697,8 @@
         "9.Y5259.31.0",
         "9.Y5659.32.0",
         "9.LJ159.20.0",
-        "9.NN159.65.0"
+        "9.NN159.65.0",
+        "9.U7059.20.0"
       ]
     },
     "64": {
@@ -56736,7 +57529,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 6
             }
           ],
           "pdfs": [
@@ -57281,6 +58074,46 @@
               "functional_group": "64"
             },
             {
+              "filename": "9.EY964.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\64\\9.EY964.00.0.pdf",
+              "nine_codes": [
+                "9.EY964.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "64"
+            },
+            {
+              "filename": "9.NL964.02.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\64\\9.NL964.02.0.pdf",
+              "nine_codes": [
+                "9.NL964.02.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "64"
+            },
+            {
+              "filename": "9.NL964.03.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\64\\9.NL964.03.0.pdf",
+              "nine_codes": [
+                "9.NL964.03.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "64"
+            },
+            {
+              "filename": "9.NN164.03.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\64\\9.NN164.03.0.pdf",
+              "nine_codes": [
+                "9.NN164.03.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "64"
+            },
+            {
               "filename": "9.NN164.04.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\64\\9.NN164.04.0.pdf",
               "nine_codes": [
@@ -57301,7 +58134,7 @@
               "functional_group": "64"
             }
           ],
-          "pdf_count": 56
+          "pdf_count": 60
         },
         "Transmission": {
           "models": [
@@ -57356,8 +58189,8 @@
           "pdf_count": 3
         }
       },
-      "total_pdfs": 118,
-      "total_nine_codes": 44,
+      "total_pdfs": 122,
+      "total_nine_codes": 47,
       "unique_nine_codes": [
         "I9.EE364.01.0",
         "I9.EE364.02.0",
@@ -57401,6 +58234,9 @@
         "9.BX164.01.0",
         "9.BX164.02.0",
         "9.BX164.03.0",
+        "9.NL964.02.0",
+        "9.NL964.03.0",
+        "9.NN164.03.0",
         "9.NN164.04.0",
         "I9.FP364.00.0"
       ]
@@ -57469,7 +58305,7 @@
             {
               "name": "F - 2018-06\\PB345 F",
               "path": "Cabin\\F - 2018-06\\PB345 F",
-              "pdf_count": 1
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -57672,9 +58508,19 @@
               "department": "Cabin",
               "model": "F - 2018-06\\PB345 F",
               "functional_group": "65"
+            },
+            {
+              "filename": "9.NL965.10.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\65\\9.NL965.10.0.pdf",
+              "nine_codes": [
+                "9.NL965.10.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "65"
             }
           ],
-          "pdf_count": 20
+          "pdf_count": 21
         },
         "First Line": {
           "models": [
@@ -57747,6 +58593,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "First Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 3
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "First Line\\F - 2018-06\\PB345F",
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -57969,9 +58820,29 @@
               "department": "First Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "65"
+            },
+            {
+              "filename": "9.NL965.01.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\65\\9.NL965.01.0.pdf",
+              "nine_codes": [
+                "9.NL965.01.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "65"
+            },
+            {
+              "filename": "9.NL965.10.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\65\\9.NL965.10.0.pdf",
+              "nine_codes": [
+                "9.NL965.10.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "65"
             }
           ],
-          "pdf_count": 22
+          "pdf_count": 24
         },
         "Second Line": {
           "models": [
@@ -58003,7 +58874,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -58098,6 +58969,26 @@
               "functional_group": "65"
             },
             {
+              "filename": "9.NL965.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\65\\9.NL965.01.0.pdf",
+              "nine_codes": [
+                "9.NL965.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "65"
+            },
+            {
+              "filename": "9.NL965.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\65\\9.NL965.10.0.pdf",
+              "nine_codes": [
+                "9.NL965.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "65"
+            },
+            {
               "filename": "9.NN165.10.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\65\\9.NN165.10.0.pdf",
               "nine_codes": [
@@ -58108,7 +58999,7 @@
               "functional_group": "65"
             }
           ],
-          "pdf_count": 10
+          "pdf_count": 12
         },
         "Transmission": {
           "models": [
@@ -58135,6 +59026,11 @@
             {
               "name": "F - 2018-06\\FRTNAT",
               "path": "Transmission\\F - 2018-06\\FRTNAT",
+              "pdf_count": 1
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Transmission\\F - 2018-06\\PB345F",
               "pdf_count": 1
             }
           ],
@@ -58208,19 +59104,30 @@
               "department": "Transmission",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "65"
+            },
+            {
+              "filename": "I9.72365.00.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\65\\I9.72365.00.0.pdf",
+              "nine_codes": [
+                "I9.72365.00.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "65"
             }
           ],
-          "pdf_count": 7
+          "pdf_count": 8
         }
       },
-      "total_pdfs": 59,
-      "total_nine_codes": 25,
+      "total_pdfs": 65,
+      "total_nine_codes": 28,
       "unique_nine_codes": [
         "9.LU065.02.0",
         "9.DB265.01.0",
         "I9.EY965.01.0",
         "9.BX165.01.0",
         "I9.CL365.01.0",
+        "9.NL965.10.0",
         "I9.FP365.03.0",
         "I9.T5965.02.0",
         "I9.T5965.03.0",
@@ -58231,6 +59138,7 @@
         "I9.CK765.02.0",
         "9.BX165.02.0",
         "I9.L1065.00.0",
+        "9.NL965.01.0",
         "9.MX265.00.0",
         "9.DB365.03.0",
         "9.NN165.10.0",
@@ -58240,7 +59148,8 @@
         "9.GN265.00.0",
         "9.GP465.00.0",
         "9.GP565.00.0",
-        "I9.72365.08.0"
+        "I9.72365.08.0",
+        "I9.72365.00.0"
       ]
     },
     "68": {
@@ -58332,7 +59241,7 @@
             {
               "name": "F - 2018-06\\PB345 F",
               "path": "Cabin\\F - 2018-06\\PB345 F",
-              "pdf_count": 2
+              "pdf_count": 4
             }
           ],
           "pdfs": [
@@ -59647,6 +60556,26 @@
               "functional_group": "68"
             },
             {
+              "filename": "9.NL968.01.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\68\\9.NL968.01.0.pdf",
+              "nine_codes": [
+                "9.NL968.01.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "68"
+            },
+            {
+              "filename": "9.NL968.02.0.pdf",
+              "path": "Cabin\\F - 2018-06\\PB345 F\\68\\9.NL968.02.0.pdf",
+              "nine_codes": [
+                "9.NL968.02.0"
+              ],
+              "department": "Cabin",
+              "model": "F - 2018-06\\PB345 F",
+              "functional_group": "68"
+            },
+            {
               "filename": "9.NL968.03.0.pdf",
               "path": "Cabin\\F - 2018-06\\PB345 F\\68\\9.NL968.03.0.pdf",
               "nine_codes": [
@@ -59657,7 +60586,7 @@
               "functional_group": "68"
             }
           ],
-          "pdf_count": 132
+          "pdf_count": 134
         },
         "First Line": {
           "models": [
@@ -59745,6 +60674,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "First Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 2
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "First Line\\F - 2018-06\\PB345F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -60037,9 +60971,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "68"
+            },
+            {
+              "filename": "9.NL968.06.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\68\\9.NL968.06.0.pdf",
+              "nine_codes": [
+                "9.NL968.06.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "68"
             }
           ],
-          "pdf_count": 29
+          "pdf_count": 30
         },
         "Second Line": {
           "models": [
@@ -60151,7 +61095,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -61086,6 +62030,16 @@
               "functional_group": "68"
             },
             {
+              "filename": "9.NK968.06.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\68\\9.NK968.06.0.pdf",
+              "nine_codes": [
+                "9.NK968.06.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "68"
+            },
+            {
               "filename": "9.NL968.00.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\68\\9.NL968.00.0.pdf",
               "nine_codes": [
@@ -61094,9 +62048,19 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "68"
+            },
+            {
+              "filename": "9.NL968.06.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\68\\9.NL968.06.0.pdf",
+              "nine_codes": [
+                "9.NL968.06.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "68"
             }
           ],
-          "pdf_count": 94
+          "pdf_count": 96
         },
         "Transmission": {
           "models": [
@@ -61236,8 +62200,8 @@
           "pdf_count": 11
         }
       },
-      "total_pdfs": 266,
-      "total_nine_codes": 63,
+      "total_pdfs": 271,
+      "total_nine_codes": 67,
       "unique_nine_codes": [
         "9.EE368.11.0",
         "9.EE368.14.0",
@@ -61272,6 +62236,8 @@
         "9.CK768.03.0",
         "I9.CK768.01.0",
         "9.NL968.00.0",
+        "9.NL968.01.0",
+        "9.NL968.02.0",
         "9.NL968.03.0",
         "9.MW268.00.0",
         "9.DB268.16.0",
@@ -61281,6 +62247,7 @@
         "9.MM768.06.0",
         "I9.CK768.12.0",
         "I9.BX168.06.0",
+        "9.NL968.06.0",
         "9.FP768.00.0",
         "I9.FP368.00.0",
         "I9.FP368.05.0",
@@ -61296,6 +62263,7 @@
         "9.KE568.15.0",
         "9.BX168.01.0",
         "9.BX168.12.0",
+        "9.NK968.06.0",
         "I9.FP368.06.0",
         "I9.T5968.00.0",
         "9.BX168.04.0",
@@ -62732,7 +63700,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -64827,6 +65795,16 @@
               "functional_group": "74"
             },
             {
+              "filename": "9.NL974.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\74\\9.NL974.00.0.pdf",
+              "nine_codes": [
+                "9.NL974.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "74"
+            },
+            {
               "filename": "9.NL974.03.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\74\\9.NL974.03.0.pdf",
               "nine_codes": [
@@ -64847,11 +65825,11 @@
               "functional_group": "74"
             }
           ],
-          "pdf_count": 211
+          "pdf_count": 212
         }
       },
-      "total_pdfs": 231,
-      "total_nine_codes": 94,
+      "total_pdfs": 232,
+      "total_nine_codes": 95,
       "unique_nine_codes": [
         "9.DB274.50.0",
         "9.FN474.32.0",
@@ -64945,6 +65923,7 @@
         "I9.CK774.01.0",
         "I9.CK774.03.0",
         "I9.R8374.03.0",
+        "9.NL974.00.0",
         "9.NL974.03.0",
         "9.NN174.00.0"
       ]
@@ -66238,7 +67217,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 4
+              "pdf_count": 11
             }
           ],
           "pdfs": [
@@ -67133,6 +68112,56 @@
               "functional_group": "63"
             },
             {
+              "filename": "9.E6163.00.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\9.E6163.00.0.pdf",
+              "nine_codes": [
+                "9.E6163.00.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
+              "filename": "9.NK963.03.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NK963.03.0.pdf",
+              "nine_codes": [
+                "9.NK963.03.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
+              "filename": "9.NL663.05.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NL663.05.0.pdf",
+              "nine_codes": [
+                "9.NL663.05.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
+              "filename": "9.NL963.01.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NL963.01.0.pdf",
+              "nine_codes": [
+                "9.NL963.01.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
+              "filename": "9.NL963.02.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NL963.02.0.pdf",
+              "nine_codes": [
+                "9.NL963.02.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
               "filename": "9.NL963.05.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NL963.05.0.pdf",
               "nine_codes": [
@@ -67163,6 +68192,16 @@
               "functional_group": "63"
             },
             {
+              "filename": "9.NN163.03.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NN163.03.0.pdf",
+              "nine_codes": [
+                "9.NN163.03.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
               "filename": "9.NN163.04.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\63\\9.NN163.04.0.pdf",
               "nine_codes": [
@@ -67171,9 +68210,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "63"
+            },
+            {
+              "filename": "I9.J1263.02.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\63\\I9.J1263.02.0.pdf",
+              "nine_codes": [
+                "I9.J1263.02.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
             }
           ],
-          "pdf_count": 93
+          "pdf_count": 100
         },
         "Second Line": {
           "models": [
@@ -67285,7 +68334,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 4
             }
           ],
           "pdfs": [
@@ -67870,6 +68919,16 @@
               "functional_group": "63"
             },
             {
+              "filename": "9.NL963.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\63\\9.NL963.01.0.pdf",
+              "nine_codes": [
+                "9.NL963.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "63"
+            },
+            {
               "filename": "9.NL963.06.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\63\\9.NL963.06.0.pdf",
               "nine_codes": [
@@ -67900,11 +68959,11 @@
               "functional_group": "63"
             }
           ],
-          "pdf_count": 61
+          "pdf_count": 62
         }
       },
-      "total_pdfs": 171,
-      "total_nine_codes": 65,
+      "total_pdfs": 179,
+      "total_nine_codes": 71,
       "unique_nine_codes": [
         "9.KE463.02.0",
         "9.DB263.02.0",
@@ -67955,16 +69014,22 @@
         "I9.EY963.00.0",
         "I9.BX163.02.0",
         "I9.CK763.00.0",
+        "9.E6163.00.0",
+        "9.NK963.03.0",
+        "9.NL663.05.0",
+        "9.NL963.01.0",
+        "9.NL963.02.0",
         "9.NL963.05.0",
         "9.NN163.01.0",
         "9.NN163.02.0",
+        "9.NN163.03.0",
         "9.NN163.04.0",
+        "I9.J1263.02.0",
         "9.GS063.05.0",
         "I9.D1063.03.0",
         "I9.S4463.02.0",
         "I9.EE363.01.0",
         "I9.J1263.01.0",
-        "I9.J1263.02.0",
         "9.BR763.00.0",
         "9.MX263.07.0",
         "9.GP563.03.0",
@@ -68540,6 +69605,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Second Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 2
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Second Line\\F - 2018-06\\PB345F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -68652,13 +69722,23 @@
               "department": "Second Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "75"
+            },
+            {
+              "filename": "9.NL975.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\75\\9.NL975.00.0.pdf",
+              "nine_codes": [
+                "9.NL975.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "75"
             }
           ],
-          "pdf_count": 11
+          "pdf_count": 12
         }
       },
-      "total_pdfs": 59,
-      "total_nine_codes": 15,
+      "total_pdfs": 60,
+      "total_nine_codes": 16,
       "unique_nine_codes": [
         "9.DB275.00.0",
         "9.DB275.01.0",
@@ -68674,7 +69754,8 @@
         "I9.R0675.01.0",
         "I9.R0675.04.0",
         "9.GU175.00.0",
-        "9.GD975.01.0"
+        "9.GD975.01.0",
+        "9.NL975.00.0"
       ]
     },
     "89": {
@@ -69195,7 +70276,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 5
+              "pdf_count": 7
             }
           ],
           "pdfs": [
@@ -71830,6 +72911,26 @@
               "functional_group": "89"
             },
             {
+              "filename": "9.NN189.07.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\89\\9.NN189.07.0.pdf",
+              "nine_codes": [
+                "9.NN189.07.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "89"
+            },
+            {
+              "filename": "9.NN189.08.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\89\\9.NN189.08.0.pdf",
+              "nine_codes": [
+                "9.NN189.08.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "89"
+            },
+            {
               "filename": "9.NN189.09.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\89\\9.NN189.09.0.pdf",
               "nine_codes": [
@@ -71850,7 +72951,7 @@
               "functional_group": "89"
             }
           ],
-          "pdf_count": 265
+          "pdf_count": 267
         },
         "Second Line": {
           "models": [
@@ -72547,8 +73648,8 @@
           "pdf_count": 13
         }
       },
-      "total_pdfs": 364,
-      "total_nine_codes": 112,
+      "total_pdfs": 366,
+      "total_nine_codes": 114,
       "unique_nine_codes": [
         "9.MR189.20.0_1",
         "9.MR189.20.0_2",
@@ -72650,6 +73751,8 @@
         "9.NL289.13.0",
         "9.NN189.03.0",
         "9.NN189.05.0",
+        "9.NN189.07.0",
+        "9.NN189.08.0",
         "9.NN189.09.0",
         "9.NN189.13.0",
         "9.GP589.01.0",
@@ -81594,6 +82697,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "First Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 1
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "First Line\\F - 2018-06\\PB345F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -82126,9 +83234,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "99"
+            },
+            {
+              "filename": "9.56699.04.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\99\\9.56699.04.0.pdf",
+              "nine_codes": [
+                "9.56699.04.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
             }
           ],
-          "pdf_count": 53
+          "pdf_count": 54
         },
         "Massey Ferguson": {
           "models": [
@@ -82302,7 +83420,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 14
             }
           ],
           "pdfs": [
@@ -84277,6 +85395,126 @@
               "functional_group": "99"
             },
             {
+              "filename": "9.BJ899.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.BJ899.01.0.pdf",
+              "nine_codes": [
+                "9.BJ899.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.DB299.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.DB299.10.0.pdf",
+              "nine_codes": [
+                "9.DB299.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.DB699.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.DB699.00.0.pdf",
+              "nine_codes": [
+                "9.DB699.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.GP499.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.GP499.00.0.pdf",
+              "nine_codes": [
+                "9.GP499.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.GQ899.11.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.GQ899.11.0.pdf",
+              "nine_codes": [
+                "9.GQ899.11.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.KE499.03.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.KE499.03.0.pdf",
+              "nine_codes": [
+                "9.KE499.03.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.L1099.50.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.L1099.50.0.pdf",
+              "nine_codes": [
+                "9.L1099.50.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.MK599.50.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.MK599.50.0.pdf",
+              "nine_codes": [
+                "9.MK599.50.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.MK799.50.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.MK799.50.0.pdf",
+              "nine_codes": [
+                "9.MK799.50.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.ML799.50.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.ML799.50.0.pdf",
+              "nine_codes": [
+                "9.ML799.50.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.OA899.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.OA899.10.0.pdf",
+              "nine_codes": [
+                "9.OA899.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
+              "filename": "9.OA999.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.OA999.10.0.pdf",
+              "nine_codes": [
+                "9.OA999.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
+            },
+            {
               "filename": "9.OB699.10.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.OB699.10.0.pdf",
               "nine_codes": [
@@ -84285,13 +85523,23 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "99"
+            },
+            {
+              "filename": "9.T5999.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\99\\9.T5999.10.0.pdf",
+              "nine_codes": [
+                "9.T5999.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "99"
             }
           ],
-          "pdf_count": 198
+          "pdf_count": 211
         }
       },
-      "total_pdfs": 264,
-      "total_nine_codes": 93,
+      "total_pdfs": 278,
+      "total_nine_codes": 99,
       "unique_nine_codes": [
         "9.IJ799.12.0",
         "9.IK199.12.0",
@@ -84314,6 +85562,7 @@
         "9.DC099.00.0",
         "9.DC899.00.0",
         "I9.72399.03.0",
+        "9.56699.04.0",
         "9.MW999.00.0",
         "9.NJ299.20.0",
         "9.NJ299.25.0",
@@ -84385,6 +85634,11 @@
         "9.NI099.10.0",
         "9.NI199.10.0",
         "9.NI299.11.0",
+        "9.BJ899.01.0",
+        "9.GQ899.11.0",
+        "9.L1099.50.0",
+        "9.OA899.10.0",
+        "9.OA999.10.0",
         "9.OB699.10.0"
       ]
     },
@@ -84473,6 +85727,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Engine Configuration\\F - 2018-06\\FRTNAT",
               "pdf_count": 3
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F",
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -84775,20 +86034,42 @@
               "department": "Engine Configuration",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "23"
+            },
+            {
+              "filename": "9.JT323.00.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\23\\9.JT323.00.0.pdf",
+              "nine_codes": [
+                "9.JT323.00.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "23"
+            },
+            {
+              "filename": "9.KX023.00.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\23\\9.KX023.00.0.pdf",
+              "nine_codes": [
+                "9.KX023.00.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "23"
             }
           ],
-          "pdf_count": 30
+          "pdf_count": 32
         }
       },
-      "total_pdfs": 30,
-      "total_nine_codes": 6,
+      "total_pdfs": 32,
+      "total_nine_codes": 8,
       "unique_nine_codes": [
         "I9.72323.04.0",
         "I9.J1423.00.0",
         "I9.J1223.00.0",
         "I9.T0623.00.0",
         "9.18823.00.0",
-        "I9.T0623.01.0"
+        "I9.T0623.01.0",
+        "9.JT323.00.0",
+        "9.KX023.00.0"
       ]
     },
     "24": {
@@ -85079,7 +86360,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Engine Configuration\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 8
             }
           ],
           "pdfs": [
@@ -85964,6 +87245,26 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.GN682.01.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.GN682.01.0.pdf",
+              "nine_codes": [
+                "9.GN682.01.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.LB082.02.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.LB082.02.0.pdf",
+              "nine_codes": [
+                "9.LB082.02.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.LB282.01.0.pdf",
               "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.LB282.01.0.pdf",
               "nine_codes": [
@@ -85984,6 +87285,16 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.LB682.02.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.LB682.02.0.pdf",
+              "nine_codes": [
+                "9.LB682.02.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.LB982.02.0.pdf",
               "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.LB982.02.0.pdf",
               "nine_codes": [
@@ -85992,9 +87303,29 @@
               "department": "Engine Configuration",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "82"
+            },
+            {
+              "filename": "9.LJ082.02.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.LJ082.02.0.pdf",
+              "nine_codes": [
+                "9.LJ082.02.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.LJ382.02.0.pdf",
+              "path": "Engine Configuration\\F - 2018-06\\PB345F\\82\\9.LJ382.02.0.pdf",
+              "nine_codes": [
+                "9.LJ382.02.0"
+              ],
+              "department": "Engine Configuration",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
             }
           ],
-          "pdf_count": 91
+          "pdf_count": 96
         },
         "First Line": {
           "models": [
@@ -86106,7 +87437,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 12
+              "pdf_count": 32
             }
           ],
           "pdfs": [
@@ -88821,10 +90152,180 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.NK982.01.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NK982.01.0.pdf",
+              "nine_codes": [
+                "9.NK982.01.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NK982.06.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NK982.06.0.pdf",
+              "nine_codes": [
+                "9.NK982.06.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NK982.40.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NK982.40.0.pdf",
+              "nine_codes": [
+                "9.NK982.40.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL282.06.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL282.06.0.pdf",
+              "nine_codes": [
+                "9.NL282.06.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL282.08.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL282.08.0.pdf",
+              "nine_codes": [
+                "9.NL282.08.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL282.16.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL282.16.0.pdf",
+              "nine_codes": [
+                "9.NL282.16.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL282.40.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL282.40.0.pdf",
+              "nine_codes": [
+                "9.NL282.40.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL682.06.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL682.06.0.pdf",
+              "nine_codes": [
+                "9.NL682.06.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL682.40.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL682.40.0.pdf",
+              "nine_codes": [
+                "9.NL682.40.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL882.08.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL882.08.0.pdf",
+              "nine_codes": [
+                "9.NL882.08.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.NL982.06.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL982.06.0.pdf",
               "nine_codes": [
                 "9.NL982.06.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.07.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL982.07.0.pdf",
+              "nine_codes": [
+                "9.NL982.07.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.08.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL982.08.0.pdf",
+              "nine_codes": [
+                "9.NL982.08.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.16.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL982.16.0.pdf",
+              "nine_codes": [
+                "9.NL982.16.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.40.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NL982.40.0.pdf",
+              "nine_codes": [
+                "9.NL982.40.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NM882.05.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NM882.05.0.pdf",
+              "nine_codes": [
+                "9.NM882.05.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NM882.13.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NM882.13.0.pdf",
+              "nine_codes": [
+                "9.NM882.13.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NM882.40.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NM882.40.0.pdf",
+              "nine_codes": [
+                "9.NM882.40.0"
               ],
               "department": "First Line",
               "model": "F - 2018-06\\PB345F",
@@ -88921,6 +90422,26 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.NN182.42.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NN182.42.0.pdf",
+              "nine_codes": [
+                "9.NN182.42.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NN182.44.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NN182.44.0.pdf",
+              "nine_codes": [
+                "9.NN182.44.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.NN182.46.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NN182.46.0.pdf",
               "nine_codes": [
@@ -88929,9 +90450,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "82"
+            },
+            {
+              "filename": "9.NN282.44.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\82\\9.NN282.44.0.pdf",
+              "nine_codes": [
+                "9.NN282.44.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
             }
           ],
-          "pdf_count": 282
+          "pdf_count": 302
         },
         "Second Line": {
           "models": [
@@ -89013,7 +90544,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 6
             }
           ],
           "pdfs": [
@@ -89308,6 +90839,46 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.NL282.08.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\82\\9.NL282.08.0.pdf",
+              "nine_codes": [
+                "9.NL282.08.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL882.08.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\82\\9.NL882.08.0.pdf",
+              "nine_codes": [
+                "9.NL882.08.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.08.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\82\\9.NL982.08.0.pdf",
+              "nine_codes": [
+                "9.NL982.08.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NM882.05.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\82\\9.NM882.05.0.pdf",
+              "nine_codes": [
+                "9.NM882.05.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.NM982.05.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\82\\9.NM982.05.0.pdf",
               "nine_codes": [
@@ -89316,9 +90887,19 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "82"
+            },
+            {
+              "filename": "9.NN182.08.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\82\\9.NN182.08.0.pdf",
+              "nine_codes": [
+                "9.NN182.08.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
             }
           ],
-          "pdf_count": 30
+          "pdf_count": 35
         },
         "Transmission": {
           "models": [
@@ -89370,7 +90951,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Transmission\\F - 2018-06\\PB345F",
-              "pdf_count": 7
+              "pdf_count": 16
             }
           ],
           "pdfs": [
@@ -90505,6 +92086,86 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.NL282.08.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL282.08.0.pdf",
+              "nine_codes": [
+                "9.NL282.08.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL282.16.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL282.16.0.pdf",
+              "nine_codes": [
+                "9.NL282.16.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL882.08.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL882.08.0.pdf",
+              "nine_codes": [
+                "9.NL882.08.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.07.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL982.07.0.pdf",
+              "nine_codes": [
+                "9.NL982.07.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.08.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL982.08.0.pdf",
+              "nine_codes": [
+                "9.NL982.08.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.14.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL982.14.0.pdf",
+              "nine_codes": [
+                "9.NL982.14.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.16.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL982.16.0.pdf",
+              "nine_codes": [
+                "9.NL982.16.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
+              "filename": "9.NL982.31.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NL982.31.0.pdf",
+              "nine_codes": [
+                "9.NL982.31.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.NN182.00.0.pdf",
               "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NN182.00.0.pdf",
               "nine_codes": [
@@ -90545,6 +92206,16 @@
               "functional_group": "82"
             },
             {
+              "filename": "9.NN182.16.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NN182.16.0.pdf",
+              "nine_codes": [
+                "9.NN182.16.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "82"
+            },
+            {
               "filename": "9.NN182.17.0.pdf",
               "path": "Transmission\\F - 2018-06\\PB345F\\82\\9.NN182.17.0.pdf",
               "nine_codes": [
@@ -90575,11 +92246,11 @@
               "functional_group": "82"
             }
           ],
-          "pdf_count": 120
+          "pdf_count": 129
         }
       },
-      "total_pdfs": 523,
-      "total_nine_codes": 267,
+      "total_pdfs": 562,
+      "total_nine_codes": 294,
       "unique_nine_codes": [
         "9.MW282.01.0",
         "9.CN982.01.0",
@@ -90614,9 +92285,13 @@
         "9.HA682.02.0",
         "9.HA782.02.0",
         "9.GU182.02.0",
+        "9.LB082.02.0",
         "9.LB282.01.0",
         "9.LB382.02.0",
+        "9.LB682.02.0",
         "9.LB982.02.0",
+        "9.LJ082.02.0",
+        "9.LJ382.02.0",
         "9.JZ882.09.0",
         "9.MW282.00.0",
         "9.MW282.02.0",
@@ -90738,7 +92413,24 @@
         "I9.CK782.09.0",
         "I9.CK782.42.0",
         "9.LB282.10.0",
+        "9.NK982.01.0",
+        "9.NK982.06.0",
+        "9.NK982.40.0",
+        "9.NL282.06.0",
+        "9.NL282.08.0",
+        "9.NL282.16.0",
+        "9.NL282.40.0",
+        "9.NL682.06.0",
+        "9.NL682.40.0",
+        "9.NL882.08.0",
         "9.NL982.06.0",
+        "9.NL982.07.0",
+        "9.NL982.08.0",
+        "9.NL982.16.0",
+        "9.NL982.40.0",
+        "9.NM882.05.0",
+        "9.NM882.13.0",
+        "9.NM882.40.0",
         "9.NM982.05.0",
         "9.NM982.13.0",
         "9.NM982.40.0",
@@ -90748,7 +92440,10 @@
         "9.NN182.08.0",
         "9.NN182.13.0",
         "9.NN182.37.0",
+        "9.NN182.42.0",
+        "9.NN182.44.0",
         "9.NN182.46.0",
+        "9.NN282.44.0",
         "I9.EE382.05.0",
         "9.P2582.07.0",
         "9.RA382.05.0",
@@ -90845,7 +92540,10 @@
         "9.Y5682.02.0",
         "9.Y5682.04.0",
         "I9.I7582.38.0",
+        "9.NL982.14.0",
+        "9.NL982.31.0",
         "9.NN182.14.0",
+        "9.NN182.16.0",
         "9.NN182.17.0",
         "9.NN182.38.0"
       ]
@@ -91858,7 +93556,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 5
+              "pdf_count": 9
             }
           ],
           "pdfs": [
@@ -93473,6 +95171,26 @@
               "functional_group": "81"
             },
             {
+              "filename": "9.NK781.03.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\81\\9.NK781.03.0.pdf",
+              "nine_codes": [
+                "9.NK781.03.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "81"
+            },
+            {
+              "filename": "9.NK981.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\81\\9.NK981.01.0.pdf",
+              "nine_codes": [
+                "9.NK981.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "81"
+            },
+            {
               "filename": "9.NL981.00.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\81\\9.NL981.00.0.pdf",
               "nine_codes": [
@@ -93503,6 +95221,26 @@
               "functional_group": "81"
             },
             {
+              "filename": "9.NL981.05.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\81\\9.NL981.05.0.pdf",
+              "nine_codes": [
+                "9.NL981.05.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "81"
+            },
+            {
+              "filename": "9.NL981.06.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\81\\9.NL981.06.0.pdf",
+              "nine_codes": [
+                "9.NL981.06.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "81"
+            },
+            {
               "filename": "9.NL981.20.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\81\\9.NL981.20.0.pdf",
               "nine_codes": [
@@ -93523,11 +95261,11 @@
               "functional_group": "81"
             }
           ],
-          "pdf_count": 166
+          "pdf_count": 170
         }
       },
-      "total_pdfs": 185,
-      "total_nine_codes": 80,
+      "total_pdfs": 189,
+      "total_nine_codes": 84,
       "unique_nine_codes": [
         "9.MR181.65.0_1",
         "9.MR181.65.0_2",
@@ -93604,9 +95342,13 @@
         "I9.CK781.00.0",
         "I9.R8381.20.0",
         "I9.Y2581.21.0",
+        "9.NK781.03.0",
+        "9.NK981.01.0",
         "9.NL981.00.0",
         "9.NL981.01.0",
         "9.NL981.03.0",
+        "9.NL981.05.0",
+        "9.NL981.06.0",
         "9.NL981.20.0",
         "9.OB681.21.0"
       ]
@@ -93690,7 +95432,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -93885,6 +95627,16 @@
               "functional_group": "26"
             },
             {
+              "filename": "9.NL426.00.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\26\\9.NL426.00.0.pdf",
+              "nine_codes": [
+                "9.NL426.00.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "26"
+            },
+            {
               "filename": "9.NL726.00.0.pdf",
               "path": "First Line\\F - 2018-06\\PB345F\\26\\9.NL726.00.0.pdf",
               "nine_codes": [
@@ -93895,7 +95647,7 @@
               "functional_group": "26"
             }
           ],
-          "pdf_count": 20
+          "pdf_count": 21
         },
         "Second Line": {
           "models": [
@@ -93982,7 +95734,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -94347,6 +96099,16 @@
               "functional_group": "26"
             },
             {
+              "filename": "9.NK926.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\26\\9.NK926.01.0.pdf",
+              "nine_codes": [
+                "9.NK926.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "26"
+            },
+            {
               "filename": "9.NL926.01.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\26\\9.NL926.01.0.pdf",
               "nine_codes": [
@@ -94357,7 +96119,7 @@
               "functional_group": "26"
             }
           ],
-          "pdf_count": 37
+          "pdf_count": 38
         },
         "Transmission": {
           "models": [
@@ -94417,8 +96179,8 @@
           "pdf_count": 4
         }
       },
-      "total_pdfs": 61,
-      "total_nine_codes": 22,
+      "total_pdfs": 63,
+      "total_nine_codes": 24,
       "unique_nine_codes": [
         "9.MW226.40.0",
         "9.MW326.40.0",
@@ -94428,6 +96190,7 @@
         "I9.S4426.00.0",
         "I9.EE326.00.0",
         "9.KE426.00.0",
+        "9.NL426.00.0",
         "9.NL726.00.0",
         "9.FP226.10.0",
         "9.FP326.15.0",
@@ -94438,6 +96201,7 @@
         "9.MX226.01.0",
         "9.KE426.01.0",
         "I9.BX126.00.0",
+        "9.NK926.01.0",
         "9.NL926.01.0",
         "9.AO426.01.0",
         "9.AW326.00.0",
@@ -95086,6 +96850,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "Second Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 2
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Second Line\\F - 2018-06\\PB345F",
+              "pdf_count": 6
             }
           ],
           "pdfs": [
@@ -98388,9 +100157,69 @@
               "department": "Second Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "31"
+            },
+            {
+              "filename": "9.U7431.65.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\31\\9.U7431.65.0.pdf",
+              "nine_codes": [
+                "9.U7431.65.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "31"
+            },
+            {
+              "filename": "9.U7431.70.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\31\\9.U7431.70.0.pdf",
+              "nine_codes": [
+                "9.U7431.70.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "31"
+            },
+            {
+              "filename": "9.U7631.65.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\31\\9.U7631.65.0.pdf",
+              "nine_codes": [
+                "9.U7631.65.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "31"
+            },
+            {
+              "filename": "9.U7831.70.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\31\\9.U7831.70.0.pdf",
+              "nine_codes": [
+                "9.U7831.70.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "31"
+            },
+            {
+              "filename": "9.U7931.65.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\31\\9.U7931.65.0.pdf",
+              "nine_codes": [
+                "9.U7931.65.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "31"
+            },
+            {
+              "filename": "9.UB031.65.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\31\\9.UB031.65.0.pdf",
+              "nine_codes": [
+                "9.UB031.65.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "31"
             }
           ],
-          "pdf_count": 330
+          "pdf_count": 336
         },
         "Transmission": {
           "models": [
@@ -98765,8 +100594,8 @@
           "pdf_count": 31
         }
       },
-      "total_pdfs": 403,
-      "total_nine_codes": 121,
+      "total_pdfs": 409,
+      "total_nine_codes": 127,
       "unique_nine_codes": [
         "9.FP731.35.0",
         "9.T5931.40.0",
@@ -98864,6 +100693,12 @@
         "9.HX531.46.0_2",
         "9.HX531.73.0",
         "9.MN31.79.0",
+        "9.U7431.65.0",
+        "9.U7431.70.0",
+        "9.U7631.65.0",
+        "9.U7831.70.0",
+        "9.U7931.65.0",
+        "9.UB031.65.0",
         "9.GR631.00.0",
         "I9.AF031.00.0",
         "I9.AF031.01.0",
@@ -98920,6 +100755,11 @@
             {
               "name": "F - 2018-06\\FRTNAT",
               "path": "First Line\\F - 2018-06\\FRTNAT",
+              "pdf_count": 1
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "First Line\\F - 2018-06\\PB345F",
               "pdf_count": 1
             }
           ],
@@ -98983,9 +100823,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "42"
+            },
+            {
+              "filename": "9.BX742.03.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\42\\9.BX742.03.0.pdf",
+              "nine_codes": [
+                "9.BX742.03.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "42"
             }
           ],
-          "pdf_count": 6
+          "pdf_count": 7
         },
         "Second Line": {
           "models": [
@@ -99105,12 +100955,13 @@
           "pdf_count": 8
         }
       },
-      "total_pdfs": 14,
-      "total_nine_codes": 4,
+      "total_pdfs": 15,
+      "total_nine_codes": 5,
       "unique_nine_codes": [
         "I9.FP342.10.0",
         "I9.S4442.08.0",
         "I9.72442.99.0",
+        "9.BX742.03.0",
         "9.FP742.99.0"
       ]
     },
@@ -101082,7 +102933,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -102207,6 +104058,16 @@
               "functional_group": "58"
             },
             {
+              "filename": "9.50158.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\58\\9.50158.10.0.pdf",
+              "nine_codes": [
+                "9.50158.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "58"
+            },
+            {
               "filename": "9.HG058.01.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\58\\9.HG058.01.0.pdf",
               "nine_codes": [
@@ -102227,7 +104088,7 @@
               "functional_group": "58"
             }
           ],
-          "pdf_count": 114
+          "pdf_count": 115
         },
         "Transmission": {
           "models": [
@@ -102267,7 +104128,7 @@
           "pdf_count": 2
         }
       },
-      "total_pdfs": 202,
+      "total_pdfs": 203,
       "total_nine_codes": 31,
       "unique_nine_codes": [
         "9.FP758.00.0",
@@ -102373,6 +104234,11 @@
               "name": "F - 2018-06\\FRTNAT",
               "path": "First Line\\F - 2018-06\\FRTNAT",
               "pdf_count": 1
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "First Line\\F - 2018-06\\PB345F",
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -102565,9 +104431,29 @@
               "department": "First Line",
               "model": "F - 2018-06\\FRTNAT",
               "functional_group": "36"
+            },
+            {
+              "filename": "9.CK736.20.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\36\\9.CK736.20.0.pdf",
+              "nine_codes": [
+                "9.CK736.20.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
+            },
+            {
+              "filename": "9.H5936.00.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\36\\9.H5936.00.0.pdf",
+              "nine_codes": [
+                "9.H5936.00.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
             }
           ],
-          "pdf_count": 19
+          "pdf_count": 21
         },
         "Second Line": {
           "models": [
@@ -102731,7 +104617,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Transmission\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 8
             }
           ],
           "pdfs": [
@@ -103246,6 +105132,26 @@
               "functional_group": "36"
             },
             {
+              "filename": "9.CK736.04.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\36\\9.CK736.04.0.pdf",
+              "nine_codes": [
+                "9.CK736.04.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
+            },
+            {
+              "filename": "9.H5936.00.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\36\\9.H5936.00.0.pdf",
+              "nine_codes": [
+                "9.H5936.00.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
+            },
+            {
               "filename": "9.H6036.06.0.pdf",
               "path": "Transmission\\F - 2018-06\\PB345F\\36\\9.H6036.06.0.pdf",
               "nine_codes": [
@@ -103274,13 +105180,43 @@
               "department": "Transmission",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "36"
+            },
+            {
+              "filename": "9.NN136.01.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\36\\9.NN136.01.0.pdf",
+              "nine_codes": [
+                "9.NN136.01.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
+            },
+            {
+              "filename": "9.NN136.02.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\36\\9.NN136.02.0.pdf",
+              "nine_codes": [
+                "9.NN136.02.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
+            },
+            {
+              "filename": "9.NN136.03.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\36\\9.NN136.03.0.pdf",
+              "nine_codes": [
+                "9.NN136.03.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "36"
             }
           ],
-          "pdf_count": 54
+          "pdf_count": 59
         }
       },
-      "total_pdfs": 80,
-      "total_nine_codes": 54,
+      "total_pdfs": 87,
+      "total_nine_codes": 60,
       "unique_nine_codes": [
         "I9.FP336.00.0",
         "I9.CK436.20.0",
@@ -103292,6 +105228,8 @@
         "9.77836.22.0",
         "9.HX536.22.0",
         "9.MN136.55.0",
+        "9.CK736.20.0",
+        "9.H5936.00.0",
         "9.GN136.22.0",
         "9.FP636.01.0",
         "I9.FP336.03.0",
@@ -103333,9 +105271,13 @@
         "I9.CK736.03.0",
         "I9.20836.00.0",
         "I9.AF036.00.0",
+        "9.CK736.04.0",
         "9.H6036.06.0",
         "9.LB236.02.0",
-        "9.NL936.00.0"
+        "9.NL936.00.0",
+        "9.NN136.01.0",
+        "9.NN136.02.0",
+        "9.NN136.03.0"
       ]
     },
     "72": {
@@ -104231,7 +106173,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 11
+              "pdf_count": 31
             }
           ],
           "pdfs": [
@@ -110316,6 +112258,76 @@
               "functional_group": "72"
             },
             {
+              "filename": "9.NK772.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NK772.41.0.pdf",
+              "nine_codes": [
+                "9.NK772.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NK872.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NK872.41.0.pdf",
+              "nine_codes": [
+                "9.NK872.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NK972.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NK972.00.0.pdf",
+              "nine_codes": [
+                "9.NK972.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NK972.10.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NK972.10.0.pdf",
+              "nine_codes": [
+                "9.NK972.10.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NK972.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NK972.41.0.pdf",
+              "nine_codes": [
+                "9.NK972.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL072.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL072.41.0.pdf",
+              "nine_codes": [
+                "9.NL072.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL172.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL172.41.0.pdf",
+              "nine_codes": [
+                "9.NL172.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
               "filename": "9.NL272.00.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL272.00.0.pdf",
               "nine_codes": [
@@ -110330,6 +112342,106 @@
               "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL272.01.0.pdf",
               "nine_codes": [
                 "9.NL272.01.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL272.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL272.41.0.pdf",
+              "nine_codes": [
+                "9.NL272.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL372.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL372.41.0.pdf",
+              "nine_codes": [
+                "9.NL372.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL472.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL472.41.0.pdf",
+              "nine_codes": [
+                "9.NL472.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL572.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL572.41.0.pdf",
+              "nine_codes": [
+                "9.NL572.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL672.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL672.00.0.pdf",
+              "nine_codes": [
+                "9.NL672.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL672.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL672.41.0.pdf",
+              "nine_codes": [
+                "9.NL672.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL772.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL772.41.0.pdf",
+              "nine_codes": [
+                "9.NL772.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL872.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL872.41.0.pdf",
+              "nine_codes": [
+                "9.NL872.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL972.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL972.00.0.pdf",
+              "nine_codes": [
+                "9.NL972.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL972.01.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL972.01.0.pdf",
+              "nine_codes": [
+                "9.NL972.01.0"
               ],
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
@@ -110376,6 +112488,36 @@
               "functional_group": "72"
             },
             {
+              "filename": "9.NL972.30.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL972.30.0.pdf",
+              "nine_codes": [
+                "9.NL972.30.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NL972.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NL972.41.0.pdf",
+              "nine_codes": [
+                "9.NL972.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
+              "filename": "9.NM072.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\72\\9.NM072.41.0.pdf",
+              "nine_codes": [
+                "9.NM072.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "72"
+            },
+            {
               "filename": "9_NK972_00_0_0_t1.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\72\\9_NK972_00_0_0_t1.pdf",
               "nine_codes": [],
@@ -110408,11 +112550,11 @@
               "functional_group": "72"
             }
           ],
-          "pdf_count": 618
+          "pdf_count": 638
         }
       },
-      "total_pdfs": 685,
-      "total_nine_codes": 315,
+      "total_pdfs": 705,
+      "total_nine_codes": 335,
       "unique_nine_codes": [
         "9.GS072.11.0",
         "9.GS272.11.0",
@@ -110725,10 +112867,30 @@
         "I9.R8372.10.0",
         "I9.S4472.10.0",
         "9.MX272.07.0",
+        "9.NK772.41.0",
+        "9.NK872.41.0",
+        "9.NK972.00.0",
+        "9.NK972.10.0",
+        "9.NK972.41.0",
+        "9.NL072.41.0",
+        "9.NL172.41.0",
         "9.NL272.00.0",
         "9.NL272.01.0",
+        "9.NL272.41.0",
+        "9.NL372.41.0",
+        "9.NL472.41.0",
+        "9.NL572.41.0",
+        "9.NL672.00.0",
+        "9.NL672.41.0",
+        "9.NL772.41.0",
+        "9.NL872.41.0",
+        "9.NL972.00.0",
+        "9.NL972.01.0",
         "9.NL972.06.0",
-        "9.NL972.12.0"
+        "9.NL972.12.0",
+        "9.NL972.30.0",
+        "9.NL972.41.0",
+        "9.NM072.41.0"
       ]
     },
     "55": {
@@ -110882,7 +113044,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 2
+              "pdf_count": 13
             }
           ],
           "pdfs": [
@@ -117687,10 +119849,100 @@
               "functional_group": "55"
             },
             {
+              "filename": "9.72355.11.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.72355.11.0.pdf",
+              "nine_codes": [
+                "9.72355.11.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.CL355.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.CL355.00.0.pdf",
+              "nine_codes": [
+                "9.CL355.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
               "filename": "9.E7055.02.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.E7055.02.0.pdf",
               "nine_codes": [
                 "9.E7055.02.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.GD955.20.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.GD955.20.0.pdf",
+              "nine_codes": [
+                "9.GD955.20.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.GD955.40.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.GD955.40.0.pdf",
+              "nine_codes": [
+                "9.GD955.40.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.GD955.41.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.GD955.41.0.pdf",
+              "nine_codes": [
+                "9.GD955.41.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.GT555.40.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.GT555.40.0.pdf",
+              "nine_codes": [
+                "9.GT555.40.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.NL955.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.NL955.00.0.pdf",
+              "nine_codes": [
+                "9.NL955.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.NN155.20.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.NN155.20.0.pdf",
+              "nine_codes": [
+                "9.NN155.20.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "9.NN155.21.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.NN155.21.0.pdf",
+              "nine_codes": [
+                "9.NN155.21.0"
               ],
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
@@ -117705,13 +119957,33 @@
               "department": "Second Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "55"
+            },
+            {
+              "filename": "9.T5955.90.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\9.T5955.90.0.pdf",
+              "nine_codes": [
+                "9.T5955.90.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
+            },
+            {
+              "filename": "I9.J1355.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\55\\I9.J1355.00.0.pdf",
+              "nine_codes": [
+                "I9.J1355.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "55"
             }
           ],
-          "pdf_count": 682
+          "pdf_count": 693
         }
       },
-      "total_pdfs": 684,
-      "total_nine_codes": 181,
+      "total_pdfs": 695,
+      "total_nine_codes": 187,
       "unique_nine_codes": [
         "I9.CK755.00.0",
         "9.AL655.01.0",
@@ -117892,8 +120164,14 @@
         "9.J5755.02.0",
         "9.GD955.20.0",
         "I9.BX155.00.0",
+        "9.72355.11.0",
+        "9.CL355.00.0",
         "9.E7055.02.0",
-        "9.NN155.22.0"
+        "9.NL955.00.0",
+        "9.NN155.20.0",
+        "9.NN155.21.0",
+        "9.NN155.22.0",
+        "I9.J1355.00.0"
       ]
     },
     "46": {
@@ -117905,7 +120183,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "First Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 2
             }
           ],
           "pdfs": [
@@ -117918,9 +120196,19 @@
               "department": "First Line",
               "model": "F - 2018-06\\PB345F",
               "functional_group": "46"
+            },
+            {
+              "filename": "9.NL446.36.0.pdf",
+              "path": "First Line\\F - 2018-06\\PB345F\\46\\9.NL446.36.0.pdf",
+              "nine_codes": [
+                "9.NL446.36.0"
+              ],
+              "department": "First Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "46"
             }
           ],
-          "pdf_count": 1
+          "pdf_count": 2
         },
         "Second Line": {
           "models": [
@@ -118300,10 +120588,11 @@
           "pdf_count": 32
         }
       },
-      "total_pdfs": 33,
-      "total_nine_codes": 11,
+      "total_pdfs": 34,
+      "total_nine_codes": 12,
       "unique_nine_codes": [
         "9.JT946.41.0",
+        "9.NL446.36.0",
         "9.T5946.10.0",
         "9.T6446.10.0",
         "9.LG046.10.0",
@@ -118453,7 +120742,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Second Line\\F - 2018-06\\PB345F",
-              "pdf_count": 1
+              "pdf_count": 3
             }
           ],
           "pdfs": [
@@ -119048,6 +121337,26 @@
               "functional_group": "83"
             },
             {
+              "filename": "9.NL683.11.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\83\\9.NL683.11.0.pdf",
+              "nine_codes": [
+                "9.NL683.11.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "83"
+            },
+            {
+              "filename": "9.NL983.00.0.pdf",
+              "path": "Second Line\\F - 2018-06\\PB345F\\83\\9.NL983.00.0.pdf",
+              "nine_codes": [
+                "9.NL983.00.0"
+              ],
+              "department": "Second Line",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "83"
+            },
+            {
               "filename": "9.NL983.11.0.pdf",
               "path": "Second Line\\F - 2018-06\\PB345F\\83\\9.NL983.11.0.pdf",
               "nine_codes": [
@@ -119058,11 +121367,11 @@
               "functional_group": "83"
             }
           ],
-          "pdf_count": 60
+          "pdf_count": 62
         }
       },
-      "total_pdfs": 60,
-      "total_nine_codes": 36,
+      "total_pdfs": 62,
+      "total_nine_codes": 38,
       "unique_nine_codes": [
         "9.MW283.00.0",
         "9.MW283.01.0_1",
@@ -119099,6 +121408,8 @@
         "I9.BW883.00.0",
         "I9.DR683.10.0",
         "I9.DR883.10.0",
+        "9.NL683.11.0",
+        "9.NL983.00.0",
         "9.NL983.11.0"
       ]
     },
@@ -120376,7 +122687,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Transmission\\F - 2018-06\\PB345F",
-              "pdf_count": 6
+              "pdf_count": 8
             }
           ],
           "pdfs": [
@@ -121141,6 +123452,26 @@
               "functional_group": "33"
             },
             {
+              "filename": "9.LB233.02.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\33\\9.LB233.02.0.pdf",
+              "nine_codes": [
+                "9.LB233.02.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "33"
+            },
+            {
+              "filename": "9.LB233.03.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\33\\9.LB233.03.0.pdf",
+              "nine_codes": [
+                "9.LB233.03.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "33"
+            },
+            {
               "filename": "9.NL233.00.0_1.pdf",
               "path": "Transmission\\F - 2018-06\\PB345F\\33\\9.NL233.00.0_1.pdf",
               "nine_codes": [
@@ -121191,11 +123522,11 @@
               "functional_group": "33"
             }
           ],
-          "pdf_count": 81
+          "pdf_count": 83
         }
       },
-      "total_pdfs": 81,
-      "total_nine_codes": 75,
+      "total_pdfs": 83,
+      "total_nine_codes": 77,
       "unique_nine_codes": [
         "9.FP233.03.0",
         "9.FP333.07.0",
@@ -121267,6 +123598,8 @@
         "I9.CK733.03.0",
         "I9.S4433.02.0",
         "9.KV233.01.0",
+        "9.LB233.02.0",
+        "9.LB233.03.0",
         "9.NL233.00.0_1",
         "9.NL233.00.0_2",
         "9.NL933.01.0",
@@ -121323,7 +123656,7 @@
             {
               "name": "F - 2018-06\\PB345F",
               "path": "Transmission\\F - 2018-06\\PB345F",
-              "pdf_count": 3
+              "pdf_count": 4
             }
           ],
           "pdfs": [
@@ -121618,6 +123951,16 @@
               "functional_group": "35"
             },
             {
+              "filename": "9.EE335.02.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\35\\9.EE335.02.0.pdf",
+              "nine_codes": [
+                "9.EE335.02.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "35"
+            },
+            {
               "filename": "9.NL635.01.0.pdf",
               "path": "Transmission\\F - 2018-06\\PB345F\\35\\9.NL635.01.0.pdf",
               "nine_codes": [
@@ -121628,11 +123971,11 @@
               "functional_group": "35"
             }
           ],
-          "pdf_count": 30
+          "pdf_count": 31
         }
       },
-      "total_pdfs": 30,
-      "total_nine_codes": 25,
+      "total_pdfs": 31,
+      "total_nine_codes": 26,
       "unique_nine_codes": [
         "I9.FP235.00.0",
         "I9.FP235.01.0",
@@ -121658,6 +124001,7 @@
         "I9.J1435.02.0",
         "9.64835.02.0",
         "9.65035.00.0",
+        "9.EE335.02.0",
         "9.NL635.01.0"
       ]
     },
@@ -122351,6 +124695,11 @@
               "name": "5D - 2021-01\\5D KEYLINE GS Stage V - TK - PB314 PS",
               "path": "Transmission\\5D - 2021-01\\5D KEYLINE GS Stage V - TK - PB314 PS",
               "pdf_count": 2
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Transmission\\F - 2018-06\\PB345F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -122393,12 +124742,22 @@
               "department": "Transmission",
               "model": "5D - 2021-01\\5D KEYLINE GS Stage V - TK - PB314 PS",
               "functional_group": "27"
+            },
+            {
+              "filename": "9.KE427.02.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\27\\9.KE427.02.0.pdf",
+              "nine_codes": [
+                "9.KE427.02.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "27"
             }
           ],
-          "pdf_count": 4
+          "pdf_count": 5
         }
       },
-      "total_pdfs": 4,
+      "total_pdfs": 5,
       "total_nine_codes": 3,
       "unique_nine_codes": [
         "9.MK527.00.0",
@@ -122426,6 +124785,11 @@
               "name": "5E - 2022-01\\5E Stage V - PB 512",
               "path": "Transmission\\5E - 2022-01\\5E Stage V - PB 512",
               "pdf_count": 8
+            },
+            {
+              "name": "F - 2018-06\\PB345F",
+              "path": "Transmission\\F - 2018-06\\PB345F",
+              "pdf_count": 1
             }
           ],
           "pdfs": [
@@ -122538,13 +124902,23 @@
               "department": "Transmission",
               "model": "5E - 2022-01\\5E Stage V - PB 512",
               "functional_group": "39"
+            },
+            {
+              "filename": "9.LB239.00.0.pdf",
+              "path": "Transmission\\F - 2018-06\\PB345F\\39\\9.LB239.00.0.pdf",
+              "nine_codes": [
+                "9.LB239.00.0"
+              ],
+              "department": "Transmission",
+              "model": "F - 2018-06\\PB345F",
+              "functional_group": "39"
             }
           ],
-          "pdf_count": 11
+          "pdf_count": 12
         }
       },
-      "total_pdfs": 11,
-      "total_nine_codes": 9,
+      "total_pdfs": 12,
+      "total_nine_codes": 10,
       "unique_nine_codes": [
         "9.KV239.00.0",
         "9.R8539.01.0",
@@ -122554,7 +124928,8 @@
         "9.R8539.00.0",
         "9.R8539.02.0",
         "9.Y4039.01.0",
-        "9.Y4039.03.0"
+        "9.Y4039.03.0",
+        "9.LB239.00.0"
       ]
     }
   }

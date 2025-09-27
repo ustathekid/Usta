@@ -4,57 +4,141 @@
 
 {% block content %}
 <style>
+/* Çok sayfalı PDF'ler için stil tanımları */
+.pdf-page-item {
+    position: relative;
+    border: none;
+    background-color: #ffffff;
+}
+
+.multipage-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(108, 117, 125, 0.8);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.page-number {
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.total-pages {
+    font-size: 0.7rem;
+    opacity: 0.9;
+    margin-left: 1px;
+}
+/* PDF Grid gelişmiş düzenleme için */
+#pdfGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 10px;
+}
+
+/* Aynı PDF'in sayfalarını vurgulamak için hover efekti */
+.pdf-page-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(108, 117, 125, 0.3);
+    transition: all 0.2s ease;
+}
+
+/* İlişkili sayfaları vurgulamak için */
+.pdf-page-item.related-page {
+    box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+/* Multi-page PDF group hover animation */
+.pdf-page-item.multipage-hover {
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+    transform: translateY(-3px);
+    transition: all 0.2s ease;
+}
+
+/* Sayfa numaralarını gösterirken hover durumunda renk değişimi */
+.pdf-page-item:hover .multipage-indicator {
+    background-color: rgba(108, 117, 125, 0.9);
+}
+
+/* Full Width Container */
+.full-width-container {
+    width: 100vw;
+    height: 100%; /* Use full available height */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 /* Functional Groups Layout Styles */
 .functional-groups-container {
     display: flex;
-    height: calc(100vh - 200px);
-    min-height: 500px;
-    max-height: calc(100vh - 200px);
-    gap: 10px;
+    height: 100%; /* Use full available height from parent container */
+    min-height: 600px;
+    gap: 12px;
+    padding: 12px;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* Left Sidebar - Functional Groups List */
 .functional-groups-sidebar {
-    width: 180px;
-    background: rgba(33, 37, 41, 0.95);
-    border-radius: 8px;
-    border: 2px solid rgba(23, 162, 184, 0.5);
+    width: 200px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: none;
     overflow-y: auto;
-    padding: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    height: 100%;
 }
 
 .functional-groups-sidebar h5 {
-    color: #ffffff !important;
-    font-weight: 700;
-    margin-bottom: 12px;
+    color: #495057 !important;
+    font-weight: 600;
+    margin-bottom: 16px;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.0rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Group Search Styles */
 .group-search-container {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .group-search-container .input-group {
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .group-search-container .input-group-text {
-    background: rgba(73, 80, 87, 0.9);
-    border: none;
-    color: #adb5bd;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    padding: 0.375rem 0.75rem;
 }
 
 .group-search-container .form-control {
-    background: rgba(73, 80, 87, 0.9);
-    border: none;
-    color: #ffffff;
-    font-size: 0.9rem;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    font-size: 0.85rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0 8px 8px 0;
 }
 
 .group-search-container .form-control::placeholder {
@@ -63,54 +147,97 @@
 }
 
 .group-search-container .form-control:focus {
-    background: rgba(73, 80, 87, 1);
-    border: none;
-    color: #ffffff;
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
 }
 
 .group-help-text {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    padding: 20px 8px;
+    padding: 24px 12px;
     color: #6c757d;
     text-align: center;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    border: 1px solid rgba(108, 117, 125, 0.1);
 }
 
 .group-help-text i {
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-    opacity: 0.7;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    opacity: 0.6;
+    color: #17a2b8;
 }
 
 .functional-group-item {
     display: block;
-    padding: 8px 10px;
-    margin-bottom: 4px;
-    background: rgba(52, 58, 64, 0.8);
-    color: #e9ecef;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #495057;
     text-decoration: none;
-    border-radius: 4px;
-    border: 1px solid rgba(108, 117, 125, 0.3);
-    transition: background-color 0.2s ease;
+    border-radius: 8px;
+    border: 1px solid rgba(108, 117, 125, 0.2);
+    transition: all 0.2s ease;
     font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+.functional-group-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(108, 117, 125, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.functional-group-item:hover::before {
+    left: 100%;
 }
 
 .functional-group-item:hover {
-    background: rgba(23, 162, 184, 0.8);
-    color: #ffffff;
-    border-color: #17a2b8;
+    background: rgba(255, 255, 255, 0.95);
+    color: #495057;
+    border-color: rgba(108, 117, 125, 0.4);
     text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .functional-group-item.active {
-    background: #17a2b8;
-    color: #ffffff;
-    border-color: #138496;
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+    border-color: #17a2b8;
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.2);
+    position: relative;
+}
+
+.functional-group-item.active::after {
+    content: '✓';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #17a2b8;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.functional-group-item.active:hover {
+    background: rgba(23, 162, 184, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(23, 162, 184, 0.3);
 }
 
 /* Main Content Area */
@@ -118,13 +245,13 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: rgba(33, 37, 41, 0.95);
-    border-radius: 10px;
-    border: 2px solid rgba(23, 162, 184, 0.5);
+    background: #ffffff;
+    border-radius: 12px;
+    border: none;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     height: 100%;
-    max-height: 100%;
+    transition: all 0.3s ease;
 }
 
 /* Search Filters */
@@ -149,7 +276,7 @@
 .search-filters .form-control {
     background: rgba(73, 80, 87, 0.9);
     border: none;
-    color: #ffffff;
+    color: #000000;
     font-size: 1.0rem;
 }
 
@@ -189,78 +316,77 @@
 }
 
 .search-filters-inline .input-group-text {
-    background: rgba(73, 80, 87, 0.9);
-    border: none;
-    color: #adb5bd;
-    padding: 0.25rem 0.5rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    padding: 0.375rem 0.75rem;
 }
 
 .search-filters-inline .form-control {
-    background: rgba(73, 80, 87, 0.9);
-    border: none;
-    color: #ffffff;
-    font-size: 0.9rem;
-    padding: 0.25rem 0.5rem;
-}
-
-.search-filters-inline .form-control::placeholder {
-    color: #adb5bd;
-    opacity: 0.8;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    font-size: 0.85rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
 }
 
 .search-filters-inline .form-control:focus {
-    background: rgba(73, 80, 87, 1);
-    border: none;
-    color: #ffffff;
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
 }
 
 .search-filters-inline .btn {
-    background: rgba(108, 117, 125, 0.8);
-    border: none;
-    color: #adb5bd;
-    padding: 0.25rem 0.5rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    padding: 0.375rem 0.75rem;
 }
 
 .search-filters-inline .btn:hover {
-    background: rgba(220, 53, 69, 0.8);
-    color: #ffffff;
+    background: #e9ecef;
+    border-color: #dee2e6;
+    color: #6c757d;
 }
 
 /* Department Filters */
 .department-filters {
-    padding: 12px;
-    background: rgba(52, 58, 64, 0.8);
-    border-bottom: 1px solid rgba(108, 117, 125, 0.3);
+    padding: 8px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .department-filters h6 {
-    color: #ffffff !important;
+    color: #495057 !important;
     font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 1.0rem;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
 }
 
 .department-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
+    align-items: center;
 }
 
 .department-chip {
-    padding: 8px 12px 8px 32px;
-    background: rgba(108, 117, 125, 0.8);
-    color: #e9ecef;
-    border: 1px solid rgba(108, 117, 125, 0.5);
-    border-radius: 12px;
-    font-size: 0.85rem;
+    padding: 6px 10px 6px 28px;
+    background: #ffffff;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
     user-select: none;
     position: relative;
     display: inline-flex;
     align-items: center;
+    margin: 2px;
 }
 
 .department-chip::before {
@@ -294,18 +420,20 @@
 }
 
 .department-chip:hover {
-    background: rgba(23, 162, 184, 0.8);
-    border-color: #17a2b8;
+    background: #f8f9fa;
+    border-color: #dee2e6;
+    color: #495057;
 }
 
 .department-chip.selected {
-    background: rgba(23, 162, 184, 0.3);
-    border-color: #17a2b8;
-    color: #ffffff;
+    background: #e3f2fd;
+    border-color: #dee2e6;
+    color: #1976d2;
 }
 
 .department-chip.selected:hover {
-    background: rgba(23, 162, 184, 0.5);
+    background: #bbdefb;
+    border-color: #dee2e6;
 }
 
 .department-chip.inactive {
@@ -333,29 +461,29 @@
 
 .pdf-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
     padding: 8px 0;
 }
 
 .pdf-item {
-    background: rgba(52, 58, 64, 0.9);
+    background: #ffffff;
     border-radius: 8px;
-    border: 2px solid rgba(108, 117, 125, 0.3);
+    border: none;
     overflow: hidden;
     transition: border-color 0.2s ease;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .pdf-item:hover {
-    border-color: #17a2b8;
-    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.2);
+    box-shadow: 0 4px 16px rgba(108, 117, 125, 0.2);
+    transition: box-shadow 0.2s ease;
 }
 
 .pdf-thumbnail {
     width: 100%;
-    height: 220px;
+    height: 250px;
     background: #f8f9fa;
     display: flex;
     justify-content: center;
@@ -378,7 +506,7 @@
     position: absolute;
     top: 4px;
     right: 4px;
-    background: rgba(23, 162, 184, 0.9);
+    background: rgba(108, 117, 125, 0.9);
     color: white;
     padding: 3px 7px;
     border-radius: 8px;
@@ -389,21 +517,28 @@
 
 .pdf-info {
     padding: 8px 10px;
-    background: rgba(33, 37, 41, 0.9);
+    background: #ffffff;
 }
 
 .pdf-title {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #e9ecef;
-    margin-bottom: 2px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 4px;
     word-wrap: break-word;
-    line-height: 1.2;
+    line-height: 1.3;
+    text-align: center;
+    padding: 4px 2px;
 }
 
-.pdf-department {
-    color: #5bc0de;
+.pdf-subtitle {
+    font-size: 0.75rem;
     font-weight: 500;
+    color: #17a2b8;
+    text-align: center;
+    margin-top: 2px;
+    word-wrap: break-word;
+    line-height: 1.2;
 }
 
 /* Loading States */
@@ -419,8 +554,8 @@
 .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid rgba(23, 162, 184, 0.2);
-    border-top: 4px solid #17a2b8;
+    border: 4px solid rgba(108, 117, 125, 0.2);
+    border-top: 4px solid #6c757d;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 15px;
@@ -448,80 +583,393 @@
     opacity: 0.5;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
+/* Responsive Design - Mobile First */
+
+/* Extra Large Screens (1200px+) */
+@media (min-width: 1200px) {
+    .functional-groups-sidebar {
+        width: 220px;
+    }
+    .pdf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Large Screens (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .functional-groups-sidebar {
+        width: 200px;
+    }
+    .pdf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+}
+
+/* Medium Screens (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .functional-groups-container {
+        gap: 10px;
+        padding: 10px;
+    }
+    .functional-groups-sidebar {
+        width: 160px;
+        padding: 12px;
+    }
+    .functional-groups-sidebar h5 {
+        font-size: 0.95rem;
+    }
+    .group-search-container .form-control {
+        font-size: 0.8rem;
+    }
+    .functional-group-item {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    .pdf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+    }
+    .department-filters {
+        padding: 6px 10px;
+    }
+    .department-chip {
+        font-size: 0.75rem;
+        padding: 4px 8px 4px 22px;
+    }
+}
+
+/* Small Screens (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
     .functional-groups-container {
         flex-direction: column;
-        height: auto;
+        gap: 8px;
+        padding: 8px;
+        height: auto; /* Allow natural height on mobile */
+        min-height: 400px;
     }
-    
     .functional-groups-sidebar {
         width: 100%;
         height: auto;
-        max-height: 150px;
+        max-height: 200px;
+        padding: 12px;
+        order: 2;
     }
-    
+    .functional-groups-main {
+        order: 1;
+        height: auto;
+        min-height: 400px;
+    }
+    .functional-groups-sidebar h5 {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+    .group-search-container {
+        margin-bottom: 10px;
+    }
+    .functional-group-item {
+        padding: 8px 10px;
+        margin-bottom: 4px;
+        font-size: 0.8rem;
+    }
     .pdf-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 8px;
+        gap: 10px;
+        padding: 6px 0;
+    }
+    .pdf-item {
+        border-radius: 6px;
+    }
+    .pdf-thumbnail {
+        height: 180px;
+    }
+    .department-filters {
+        padding: 6px 8px;
+    }
+    .department-chips {
+        gap: 3px;
+    }
+    .department-chip {
+        font-size: 0.7rem;
+        padding: 3px 6px 3px 18px;
+        margin: 1px;
+    }
+    .search-filters-inline .form-control {
+        max-width: 120px;
+        font-size: 0.75rem;
     }
 }
 
-@media (max-width: 768px) {
-    .department-chips {
-        flex-direction: column;
+/* Extra Small Screens (320px - 575px) */
+@media (max-width: 575px) {
+    .full-width-container {
+        padding: 0;
     }
-    
-    .department-chip {
+    .functional-groups-container {
+        flex-direction: column;
+        gap: 6px;
+        padding: 6px;
+        height: auto; /* Allow natural height on mobile */
+        min-height: 350px;
+        border-radius: 8px;
+    }
+    .functional-groups-sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 180px;
+        padding: 10px;
+        border-radius: 8px;
+        order: 2;
+    }
+    .functional-groups-main {
+        order: 1;
+        height: auto;
+        min-height: 350px;
+        border-radius: 8px;
+    }
+    .functional-groups-sidebar h5 {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
         text-align: center;
     }
-    
+    .group-search-container {
+        margin-bottom: 8px;
+    }
+    .group-search-container .input-group {
+        border-radius: 6px;
+    }
+    .group-search-container .form-control {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    .group-search-container .input-group-text {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    .functional-group-item {
+        padding: 6px 8px;
+        margin-bottom: 3px;
+        font-size: 0.75rem;
+        border-radius: 6px;
+    }
+    .functional-group-item small {
+        font-size: 0.65rem;
+    }
+    .pdf-grid-container {
+        padding: 8px;
+    }
     .pdf-grid {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
+        padding: 4px 0;
     }
-    
-    .functional-groups-container {
-        height: calc(100vh - 140px);
+    .pdf-item {
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .pdf-thumbnail {
+        height: 140px;
+    }
+    .pdf-thumbnail .pdf-icon {
+        font-size: 2.5rem;
+    }
+    .pdf-info {
+        padding: 6px 8px;
+    }
+    .pdf-title {
+        font-size: 0.75rem;
+        margin-bottom: 2px;
+    }
+    .pdf-subtitle {
+        font-size: 0.65rem;
+    }
+    .page-count-badge {
+        top: 2px;
+        right: 2px;
+        padding: 2px 5px;
+        font-size: 0.6rem;
+    }
+    .department-filters {
+        padding: 4px 6px;
+    }
+    .department-filters h6 {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+    .department-chips {
+        gap: 2px;
+    }
+    .department-chip {
+        font-size: 0.65rem;
+        padding: 2px 4px 2px 14px;
+        margin: 1px;
+        border-radius: 12px;
+    }
+    .department-chip::before {
+        width: 10px;
+        height: 10px;
+        left: 6px;
+    }
+    .department-chip.selected::before,
+    .department-chip.selected::after {
+        left: 7px;
+    }
+    .search-filters-inline {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+    .search-filters-inline .input-group {
+        border-radius: 4px;
+    }
+    .search-filters-inline .form-control {
+        max-width: 100px;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+    .search-filters-inline .input-group-text {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+    .search-filters-inline .btn {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+    .pagination-container {
+        padding: 6px;
+    }
+    .pagination-info {
+        font-size: 0.7rem;
+    }
+    .pagination-buttons {
+        font-size: 0.7rem;
+    }
+    .pagination-buttons .btn {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.65rem;
+    }
+    .empty-state {
+        height: 150px;
+    }
+    .empty-state i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    .loading-state {
+        height: 150px;
+    }
+    .loading-spinner {
+        width: 30px;
+        height: 30px;
     }
 }
 
-/* Custom Scrollbar */
-.functional-groups-sidebar::-webkit-scrollbar,
-.pdf-grid-container::-webkit-scrollbar {
-    width: 6px;
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .functional-group-item:hover {
+        transform: none;
+    }
+    .functional-group-item:hover::before {
+        left: -100%;
+    }
+    .pdf-item:hover {
+        transform: none;
+    }
+    .department-chip:hover {
+        transform: none;
+    }
+}
+
+/* Landscape Orientation for Small Screens */
+@media (max-width: 575px) and (orientation: landscape) {
+    .functional-groups-container {
+        flex-direction: row;
+        height: auto; /* Allow natural height in landscape */
+        min-height: 300px;
+    }
+    .functional-groups-sidebar {
+        width: 140px;
+        height: 100%;
+        max-height: none;
+        order: 1;
+    }
+    .functional-groups-main {
+        order: 2;
+        flex: 1;
+    }
+    .pdf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 6px;
+    }
+    .pdf-thumbnail {
+        height: 100px;
+    }
+}
+
+/* Custom card styling */
+.page-full-card {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+}
+
+.page-full-card .card-header {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-bottom: 1px solid rgba(108, 117, 125, 0.1);
+}
+
+.page-full-card .card-body {
+    padding: 0;
 }
 
 .functional-groups-sidebar::-webkit-scrollbar-track,
 .pdf-grid-container::-webkit-scrollbar-track {
-    background: rgba(52, 58, 64, 0.5);
-    border-radius: 3px;
+    background: rgba(108, 117, 125, 0.1);
+    border-radius: 6px;
 }
 
 .functional-groups-sidebar::-webkit-scrollbar-thumb,
 .pdf-grid-container::-webkit-scrollbar-thumb {
-    background: rgba(23, 162, 184, 0.6);
-    border-radius: 3px;
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    border-radius: 6px;
 }
 
 .functional-groups-sidebar::-webkit-scrollbar-thumb:hover,
 .pdf-grid-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(23, 162, 184, 0.8);
+    background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+}
+
+/* Pagination Styles */
+.pagination-container {
+    background: #ffffff;
+    border-top: 1px solid rgba(108, 117, 125, 0.3);
+    margin-top: auto;
+}
+
+.pagination-info {
+    color: #000000;
+    font-size: 0.85rem;
+}
+
+.pagination-buttons {
+    display: flex;
+    align-items: center;
 }
 </style>
 
-<div class="container-fluid px-0">
-    <div class="row g-3">
+<div class="full-width-container">
+    <div class="row g-0">
         <div class="col-12">
-            <div class="card bg-secondary page-full-card">
+            <div class="card bg-white page-full-card">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <h2 class="card-title mb-0 me-3">
-                                <i class="bi bi-diagram-3 me-2"></i>
-                                Functional Groups
-                            </h2>
-                            <p class="card-text mb-0 text-muted" style="line-height: 1.5; padding-top: 2px;">Browse PDFs by functional groups and departments</p>
-                        </div>
+                        <h2 class="card-title mb-0 me-3 text-dark">
+                            <i class="bi bi-diagram-3 me-2"></i>
+                            Functional Groups
+                        </h2>
+                        <p class="card-text mb-0 text-muted d-none d-md-block" style="line-height: 1.5; padding-top: 2px;">Browse PDFs by functional groups and departments</p>
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -558,16 +1006,16 @@
                         <div class="functional-groups-main">
                             <!-- Department Filters -->
                             <div class="department-filters" id="departmentFiltersSection" style="display: none;">
-                                <div class="d-flex align-items-start justify-content-between mb-3">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-2"><i class="bi bi-funnel me-2"></i>Filter by Department</h6>
+                                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2">
+                                    <div class="flex-grow-1 w-100">
+                                        <h6 class="mb-2 mb-md-1"><i class="bi bi-funnel me-2"></i>Filter by Department</h6>
                                         <div class="department-chips" id="departmentFilters">
                                             <!-- Department chips will be populated by JavaScript -->
                                         </div>
                                     </div>
                                     
                                     <!-- Search Bar for 9-digit codes -->
-                                    <div class="search-filters-inline ms-3">
+                                    <div class="search-filters-inline mt-2 mt-md-0">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text">
                                                 <i class="bi bi-search"></i>
@@ -576,9 +1024,8 @@
                                                    class="form-control" 
                                                    id="ninecodeSearch" 
                                                    placeholder="Search by 9.x"
-                                                   autocomplete="off"
-                                                   style="max-width: 200px;">
-                                            <button class="btn btn-outline-secondary btn-sm" 
+                                                   autocomplete="off">
+                                            <button class="btn btn-sm" 
                                                     type="button" 
                                                     id="clearSearch"
                                                     title="Clear search">
@@ -601,6 +1048,10 @@
                                         <div>Select a functional group to view PDFs</div>
                                     </div>
                                 </div>
+                                <!-- Pagination Controls -->
+                                <div id="paginationControls" class="pagination-container p-2" style="display:none;">
+                                    <!-- Pagination will be added here via JavaScript -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -622,6 +1073,15 @@ class FunctionalGroupsManager {
         this.filteredPdfs = [];
         this.searchQuery = '';
         this.groupSearchQuery = '';
+        this.lazyLoadObserver = null;
+        this.pagination = {
+            page: 1,
+            page_size: 30,
+            total_pages: 1,
+            total_items: 0,
+            has_next: false,
+            has_prev: false
+        };
         
         this.initializeEventListeners();
         this.loadFunctionalGroups();
@@ -810,6 +1270,23 @@ class FunctionalGroupsManager {
         // Clear PDFs
         this.allPdfs = [];
         this.filteredPdfs = [];
+        
+        // Reset pagination
+        this.pagination = {
+            page: 1,
+            page_size: 30,
+            total_pages: 1,
+            total_items: 0,
+            has_next: false,
+            has_prev: false
+        };
+        
+        // Hide pagination controls
+        const paginationContainer = document.getElementById('paginationControls');
+        if (paginationContainer) {
+            paginationContainer.style.display = 'none';
+        }
+        
         // Show initial state in PDF grid
         const pdfContainer = document.getElementById('pdfGrid');
         if (pdfContainer) {
@@ -963,28 +1440,70 @@ class FunctionalGroupsManager {
         
         this.selectedGroup = groupCode;
         
+        // Reset pagination when selecting a new group
+        this.pagination = {
+            page: 1,
+            page_size: 30,
+            total_pages: 1,
+            total_items: 0,
+            has_next: false,
+            has_prev: false
+        };
+        
         // Don't show department filters yet - wait for PDF data loading
         // this.renderDepartmentFilters();
         
         await this.loadGroupPdfs(groupCode);
     }
     
-    async loadGroupPdfs(groupCode) {
+    async loadGroupPdfs(groupCode, page = 1) {
         try {
             this.showLoading();
             
-            const response = await fetch(`/api/functional-groups/${encodeURIComponent(groupCode)}/pdfs`);
+            // Initialize pagination properties if not already set
+            if (!this.pagination) {
+                this.pagination = {
+                    page: 1,
+                    page_size: 30,
+                    total_pages: 1,
+                    total_items: 0,
+                    has_next: false,
+                    has_prev: false
+                };
+            }
+            
+            // Update current page
+            this.pagination.page = page;
+            
+            // Add pagination parameters to the request
+            const response = await fetch(`/api/functional-groups/${encodeURIComponent(groupCode)}/pdfs?page=${page}&page_size=${this.pagination.page_size}`);
             const data = await response.json();
             
             if (data.success) {
-                this.allPdfs = data.pdfs || [];
+                // If this is page 1, reset all PDFs
+                if (page === 1) {
+                    this.allPdfs = data.pdfs || [];
+                } else {
+                    // Append PDFs to existing ones
+                    this.allPdfs = [...this.allPdfs, ...(data.pdfs || [])];
+                }
+                
+                // Update pagination information
+                if (data.pagination) {
+                    this.pagination = data.pagination;
+                }
+                
                 // Update department filters with group-specific counts
-                if (data.department_counts) {
+                if (data.department_counts && page === 1) {
                     this.updateDepartmentFiltersWithCounts(data.department_counts);
                 }
+                
                 // Hide loading before rendering PDFs for better UX
                 this.hideLoading();
                 this.filterAndRenderPdfs();
+                
+                // Show pagination controls
+                this.renderPaginationControls();
             } else {
                 this.hideLoading();
                 this.showError('Failed to load PDFs: ' + (data.message || 'Unknown error'));
@@ -1092,8 +1611,97 @@ class FunctionalGroupsManager {
         
         this.updateSearchResultsCount();
         this.renderPdfGrid();
+        
+        // Initialize lazy loading after rendering
+        this.initLazyLoading();
     }
     
+    initLazyLoading() {
+        // Disconnect previous observer if it exists
+        if (this.lazyLoadObserver) {
+            this.lazyLoadObserver.disconnect();
+        }
+        
+        // Create new intersection observer
+        this.lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.getAttribute('data-src');
+                    if (src) {
+                        img.setAttribute('src', src);
+                        img.removeAttribute('data-src');
+                        observer.unobserve(img);
+                    }
+                }
+            });
+        }, {
+            rootMargin: '300px 0px',  // Start loading when image is 300px from viewport
+            threshold: 0.1  // 10% of the image is visible
+        });
+        
+        // Observe all lazy-thumbnail images
+        document.querySelectorAll('.lazy-thumbnail').forEach(img => {
+            if (img.getAttribute('data-src')) {
+                this.lazyLoadObserver.observe(img);
+            }
+        });
+    }
+    
+    renderPaginationControls() {
+        const paginationContainer = document.getElementById('paginationControls');
+        if (!paginationContainer || !this.pagination) return;
+        
+        if (!this.selectedGroup || this.pagination.total_pages <= 1) {
+            paginationContainer.innerHTML = '';
+            paginationContainer.style.display = 'none';
+            return;
+        }
+        
+        // Show pagination controls
+        paginationContainer.style.display = 'flex';
+        
+        // Create pagination HTML
+        let paginationHTML = `
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="pagination-info">
+                    Showing ${this.pagination.page_size * (this.pagination.page - 1) + 1} - 
+                    ${Math.min(this.pagination.page_size * this.pagination.page, this.pagination.total_items)} 
+                    of ${this.pagination.total_items} PDFs
+                </div>
+                <div class="pagination-buttons">
+                    <button class="btn btn-sm btn-outline-secondary" 
+                            ${this.pagination.has_prev ? '' : 'disabled'}
+                            onclick="functionalGroupsManager.loadPreviousPage()">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </button>
+                    <span class="mx-2">
+                        Page ${this.pagination.page} of ${this.pagination.total_pages}
+                    </span>
+                    <button class="btn btn-sm btn-outline-secondary" 
+                            ${this.pagination.has_next ? '' : 'disabled'}
+                            onclick="functionalGroupsManager.loadNextPage()">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        paginationContainer.innerHTML = paginationHTML;
+    }
+    
+    loadNextPage() {
+        if (this.pagination && this.pagination.has_next && this.selectedGroup) {
+            this.loadGroupPdfs(this.selectedGroup, this.pagination.page + 1);
+        }
+    }
+    
+    loadPreviousPage() {
+        if (this.pagination && this.pagination.has_prev && this.selectedGroup) {
+            this.loadGroupPdfs(this.selectedGroup, this.pagination.page - 1);
+        }
+    }
+
     renderPdfGrid() {
         const container = document.getElementById('pdfGrid');
         
@@ -1106,6 +1714,11 @@ class FunctionalGroupsManager {
                     <small class="text-muted mt-2">Use the department filters above to make your selection</small>
                 </div>
             `;
+            // Hide pagination
+            const paginationContainer = document.getElementById('paginationControls');
+            if (paginationContainer) {
+                paginationContainer.style.display = 'none';
+            }
             return;
         }
         
@@ -1116,6 +1729,11 @@ class FunctionalGroupsManager {
                     <div>No PDFs found for the selected filters</div>
                 </div>
             `;
+            // Hide pagination
+            const paginationContainer = document.getElementById('paginationControls');
+            if (paginationContainer) {
+                paginationContainer.style.display = 'none';
+            }
             return;
         }
         
@@ -1126,24 +1744,94 @@ class FunctionalGroupsManager {
                     <div>Select a functional group to view PDFs</div>
                 </div>
             `;
+            // Hide pagination
+            const paginationContainer = document.getElementById('paginationControls');
+            if (paginationContainer) {
+                paginationContainer.style.display = 'none';
+            }
             return;
         }
         
-        container.innerHTML = this.filteredPdfs.map(pdf => `
-            <div class="pdf-item" onclick="functionalGroupsManager.openPdf('${pdf.token}', ${pdf.is_multipage || false})" 
-                 title="Used in departments: ${pdf.all_departments ? pdf.all_departments.join(', ') : pdf.department_name}">
-                <div class="pdf-thumbnail">
-                    ${pdf.thumbnail ? 
-                        `<img src="${pdf.thumbnail}" alt="PDF thumbnail" loading="lazy" onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.3s">` :
-                        `<i class="bi bi-file-pdf pdf-icon"></i>`
-                    }
-                    ${pdf.pages > 1 ? `<div class="page-count-badge">${pdf.pages} pages</div>` : ''}
-                </div>
-                <div class="pdf-info">
-                    <div class="pdf-title">${pdf.name}</div>
-                </div>
-            </div>
-        `).join('');
+        // Çok sayfalı PDF'ler için ayrı öğeler oluşturacak şekilde düzenleme
+        let renderedItems = [];
+        
+        this.filteredPdfs.forEach(pdf => {
+            // PDF'nin adı ve nine_code'u alalım
+            const pdfNameWithoutExt = pdf.name.replace('.pdf', '');
+            
+            // Çok sayfalı PDF'ler için
+            if (pdf.pages > 1) {
+                // PDF'nin temel adını al (_1, _2 gibi son ekleri olmadan)
+                // Örnek: 9.MO310.09.A_1.pdf -> 9.MO310.09.A
+                const pdfBaseName = pdfNameWithoutExt.split('_')[0];
+                
+                // Ortak grup ID'si (aynı PDF'in sayfalarını gruplamak için)
+                const groupId = `pdf-group-${pdfBaseName}`;
+                
+                // Her sayfa için ayrı bir öğe oluştur
+                for (let i = 1; i <= pdf.pages; i++) {
+                    // Her sayfa için thumbnail yolu
+                    const pageThumbPath = `/static/thumbnails/${this.selectedGroup}/${pdfBaseName}_${i}_w220.png`;
+                    
+                    // Her sayfa için token (orijinal token veya i > 1 için oluşturulan)
+                    const pageToken = i === 1 ? pdf.token : pdf.token.replace('.pdf', `_${i}.pdf`);
+                    
+                    // Bu sayfanın dosya adı
+                    const pageName = i === 1 ? pdf.name : pdf.name.replace('.pdf', `_${i}.pdf`);
+                    
+                    // Bu PDF sayfasının HTML'i
+                    renderedItems.push(`
+                        <div class="pdf-item pdf-page-item" 
+                             data-pdf-group="${groupId}"
+                             data-page-num="${i}" 
+                             data-total-pages="${pdf.pages}"
+                             onclick="functionalGroupsManager.openPdf('${pageToken}', ${pdf.is_multipage || false})" 
+                             title="Page ${i} of ${pdf.pages} | Used in: ${pdf.all_departments ? pdf.all_departments.join(', ') : pdf.department_name}">
+                            <div class="pdf-thumbnail">
+                                <img data-src="${pageThumbPath}" alt="PDF page ${i}" loading="lazy" 
+                                     class="lazy-thumbnail"
+                                     onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.3s">
+                                <div class="multipage-indicator">
+                                    <span class="page-number">${i}</span>
+                                    <span class="total-pages">/ ${pdf.pages}</span>
+                                </div>
+                            </div>
+                            <div class="pdf-info">
+                                <div class="pdf-title">
+                                    ${pageName}
+                                </div>
+                                <div class="pdf-subtitle">
+                                    ${pdf.all_departments ? pdf.all_departments.join(', ') : pdf.department_name}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                }
+            } 
+            // Tek sayfalı PDF'ler için
+            else {
+                renderedItems.push(`
+                    <div class="pdf-item" 
+                         onclick="functionalGroupsManager.openPdf('${pdf.token}', ${pdf.is_multipage || false})" 
+                         title="Used in departments: ${pdf.all_departments ? pdf.all_departments.join(', ') : pdf.department_name}">
+                        <div class="pdf-thumbnail">
+                            ${pdf.thumbnail ? 
+                                `<img data-src="/static/thumbnails/${this.selectedGroup}/${pdf.name.replace('.pdf', '')}_w220.png" alt="PDF thumbnail" loading="lazy" class="lazy-thumbnail" onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.3s">` :
+                                `<i class="bi bi-file-pdf pdf-icon"></i>`
+                            }
+                        </div>
+                        <div class="pdf-info">
+                            <div class="pdf-title">${pdf.name}</div>
+                            <div class="pdf-subtitle">
+                                ${pdf.all_departments ? pdf.all_departments.join(', ') : pdf.department_name}
+                            </div>
+                        </div>
+                    </div>
+                `);
+            }
+        });
+        
+        container.innerHTML = renderedItems.join('');
     }
     
     updateSearchResultsCount() {
@@ -1203,6 +1891,36 @@ class FunctionalGroupsManager {
 // Initialize the manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     window.functionalGroupsManager = new FunctionalGroupsManager();
+    
+    // Çok sayfalı PDF'lerin hover efektlerini düzenleyen kod
+    document.addEventListener('mouseover', function(e) {
+        const pdfItem = e.target.closest('.pdf-page-item');
+        if (!pdfItem) return;
+        
+        const pdfGroup = pdfItem.getAttribute('data-pdf-group');
+        if (!pdfGroup) return;
+        
+        // Aynı gruba ait tüm sayfaları vurgula ve animasyon uygula
+        document.querySelectorAll(`.pdf-page-item[data-pdf-group="${pdfGroup}"]`).forEach(item => {
+            item.classList.add('multipage-hover');
+            if (item !== pdfItem) {
+                item.classList.add('related-page');
+            }
+        });
+    });
+    
+    document.addEventListener('mouseout', function(e) {
+        const pdfItem = e.target.closest('.pdf-page-item');
+        if (!pdfItem) return;
+        
+        const pdfGroup = pdfItem.getAttribute('data-pdf-group');
+        if (!pdfGroup) return;
+        
+        // Tüm gruptaki animasyonu ve vurgulamayı kaldır
+        document.querySelectorAll(`.pdf-page-item[data-pdf-group="${pdfGroup}"]`).forEach(item => {
+            item.classList.remove('multipage-hover', 'related-page');
+        });
+    });
 });
 </script>
 {% endblock %}

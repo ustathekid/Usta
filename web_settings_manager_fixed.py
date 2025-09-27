@@ -139,7 +139,8 @@ class WebSettingsManager(WebBaseManager):
                     dir_stat = os.stat(directory)
                     if dir_stat.st_mtime > last_completed:
                         modified_directories.append(directory)
-                modified_directories.append(directory)
+            except Exception:
+                pass
         
         # Step 2: Limited depth scan for new directories (only if few changes detected)
         if len(modified_directories) <= 20:
@@ -158,7 +159,9 @@ class WebSettingsManager(WebBaseManager):
                                     modified_directories.append(item_path)
                                 if current_depth < 2:  # Recurse only 2 levels
                                     limited_walk(item_path, max_depth, current_depth + 1)
-                                modified_directories.append(item_path)
+                            except Exception:
+                                pass
+                except Exception:
                     pass
             
             limited_walk(base_folder_str)
@@ -278,6 +281,10 @@ class WebSettingsManager(WebBaseManager):
                 
                 if functional_groups_success:
                     self.add_log("✅ Functional groups database integrated successfully!")
+                    
+                    # Update thumbnail cache after successful indexing
+                    self.add_log("🔄 Updating PDF thumbnail cache...")
+                    self._update_thumbnail_cache_after_index()
                 else:
                     self.add_log("⚠️ Functional groups database creation failed")
                     
@@ -777,12 +784,20 @@ class WebSettingsManager(WebBaseManager):
             self.indexing_progress['status'] = f"Scanning {len(modified_directories)} changed directories..."
             
             for i, directory in enumerate(modified_directories):
-                    if dir_stat.st_mtime > last_completed:
-                        if len(modified_directories) <= 5:  # Log first few directories
-                        elif len(modified_directories) == 6:
-                            self.add_log(f"📁 ... and {len(modified_directories)-5} more directories with changes")
+                if not self.indexing_progress['running']:
+                    return False
+                try:
+                    if os.path.exists(directory):
+                        dir_stat = os.stat(directory)
+                        if dir_stat.st_mtime > last_completed:
+                            if len(modified_directories) <= 5:  # Log first few directories
+                                self.add_log(f"📁 Checking directory: {directory}")
+                            elif len(modified_directories) == 6:
+                                self.add_log(f"📁 ... and {len(modified_directories)-5} more directories with changes")
+                except Exception:
+                    pass
             
-            self.add_log(f"🎯 Found {len(modified_directories)} directories with recent changes out of {total_dirs} total")
+            self.add_log(f"🎯 Found {len(modified_directories)} directories with recent changes")
             
             # Phase 2: Scan only the modified directories for new/changed files
             self.indexing_progress['percentage'] = 30
@@ -821,10 +836,10 @@ class WebSettingsManager(WebBaseManager):
                                 else:
                                     # This is a new file
                                     new_files.append(file_path)
-                                    
+                            except Exception:
                                 # If we can't stat the file, skip it
                                 continue
-                                
+                except Exception:
                     # If we can't list directory, skip it
                     continue
             
@@ -924,6 +939,7 @@ class WebSettingsManager(WebBaseManager):
         
         # First count directories for better progress tracking
         for root, dirs, _ in os.walk(base_folder_str):
+            total_dirs += 1
         
         # Now scan files with progress updates
         for root, dirs, files in os.walk(base_folder_str):
@@ -1418,4 +1434,159 @@ class WebSettingsManager(WebBaseManager):
             
         except Exception as e:
             self.add_log(f"❌ Error building functional groups: {str(e)}")
+            return False
+
+    def _update_thumbnail_cache_after_index(self):
+        """Generate thumbnails for all PDFs organized by functional groups after indexing"""
+        try:
+            import shutil
+            from pathlib import Path
+            import json
+            import re
+            
+            self.add_log("Cleaning old thumbnail cache...")
+            thumbnails_dir = Path('thumbnails')
+            if thumbnails_dir.exists():
+                # Clear existing thumbnails recursively
+                for item in thumbnails_dir.iterdir():
+                    try:
+                        if item.is_file() and item.suffix == '.png':
+                            item.unlink()
+                        elif item.is_dir():
+                            shutil.rmtree(item)
+                    except Exception as e:
+                        self.add_log(f"Could not remove {item}: {str(e)}")
+            else:
+                thumbnails_dir.mkdir(exist_ok=True)
+            
+            self.add_log("Generating thumbnails for all PDFs organized by functional groups...")
+            
+            # Load functional groups database
+            functional_groups_file = Path('databases/functional_groups.json')
+            if not functional_groups_file.exists():
+                self.add_log("Functional groups database not found, thumbnails will be organized by 9.x codes")
+                return
+            
+            # Load search index to get all PDF paths
+            index_file = Path("databases/indexs/search_index.json")
+            if not index_file.exists():
+                self.add_log("Search index not found, cannot generate thumbnails")
+                return
+                
+            with open(index_file, 'r', encoding='utf-8') as f:
+                all_paths = json.load(f)
+            
+            with open(functional_groups_file, 'r', encoding='utf-8') as f:
+                fg_data = json.load(f)
+            
+            # Create mapping: 9.x code -> functional group
+            nine_code_to_fg = {}
+            for dept_name, dept_data in fg_data.get('departments', {}).items():
+                for model in dept_data.get('models', []):
+                    for fg in model.get('functional_groups', []):
+                        fg_code = fg.get('code')
+                        for nine_code in fg.get('nine_codes', []):
+                            nine_code_to_fg[nine_code] = fg_code
+            
+            self.add_log(f"Found {len(nine_code_to_fg)} 9.x codes mapped to functional groups")
+            
+            # Process all PDF files
+            processed_count = 0
+            fg_stats = {}
+            
+            for path_str in all_paths:
+                try:
+                    pdf_path = Path(path_str)
+                    if pdf_path.is_file() and pdf_path.suffix.lower() == '.pdf':
+                        # Extract 9.x code from filename
+                        nine_match = re.search(r'9\.[A-Z]+\d+\.\d+\.\d+', pdf_path.stem)
+                        if nine_match:
+                            nine_code = nine_match.group()
+                            fg_code = nine_code_to_fg.get(nine_code)
+                            
+                            if fg_code:
+                                # Create functional group directory
+                                fg_dir = thumbnails_dir / str(fg_code)
+                                fg_dir.mkdir(exist_ok=True)
+                                
+                                # Generate thumbnail for this specific PDF
+                                self._generate_single_thumbnail(pdf_path, fg_dir)
+                                processed_count += 1
+                                
+                                # Track stats
+                                if fg_code not in fg_stats:
+                                    fg_stats[fg_code] = 0
+                                fg_stats[fg_code] += 1
+                                
+                                if processed_count % 100 == 0:
+                                    self.add_log(f"Processed {processed_count} thumbnails...")
+                            
+                except Exception as e:
+                    self.add_log(f"Error processing {path_str}: {str(e)}")
+            
+            # Log summary
+            self.add_log(f"Thumbnail generation completed!")
+            self.add_log(f"Generated {processed_count} thumbnails across {len(fg_stats)} functional groups")
+            for fg_code, count in sorted(fg_stats.items()):
+                self.add_log(f"   FG {fg_code}: {count} thumbnails")
+            
+        except Exception as e:
+            self.add_log(f"Error updating thumbnail cache: {str(e)}")
+    
+    def _generate_single_thumbnail(self, pdf_path: Path, output_dir: Path, width: int = 220):
+        """Generate thumbnail for a single PDF file"""
+        try:
+            # Import PyMuPDF if available
+            try:
+                import fitz
+            except ImportError:
+                return False
+            
+            # Generate thumbnail filename
+            thumb_filename = f"{pdf_path.stem}_w{width}.png"
+            thumb_path = output_dir / thumb_filename
+            
+            # Skip if already exists and is newer than PDF
+            if thumb_path.exists():
+                try:
+                    thumb_mtime = thumb_path.stat().st_mtime
+                    pdf_mtime = pdf_path.stat().st_mtime
+                    if thumb_mtime >= pdf_mtime:
+                        return True  # Already up to date
+                except:
+                    pass
+            
+            # Generate thumbnail
+            doc = fitz.open(str(pdf_path))
+            if len(doc) == 0:
+                doc.close()
+                return False
+                
+            # Get first page
+            page = doc[0]
+            
+            # Calculate zoom factor to achieve desired width
+            page_rect = page.rect
+            zoom_factor = width / page_rect.width
+            
+            # Create matrix for scaling
+            mat = fitz.Matrix(zoom_factor, zoom_factor)
+            
+            # Render page to pixmap
+            try:
+                pix = page.get_pixmap(matrix=mat, alpha=False)
+            except AttributeError:
+                # Try older PyMuPDF API
+                pix = page.getPixmap(matrix=mat, alpha=False)
+            
+            # Save to file
+            pix.save(str(thumb_path))
+            pix = None
+            doc.close()
+            
+            return True
+            
+        except Exception as e:
+            if 'doc' in locals():
+                doc.close()
             return False

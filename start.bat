@@ -8,5 +8,5 @@ echo Starting Flask application...
 echo Access the app at: http://localhost:5000
 echo Press Ctrl+C to stop the server
 echo.
-python app.py
+".\.venv\Scripts\python.exe" app.py
 pause

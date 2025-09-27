@@ -11,7 +11,7 @@
     "smtp_server": "smtp.gmail.com",
     "smtp_port": 587,
     "sender_email": "cafertayyarusta@gmail.com",
-    "sender_name": "Schemini Management System",
+    "sender_name": "Schemini Management Support",
     "sender_password": "qgud daye lpeh wfxp",
     "enabled": true
   },
@@ -47,12 +47,12 @@
   ],
   "auto_indexing": {
     "enabled": true,
-    "primary_time": "08:23",
+    "primary_time": "07:55",
     "secondary_enabled": true,
-    "secondary_time": "23:19",
+    "secondary_time": "15:55",
     "frequency": "daily",
     "weekday": "monday",
-    "last_run": 1758259390.7289634,
-    "last_run_secondary": 1758485949.8869097
+    "last_run": 1758518609.2063196,
+    "last_run_secondary": 1758891319.4325855
   }
 }

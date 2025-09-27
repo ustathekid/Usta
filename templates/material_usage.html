@@ -389,23 +389,201 @@
     align-items: center;
 }
 
-/* 9.x Code Links Styling */
+/* Enhanced Results Section Styling */
+#resultsSection .card {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#resultsSection .card-header {
+    background-color: #495057;
+    border: none;
+    padding: 1rem 1.5rem;
+}
+
+#resultsSection .nav-tabs {
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 4px;
+    margin: 0;
+}
+
+#resultsSection .nav-link {
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+#resultsSection .nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#resultsSection .nav-link.active {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#resultsSection .card-body {
+    padding: 2rem;
+}
+
+/* Summary Cards Enhancement - Smaller and more compact */
+.summary-card {
+    transition: none;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 70px; /* Even smaller height */
+    background-color: #434347; /* Use program color */
+    border: 2px solid #434347;
+}
+
+.summary-card .card-body {
+    padding: 0.5rem !important;
+    text-align: center; /* Center align text */
+}
+
+/* Total Parts Card - Light background */
+.summary-card.bg-light {
+    background-color: #f8f9fa !important;
+    border: 2px solid #dee2e6 !important;
+}
+
+.summary-card.bg-light .card-title {
+    color: #495057 !important;
+}
+
+/* Hierarchy Accordion Styles */
+.hierarchy-accordion-item {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hierarchy-accordion-item .accordion-button {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    border-radius: 0.375rem !important;
+}
+
+.hierarchy-accordion-item .accordion-button:not(.collapsed) {
+    background-color: #28a745;
+    color: white;
+    box-shadow: none;
+}
+
+.hierarchy-accordion-item .accordion-button:not(.collapsed) .text-muted {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.hierarchy-accordion-item .accordion-button:not(.collapsed) code {
+    color: white !important;
+}
+
+.hierarchy-accordion-item .accordion-button:focus {
+    box-shadow: none;
+    border: none;
+}
+
+.hierarchy-accordion-item .accordion-collapse {
+    border: none;
+}
+
+.hierarchy-accordion-item .accordion-body {
+    padding: 1rem 1.25rem;
+    background: rgba(248, 249, 250, 0.5);
+}
+
+.hierarchy-detail-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.hierarchy-detail-section h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 0.25rem;
+}
+
+/* 9.x Code Links - Enhanced visibility and interactivity */
 .nine-x-code-link {
-    position: relative;
-    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    font-weight: 500;
 }
 
-.nine-x-code-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    background: linear-gradient(135deg, #ffdd99 0%, #ffaa66 100%) !important;
-    color: #222 !important;
-    border-color: #ff9933 !important;
+.nine-x-code-link.disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}/* Mix, Radical, 9.x sections */
+.hierarchy-section {
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
-.nine-x-code-link:active {
-    transform: translateY(0px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+.hierarchy-section h6 {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.hierarchy-section .badge {
+    font-size: 0.7rem;
+    margin: 0.1rem;
+}
+
+/* Details Section Improvements */
+.details-grid .border {
+    border-radius: 6px !important;
+    transition: none;
+    margin-bottom: 0.25rem; /* More compact */
+}
+
+/* Loading States */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Improvements */
+@media (max-width: 768px) {
+    #resultsSection .card-body {
+        padding: 1rem;
+    }
+    
+    #hierarchyAccordion .accordion-button {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .summary-card .display-4 {
+        font-size: 2rem;
+    }
 }
 </style>
 
@@ -723,27 +901,6 @@
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <small id="current-status" class="text-truncate fw-semibold" style="color: #17a2b8; font-size: 1rem;">Ready to start...</small>
                                         <small id="progress-count" class="fw-bold px-3 py-2 rounded" style="color: #ffffff; background-color: #28a745; font-size: 1rem; border-radius: 8px; box-shadow: 0 3px 6px rgba(40, 167, 69, 0.4);">0/0</small>
-                                    </div>
-                                </div>
-                                
-                                <div class="row text-center mt-4">
-                                    <div class="col-4">
-                                        <div class="border rounded p-3" style="background: rgba(40, 167, 69, 0.1); border-color: #28a745 !important;">
-                                            <div class="fw-bold text-success" id="found-count" style="font-size: 1.8rem;">0</div>
-                                            <small class="text-success fw-semibold">Found</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="border rounded p-3" style="background: rgba(23, 162, 184, 0.1); border-color: #17a2b8 !important;">
-                                            <div class="fw-bold text-info" id="current-count" style="font-size: 1.8rem;">0</div>
-                                            <small class="text-info fw-semibold">Current</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="border rounded p-3" style="background: rgba(108, 117, 125, 0.1); border-color: #6c757d !important;">
-                                            <div class="fw-bold text-secondary" id="total-count" style="font-size: 1.8rem;">0</div>
-                                            <small class="text-secondary fw-semibold">Total</small>
-                                        </div>
                                     </div>
                                 </div>
                                 
@@ -1448,50 +1605,86 @@ $(document).ready(function() {
         $('#preOperationDetails').hide();
         $('#operationDetailsSection').show();
         
-        // Show detailed results in tabs
+        // Show detailed results in tabs with lazy loading
         $('#resultsSection').show();
+        
+        // Show summary immediately
         displaySummary(results);
-        displayHierarchy(results);
-        displayDetails(results);
+        
+        // Add loading indicators for other tabs
+        $('#hierarchyContent').html(`
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">Loading hierarchy data...</p>
+            </div>
+        `);
+        
+        $('#detailsContent').html(`
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">Loading details...</p>
+            </div>
+        `);
+        
+        // Load other tabs after a short delay to improve initial responsiveness
+        setTimeout(() => {
+            displayHierarchy(results);
+        }, 100);
+        
+        setTimeout(() => {
+            displayDetails(results);
+        }, 200);
         
         // Enable download log button
         $('#downloadLogBtn').prop('disabled', false);
     }
 
     function displaySummary(results) {
-        let html = '<div class="row">';
+        let html = '<div class="row g-2">';
         
-        // Summary cards
+        // Calculate success rate
+        const successRate = results.total_parts > 0 ? ((results.found_parts/results.total_parts)*100) : 0;
+        
+        // Calculate color based on success rate (red to green gradient)
+        // Hue: 0 (red) to 120 (green)
+        const hue = (successRate / 100) * 120;
+        const successRateColor = `hsl(${hue}, 70%, 50%)`;
+        
+        // Summary cards - uniform size and consistent styling
         html += `
-            <div class="col-md-3 mb-3">
-                <div class="card bg-primary text-white">
-                    <div class="card-body text-center">
-                        <h4>${results.total_parts}</h4>
-                        <p class="mb-0">Total Parts</p>
+            <div class="col-6 col-md-3 mb-2">
+                <div class="card summary-card bg-light text-dark h-100 border" style="min-height: 70px;">
+                    <div class="card-body text-center p-2 d-flex flex-column justify-content-center">
+                        <div class="h4 fw-bold mb-1 text-primary">${results.total_parts}</div>
+                        <div class="small text-muted">Total Parts</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-success text-white">
-                    <div class="card-body text-center">
-                        <h4>${results.found_parts}</h4>
-                        <p class="mb-0">Found</p>
+            <div class="col-6 col-md-3 mb-2">
+                <div class="card summary-card h-100" style="background-color: #28a745; color: white; min-height: 70px;">
+                    <div class="card-body text-center p-2 d-flex flex-column justify-content-center">
+                        <div class="h4 fw-bold mb-1">${results.found_parts}</div>
+                        <div class="small">Found</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-danger text-white">
-                    <div class="card-body text-center">
-                        <h4>${results.not_found_parts}</h4>
-                        <p class="mb-0">Not Found</p>
+            <div class="col-6 col-md-3 mb-2">
+                <div class="card summary-card h-100" style="background-color: #dc3545; color: white; min-height: 70px;">
+                    <div class="card-body text-center p-2 d-flex flex-column justify-content-center">
+                        <div class="h4 fw-bold mb-1">${results.not_found_parts}</div>
+                        <div class="small">Not Found</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-info text-white">
-                    <div class="card-body text-center">
-                        <h4>${((results.found_parts/results.total_parts)*100).toFixed(1)}%</h4>
-                        <p class="mb-0">Success Rate</p>
+            <div class="col-6 col-md-3 mb-2">
+                <div class="card summary-card h-100" style="background-color: ${successRateColor}; color: white; min-height: 70px;">
+                    <div class="card-body text-center p-2 d-flex flex-column justify-content-center">
+                        <div class="h4 fw-bold mb-1">${successRate.toFixed(1)}%</div>
+                        <div class="small">Success Rate</div>
                     </div>
                 </div>
             </div>
@@ -1504,171 +1697,211 @@ $(document).ready(function() {
 
     function displayHierarchy(results) {
         let html = '';
-        
-        if (Object.keys(results.part_analyses).length > 0) {
-            html += '<div class="accordion" id="hierarchyAccordion">';
-            
-            let index = 0;
-            for (const [partCode, analysis] of Object.entries(results.part_analyses)) {
-                if (analysis.found) {
-                    // Create hierarchy data if it doesn't exist
-                    const hierarchy = analysis.hierarchy || {
-                        departments: [],
-                        mgroups: [],
-                        nine_x_groups: [], // 9'lu kodlar için yeni alan
-                        models: [],
-                        mixes: []
-                    };
-                    
-                    // Backend'den gelen 9'lu kodları kullan
-                    const nineLuGroups = hierarchy.nine_x_groups || [];
-                    
-                    html += `
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading${index}">
-                                <button class="accordion-button ${index > 0 ? 'collapsed' : ''}" type="button" 
-                                        data-bs-toggle="collapse" data-bs-target="#collapse${index}">
-                                    <strong>${partCode}</strong> 
-                                    <span class="badge bg-primary ms-2">${analysis.occurrences || 1} occurrence(s)</span>
-                                </button>
-                            </h2>
-                            <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
-                                 data-bs-parent="#hierarchyAccordion">
-                                <div class="accordion-body">
-                                    <div class="row">
-                                        <!-- Mixes Used Column -->
-                                        <div class="col-md-4">
-                                            <div class="card h-100 border-0">
-                                                <div class="card-header text-white" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                                                    <h6 class="mb-0"><i class="fas fa-code-branch me-2"></i>Mixes Used</h6>
-                                                </div>
-                                                <div class="card-body bg-light">
-                                                    ${hierarchy.mixes && hierarchy.mixes.length > 0 ? 
-                                                        hierarchy.mixes.map(mix => `<span class="badge me-1 mb-1" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">${mix}</span>`).join('') : 
-                                                        '<span class="text-muted">No mixes found</span>'}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Models Used Column -->
-                                        <div class="col-md-4">
-                                            <div class="card h-100 border-0">
-                                                <div class="card-header text-white" style="background: linear-gradient(135deg, #06beb6 0%, #48b1bf 100%);">
-                                                    <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Models Used</h6>
-                                                </div>
-                                                <div class="card-body bg-light">
-                                                    ${hierarchy.models && hierarchy.models.length > 0 ? 
-                                                        hierarchy.models.map(model => `<span class="badge me-1 mb-1" style="background: linear-gradient(135deg, #06beb6 0%, #48b1bf 100%); color: white;">${model}</span>`).join('') : 
-                                                        '<span class="text-muted">No models found</span>'}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- 9.x Groups Column -->
-                                        <div class="col-md-4">
-                                            <div class="card h-100 border-0">
-                                                <div class="card-header text-white" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333;">
-                                                    <h6 class="mb-0"><i class="fas fa-layer-group me-2"></i>9.x Groups</h6>
-                                                </div>
-                                                <div class="card-body bg-light">
-                                                    ${nineLuGroups && nineLuGroups.length > 0 ? 
-                                                        nineLuGroups.map(group => `<span class="badge me-1 mb-1 nine-x-code-link" data-code="${group}" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; border: 1px solid #ddd; cursor: pointer; transition: all 0.3s ease;" title="Click to search ${group} in Home page">${group}</span>`).join('') : 
-                                                        '<span class="text-muted">No 9.x groups found</span>'}
-                                                </div>
-                                            </div>
+        const foundParts = Object.values(results.part_analyses).filter(p => p.found);
+
+        if (foundParts.length === 0) {
+            html = '<div class="text-center text-muted"><p>No parts were found in the selected department and MGroups.</p></div>';
+        } else {
+            // Create accordion for collapsible hierarchy details
+            html = '<div class="accordion" id="hierarchyAccordion">';
+
+            // Show each found part as an accordion item
+            foundParts.forEach((part, index) => {
+                const componentName = (part.raw_results && part.raw_results[0]) ? (part.raw_results[0].part_name || part.raw_results[0].component_name || part.raw_results[0].maktx_cmp || '') : (part.part_name || '');
+                const componentNumber = (part.raw_results && part.raw_results[0]) ? (part.raw_results[0].part_code || part.raw_results[0].group_code || '') : '';
+                const hierarchy = part.hierarchy || {};
+                const mixes = hierarchy.mixes || [];
+                const radicalCodes = hierarchy.radical_codes || hierarchy.models || [];
+                const nineXGroups = hierarchy.nine_x_groups || [];
+                const itemId = `hierarchyItem${index}`;
+                const collapseId = `hierarchyCollapse${index}`;
+
+                html += `
+                    <div class="accordion-item hierarchy-accordion-item">
+                        <h2 class="accordion-header" id="${itemId}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}">
+                                <div class="d-flex align-items-center w-100">
+                                    <i class="fas fa-check-circle text-success me-2" style="font-size: 0.9rem;"></i>
+                                    <div class="flex-grow-1">
+                                        <code class="text-success fw-bold me-2">${componentNumber || part.part_code || 'Unknown'}</code>
+                                        ${componentName ? `<span class="text-muted small">${componentName}</span>` : ''}
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="${itemId}" data-bs-parent="#hierarchyAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <!-- Mixes Section -->
+                                    <div class="col-md-4">
+                                        <div class="hierarchy-detail-section">
+                                            <h6 class="text-primary mb-3">
+                                                <i class="fas fa-code-branch me-2"></i>Mixes (${mixes.length})
+                                            </h6>
+                                            ${mixes.length > 0 ?
+                                                `<div class="d-flex flex-wrap gap-2">
+                                                    ${mixes.map(m => `<span class="badge bg-warning text-dark px-2 py-1">${m}</span>`).join('')}
+                                                </div>` :
+                                                '<small class="text-muted">No mixes found</small>'}
                                         </div>
                                     </div>
-                                    
-                                    <!-- Part Details Section -->
-                                    <div class="row mt-3">
-                                        <div class="col-12">
-                                            <div class="card border-0" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-                                                <div class="card-header bg-transparent">
-                                                    <h6 class="mb-0 text-dark"><i class="fas fa-info-circle me-2"></i>Part Locations</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    ${analysis.locations && analysis.locations.length > 0 ? 
-                                                        analysis.locations.map(loc => 
-                                                            `<div class="d-inline-block me-2 mb-2">
-                                                                <span class="badge bg-info me-1">${loc.mgroup || loc.location}</span>
-                                                                <small class="text-muted">${loc.file || 'Unknown file'}</small>
-                                                            </div>`
-                                                        ).join('') : 
-                                                        '<span class="text-muted">No location details available</span>'}
-                                                </div>
-                                            </div>
+
+                                    <!-- Radical Codes Section -->
+                                    <div class="col-md-4">
+                                        <div class="hierarchy-detail-section">
+                                            <h6 class="text-info mb-3">
+                                                <i class="fas fa-dna me-2"></i>Radical Codes (${radicalCodes.length})
+                                            </h6>
+                                            ${radicalCodes.length > 0 ?
+                                                `<div class="d-flex flex-wrap gap-2">
+                                                    ${radicalCodes.map(r => `<span class="badge bg-info text-white px-2 py-1">${r}</span>`).join('')}
+                                                </div>` :
+                                                '<small class="text-muted">No radical codes found</small>'}
+                                        </div>
+                                    </div>
+
+                                    <!-- 9.x Groups Section -->
+                                    <div class="col-md-4">
+                                        <div class="hierarchy-detail-section">
+                                            <h6 class="text-secondary mb-3">
+                                                <i class="fas fa-layer-group me-2"></i>9.x Groups (${nineXGroups.length})
+                                                <small class="text-muted ms-2">Click to open PDF</small>
+                                            </h6>
+                                            ${nineXGroups.length > 0 ?
+                                                `<div class="d-flex flex-wrap gap-2">
+                                                    ${nineXGroups.map(g => `<span class="badge nine-x-code-link bg-warning text-dark px-2 py-1" style="cursor: pointer;" data-code="${g}" title="Click to open PDF">${g}</span>`).join('')}
+                                                </div>` :
+                                                '<small class="text-muted">No 9.x groups found</small>'}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    `;
-                    index++;
-                }
-            }
-            
+                    </div>
+                `;
+            });
+
             html += '</div>';
-        } else {
-            html = '<div class="text-center text-muted"><p>No hierarchy data available for selected MGroups.</p></div>';
         }
-        
+
         $('#hierarchyContent').html(html);
-        
+
         // Add click event handlers for 9.x code links
         $('.nine-x-code-link').off('click').on('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
+
             const nineXCode = $(this).data('code');
             console.log('🔍 DEBUG: 9.x code clicked:', nineXCode);
-            
+
             // Show loading state
             const originalText = $(this).text();
             $(this).html('<i class="fas fa-spinner fa-spin"></i>').addClass('disabled');
-            
+
             // Restore original state after a short delay
             setTimeout(() => {
                 $(this).html(originalText).removeClass('disabled');
             }, 1000);
-            
-            // Open Home page in new tab with the 9.x code search
+
+            // Open Home page in new tab with the search
             searchNineXCodeInHomePage(nineXCode);
         });
-    }
-
-    function displayDetails(results) {
+    }    function displayDetails(results) {
         let html = '';
         
-        // Found parts - ensure uniqueness
+        // Found parts section
         if (results.found_list && results.found_list.length > 0) {
             const uniqueFoundList = [...new Set(results.found_list)]; // Remove duplicates
-            html += '<div class="card mb-3">';
-            html += '<div class="card-header bg-success text-white"><h6 class="mb-0">✅ Found Parts in Selected MGroups</h6></div>';
-            html += '<div class="card-body"><div class="row">';
             
-            uniqueFoundList.forEach(part => {
-                html += `<div class="col-md-3 mb-2"><span class="badge bg-success">${part}</span></div>`;
+            html += `
+                <div class="card mb-4 border-success">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0"><i class="fas fa-check-circle me-2"></i>Found Parts in Selected MGroups</h6>
+                        <span class="badge bg-light text-success">${uniqueFoundList.length} parts</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2 details-grid">
+            `;
+            
+            // Show in a responsive grid, max 50 items for performance
+            uniqueFoundList.slice(0, 50).forEach(part => {
+                html += `
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="d-flex align-items-center p-2 border rounded bg-light">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <code class="text-success flex-grow-1">${part}</code>
+                        </div>
+                    </div>
+                `;
             });
             
-            html += '</div></div></div>';
+            if (uniqueFoundList.length > 50) {
+                html += `
+                    <div class="col-12 text-center mt-3">
+                        <small class="text-muted">And ${uniqueFoundList.length - 50} more parts...</small>
+                    </div>
+                `;
+            }
+            
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
-        // Not found parts - ensure uniqueness
-        if (results.not_found_list && results.not_found_list.length > 0) {
-            const uniqueNotFoundList = [...new Set(results.not_found_list)]; // Remove duplicates
-            html += '<div class="card mb-3">';
-            html += '<div class="card-header bg-danger text-white"><h6 class="mb-0">❌ Parts Not Found in Selected MGroups</h6></div>';
-            html += '<div class="card-body"><div class="row">';
+        // Not found parts section
+        if (results.part_analyses) {
+            const notFoundParts = Object.keys(results.part_analyses).filter(partCode => !results.part_analyses[partCode].found);
             
-            uniqueNotFoundList.forEach(part => {
-                html += `<div class="col-md-3 mb-2"><span class="badge bg-danger">${part}</span></div>`;
-            });
-            
-            html += '</div></div></div>';
+            if (notFoundParts.length > 0) {
+                html += `
+                    <div class="card mb-4 border-danger">
+                        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0"><i class="fas fa-times-circle me-2"></i>Not Found Parts</h6>
+                            <span class="badge bg-light text-danger">${notFoundParts.length} parts</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-2 details-grid">
+                `;
+                
+                // Show in a responsive grid, max 50 items for performance
+                notFoundParts.slice(0, 50).forEach(part => {
+                    html += `
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="d-flex align-items-center p-2 border rounded bg-light">
+                                <i class="fas fa-times-circle text-danger me-2"></i>
+                                <code class="text-danger flex-grow-1">${part}</code>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                if (notFoundParts.length > 50) {
+                    html += `
+                        <div class="col-12 text-center mt-3">
+                            <small class="text-muted">And ${notFoundParts.length - 50} more parts...</small>
+                        </div>
+                    `;
+                }
+                
+                html += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }
         
+        // If no results at all
         if (!html) {
-            html = '<div class="text-center text-muted"><p>No detailed results available.</p></div>';
+            html = `
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-list fa-3x mb-3 text-muted"></i>
+                    <p class="mb-0">No detailed results available.</p>
+                    <small>This might indicate no parts were analyzed or an error occurred.</small>
+                </div>
+            `;
         }
         
         $('#detailsContent').html(html);

@@ -3,23 +3,164 @@
 {% block title %}Account Settings - Schemini Manager{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card bg-secondary">
-            <div class="card-header">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <h2 class="card-title mb-0 me-3">
-                            <i class="bi bi-person-circle me-2"></i>
-                            Account Settings
-                        </h2>
-                        <p class="card-text mb-0 text-muted">Manage your account settings and preferences</p>
+<style>
+/* Custom styles for better organization */
+.settings-container {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.settings-card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.settings-section-title {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 8px 8px 0 0;
+    margin-right: 4px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid #17a2b8;
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.alert-custom {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom {
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.progress-custom {
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-group-custom .input-group-text {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.input-group-custom .form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.input-group-custom .form-control:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #17a2b8;
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+/* Users table specific styling */
+#users .table {
+    background: #fff;
+    color: #212529;
+}
+
+#users .table thead th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+}
+
+#users .table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+#users .table tbody tr:hover {
+    background: #e9ecef;
+}
+
+#users .badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 0 10px;
+    }
+    
+    .settings-card {
+        margin-bottom: 1rem;
+    }
+    
+    .form-section {
+        padding: 1rem;
+    }
+}
+</style>
+
+<div class="container-fluid settings-container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-secondary settings-card">
+                <div class="card-header bg-dark border-bottom border-light">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <h2 class="card-title mb-0 me-3 text-dark">
+                                <i class="bi bi-gear-fill me-2"></i>
+                                Account Settings
+                            </h2>
+                            <p class="card-text mb-0 text-muted">Manage your account settings and preferences</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-body">
+                <div class="card-body">
                 <!-- Main Navigation Tabs -->
-                <ul class="nav nav-tabs nav-fill mb-4" id="mainTabs" role="tablist">
+                <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="my-account-tab" data-bs-toggle="tab" data-bs-target="#my-account" type="button" role="tab">
                             <i class="bi bi-person-badge me-2"></i>
@@ -59,7 +200,7 @@
                                         <!-- Username (Read-only) -->
                                         <div class="mb-4">
                                             <label for="accountUsername" class="form-label fw-bold">Username</label>
-                                            <div class="input-group">
+                                            <div class="input-group input-group-custom">
                                                 <span class="input-group-text bg-secondary border-secondary">
                                                     <i class="bi bi-person-circle"></i>
                                                 </span>
@@ -71,7 +212,7 @@
                                         <!-- Email (Read-only) -->
                                         <div class="mb-4">
                                             <label for="accountEmail" class="form-label fw-bold">Email Address</label>
-                                            <div class="input-group">
+                                            <div class="input-group input-group-custom">
                                                 <span class="input-group-text bg-secondary border-secondary">
                                                     <i class="bi bi-envelope"></i>
                                                 </span>
@@ -152,14 +293,14 @@
                                     <i class="bi bi-people me-2"></i>
                                     User Management
                                 </h5>
-                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                <button class="btn btn-success btn-custom" data-bs-toggle="modal" data-bs-target="#addUserModal">
                                     <i class="bi bi-plus-circle me-1"></i> Add New User
                                 </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-dark table-striped">
-                                        <thead>
+                                    <table class="table table-striped table-hover">
+                                        <thead class="table-light">
                                             <tr>
                                                 <th>Username</th>
                                                 <th>Email</th>
@@ -207,7 +348,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="input-group mb-3">
+                                        <div class="input-group mb-3 input-group-custom">
                                             <span class="input-group-text bg-secondary border-secondary">
                                                 <i class="bi bi-folder2"></i>
                                             </span>
@@ -217,7 +358,7 @@
                                                 Browse
                                             </button>
                                         </div>
-                                        <button class="btn btn-warning w-100" id="saveGlobalScheminiFolder">
+                                        <button class="btn btn-warning w-100 btn-custom" id="saveGlobalScheminiFolder">
                                             <i class="bi bi-save me-2"></i>
                                             Save Global Folder
                                         </button>
@@ -356,7 +497,7 @@
                                                 <!-- Primary Time Selection -->
                                                 <div class="mb-3">
                                                     <label for="autoIndexPrimaryTime" class="form-label fw-bold">Primary Schedule Time</label>
-                                                    <div class="input-group">
+                                                    <div class="input-group input-group-custom">
                                                         <span class="input-group-text bg-secondary border-secondary">
                                                             <i class="bi bi-sunrise"></i>
                                                         </span>
@@ -387,7 +528,7 @@
                                                 <!-- Secondary Time Selection -->
                                                 <div class="mb-3">
                                                     <label for="autoIndexSecondaryTime" class="form-label fw-bold">Secondary Schedule Time</label>
-                                                    <div class="input-group">
+                                                    <div class="input-group input-group-custom">
                                                         <span class="input-group-text bg-secondary border-secondary">
                                                             <i class="bi bi-sun"></i>
                                                         </span>
@@ -431,7 +572,7 @@
                                         </div>
                                         
                                         <!-- Save Button -->
-                                        <button class="btn btn-success w-100" id="saveAutoIndexSettings">
+                                        <button class="btn btn-success w-100 btn-custom" id="saveAutoIndexSettings">
                                             <i class="bi bi-check-circle me-2"></i>
                                             Save Auto-Indexing Settings
                                         </button>
@@ -486,7 +627,7 @@
                                         <!-- Reference Folder Selection -->
                                         <div class="mb-4">
                                             <label for="referenceFolder" class="form-label fw-bold">Reference Folder Path</label>
-                                            <div class="input-group mb-3">
+                                            <div class="input-group mb-3 input-group-custom">
                                                 <span class="input-group-text bg-secondary border-secondary">
                                                     <i class="bi bi-folder2"></i>
                                                 </span>
@@ -496,7 +637,7 @@
                                                     Browse
                                                 </button>
                                             </div>
-                                            <button class="btn btn-success w-100" id="saveReferenceFolder">
+                                            <button class="btn btn-success w-100 btn-custom" id="saveReferenceFolder">
                                                 <i class="bi bi-check-circle me-2"></i>
                                                 Save Reference Folder
                                             </button>

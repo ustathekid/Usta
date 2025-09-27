@@ -17,6 +17,7 @@ import os
 import json
 import datetime
 import threading
+import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from web_base_manager import WebBaseManager
@@ -39,6 +40,59 @@ class WebMaterialUsageManager(WebBaseManager):
         self.uploaded_parts = []
         self.department_usage = {}
         
+        # Selected filters for optimized search
+        self.selected_department = None
+        self.selected_department_files = []
+        self.selected_mixes = []
+        self.selected_mix_radicals = set()
+        self.selected_mgroups = []
+        
+    def set_selected_filters(self, department: Optional[str] = None, mixes: Optional[List[str]] = None, mgroups: Optional[List[str]] = None):
+        """Set selected filters for optimized search"""
+        try:
+            self.selected_department = department
+            self.selected_mgroups = [mg.upper().strip() for mg in (mgroups or [])]
+            self.selected_mixes = mixes or []
+            
+            # Get department files
+            if department and department in self.workcenters_data.get('department_folders', {}):
+                dept_files = self.workcenters_data['department_folders'][department]
+                self.selected_department_files = [f"{file_prefix}.json" for file_prefix in dept_files]
+                self.add_log(f"🎯 Department '{department}' selected -> Files: {self.selected_department_files}")
+            else:
+                self.selected_department_files = []
+                if department:
+                    self.add_log(f"⚠️ Department '{department}' not found in workcenters data")
+            
+            # Get radicals for selected mixes
+            self.selected_mix_radicals = set()
+            if mixes and self.mix_data.get('mix_hierarchical_mapping'):
+                for mix_code in mixes:
+                    mix_info = self.mix_data['mix_hierarchical_mapping'].get(mix_code)
+                    if mix_info:
+                        # Assuming models in mix are the radical codes
+                        models = mix_info.get('models', [])
+                        self.selected_mix_radicals.update(models)
+                        self.add_log(f"🧪 Mix '{mix_code}' -> Radicals: {models}")
+                
+                self.add_log(f"📋 Total selected radicals: {list(self.selected_mix_radicals)}")
+            
+            if mgroups:
+                self.add_log(f"⚙️ Selected MGroups: {self.selected_mgroups}")
+            
+            return {
+                'success': True,
+                'department': self.selected_department,
+                'files': self.selected_department_files,
+                'mgroups': self.selected_mgroups,
+                'mixes': self.selected_mixes,
+                'radicals': list(self.selected_mix_radicals)
+            }
+            
+        except Exception as e:
+            self.add_log(f"❌ Error setting filters: {str(e)}")
+            return {'success': False, 'error': str(e)}
+
     def cancel(self):
         """Cancel the current operation."""
         self.add_log("🛑 Cancellation requested. Attempting to stop the operation...")
@@ -49,28 +103,28 @@ class WebMaterialUsageManager(WebBaseManager):
         try:
             mgroups_json = Path('databases/mgroups.json')
             debug_mode = os.environ.get('DEBUG_MODE', '').lower() == 'true'
-            
+
             if debug_mode:
                 print(f"🔍 DEBUG: Looking for mgroups.json at: {mgroups_json.absolute()}")
-            
+
             if mgroups_json.exists():
                 if debug_mode:
                     print("✅ DEBUG: mgroups.json found, loading...")
                 with open(mgroups_json, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                
+
                 result = {
                     'department_mgroups': data.get('department_mgroups', {}),
                     'mgroup_names': data.get('mgroup_names_clean', {}),
                     'department_folders': data.get('department_folders', {}),
                     'bull_files_filter': data.get('bull_files_filter', [])
                 }
-                
+
                 if debug_mode:
                     print(f"✅ DEBUG: Loaded {len(result['department_mgroups'])} departments from JSON")
                     print(f"✅ DEBUG: Department keys: {list(result['department_mgroups'].keys())}")
                     print(f"✅ DEBUG: Loaded {len(result['mgroup_names'])} mgroup names")
-                
+
                 return result
             else:
                 if debug_mode:
@@ -82,10 +136,13 @@ class WebMaterialUsageManager(WebBaseManager):
                     'department_folders': {},
                     'bull_files_filter': []
                 }
-                
+
         except Exception as e:
-            print(f"❌ DEBUG: Error loading workcenters data: {str(e)}")
-            self.add_log(f"❌ Error loading workcenters data: {str(e)}")
+            # Log and return empty structures on failure
+            debug_mode = os.environ.get('DEBUG_MODE', '').lower() == 'true'
+            if debug_mode:
+                print(f"❌ DEBUG: Error loading workcenters data: {str(e)}")
+            self.add_log(f"❌ Error loading mgroups data: {str(e)}")
             return {
                 'department_mgroups': {},
                 'mgroup_names': {},
@@ -127,6 +184,10 @@ class WebMaterialUsageManager(WebBaseManager):
             
             results = []
             part_code_upper = part_code.upper().strip()
+            # Tüm target_mgroups'u uppercase ve strip ile normalize et
+            normalized_target_mgroups = None
+            if target_mgroups:
+                normalized_target_mgroups = [mg.upper().strip() for mg in target_mgroups]
             
             self.add_log(f"🔍 Searching for part code: {part_code_upper}")
             
@@ -143,62 +204,65 @@ class WebMaterialUsageManager(WebBaseManager):
             
             for json_filename in files_to_search:
                 json_file = partcodes_dir / json_filename
-                
                 if not json_file.exists():
                     self.add_log(f"⚠️ File not found: {json_filename}")
                     continue
-                    
                 try:
                     self.add_log(f"🔍 Checking file: {json_file.name}")
                     with open(json_file, 'r', encoding='utf-8') as f:
                         data = json.load(f)
-                    
-                    # Handle the actual JSON structure (ZGROUPS format)
                     zgroups = data.get('ZGROUPS', [])
                     if not zgroups:
                         self.add_log(f"⚠️ No ZGROUPS found in {json_file.name}")
                         continue
-                    
                     for zgroup in zgroups:
-                        zgroup_code = zgroup.get('ZGROUP', '')
-                        
+                        zgroup_code = zgroup.get('ZGROUP', '').upper().strip()
                         # Filter by target MGroups if specified
-                        if target_mgroups and zgroup_code not in target_mgroups:
+                        if normalized_target_mgroups and zgroup_code not in normalized_target_mgroups:
                             continue  # Skip this ZGROUP if it's not in our target list
-                        
-                        maktx_s_groups = zgroup.get('MAKTX_S_GROUPS', [])
-                        
-                        for maktx_group in maktx_s_groups:
-                            model = maktx_group.get('MAKTX_S', '')
-                            matnr_groups = maktx_group.get('MATNR_GROUPS', [])
-                            
-                            for matnr_group in matnr_groups:
-                                group_code = matnr_group.get('matnr_hl', '')
-                                group_name = matnr_group.get('maktx_hl', '')
-                                components = matnr_group.get('components', [])
-                                
-                                for component in components:
-                                    component_code = component.get('component', '').strip().upper()
-                                    
-                                    # Check for exact match or normalized match (handling I-prefix)
-                                    if (component_code == part_code_upper or 
-                                        component_code == f"I{part_code_upper}" or 
-                                        component_code.lstrip('I') == part_code_upper.lstrip('I')):
-                                        
-                                        result = {
-                                            'part_code': component_code,
-                                            'part_name': component.get('maktx_cmp', ''),
-                                            'position': component.get('posnr', ''),
-                                            'group_code': group_code,
-                                            'group_name': group_name,
-                                            'source_file': json_file.stem,
-                                            'mgroup': zgroup_code,  # This is the MGroup (MCB100, etc.)
-                                            'model': model
-                                        }
-                                        
-                                        results.append(result)
-                                        self.add_log(f"✅ Found {part_code_upper} in {json_file.name} -> MGroup: {zgroup_code}")
-                
+
+                        # Hem MAKTX_S_GROUPS hem de RADICAL_CODE_GROUPS destekle
+                        group_types = []
+                        if 'MAKTX_S_GROUPS' in zgroup:
+                            group_types.append(('MAKTX_S_GROUPS', 'MAKTX_S'))
+                        if 'RADICAL_CODE_GROUPS' in zgroup:
+                            group_types.append(('RADICAL_CODE_GROUPS', 'RADICAL_CODE'))
+                        if not group_types:
+                            # Eski format için fallback
+                            group_types.append(('MAKTX_S_GROUPS', 'MAKTX_S'))
+
+                        for group_key, model_key in group_types:
+                            maktx_groups = zgroup.get(group_key, [])
+                            for maktx_group in maktx_groups:
+                                # Model adı anahtarı değişebilir
+                                model = maktx_group.get(model_key, '')
+                                radical_code_val = maktx_group.get('radical_code') or maktx_group.get('RADICAL_CODE') or model
+                                matnr_groups = maktx_group.get('MATNR_GROUPS', [])
+                                for matnr_group in matnr_groups:
+                                    group_code = matnr_group.get('matnr_hl', '')
+                                    group_name = matnr_group.get('maktx_hl', '')
+                                    components = matnr_group.get('components', [])
+                                    for component in components:
+                                        component_code = component.get('component', '').strip().upper()
+                                        # Check for exact match or normalized match (handling I-prefix)
+                                        if (component_code == part_code_upper or 
+                                            component_code == f"I{part_code_upper}" or 
+                                            component_code.lstrip('I') == part_code_upper.lstrip('I')):
+                                            # Try to pull radical_code from component level first, then maktx_group, then fallback to model text
+                                            component_radical = component.get('radical_code') or component.get('RADICAL_CODE') or radical_code_val
+                                            result = {
+                                                'part_code': component_code,
+                                                'part_name': component.get('maktx_cmp', ''),
+                                                'position': component.get('posnr', ''),
+                                                'group_code': group_code,
+                                                'group_name': group_name,
+                                                'source_file': json_file.stem,
+                                                'mgroup': zgroup_code,  # This is the MGroup (MCB100, etc.)
+                                                'model': model,  # kept for backward compatibility
+                                                'radical_code': component_radical
+                                            }
+                                            results.append(result)
+                                            self.add_log(f"✅ Found {part_code_upper} in {json_file.name} -> MGroup: {zgroup_code}")
                 except Exception as e:
                     self.add_log(f"❌ Error reading {json_file.name}: {str(e)}")
                     continue
@@ -214,6 +278,100 @@ class WebMaterialUsageManager(WebBaseManager):
             self.add_log(f"❌ Error searching part codes: {str(e)}")
             return []
 
+    def _find_part_in_partcodes_optimized(self, part_code: str) -> List[Dict[str, Any]]:
+        """Optimized search using pre-selected filters"""
+        try:
+            partcodes_dir = Path('databases/partcodes')
+            if not partcodes_dir.exists():
+                self.add_log(f"❌ Partcodes directory not found: {partcodes_dir}")
+                return []
+            
+            results = []
+            part_code_upper = part_code.upper().strip()
+            
+            self.add_log(f"🔍 Optimized search for part code: {part_code_upper}")
+            
+            # Only search in selected department files
+            for json_filename in self.selected_department_files:
+                json_file = partcodes_dir / json_filename
+                if not json_file.exists():
+                    self.add_log(f"⚠️ File not found: {json_filename}")
+                    continue
+                
+                try:
+                    self.add_log(f"🔍 Checking file: {json_file.name}")
+                    with open(json_file, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                    zgroups = data.get('ZGROUPS', [])
+                    if not zgroups:
+                        self.add_log(f"⚠️ No ZGROUPS found in {json_file.name}")
+                        continue
+                    
+                    for zgroup in zgroups:
+                        zgroup_code = zgroup.get('ZGROUP', '').upper().strip()
+                        
+                        # Filter by selected MGroups
+                        if self.selected_mgroups and zgroup_code not in self.selected_mgroups:
+                            continue
+                        
+                        # Process group types
+                        group_types = []
+                        if 'MAKTX_S_GROUPS' in zgroup:
+                            group_types.append(('MAKTX_S_GROUPS', 'MAKTX_S'))
+                        if 'RADICAL_CODE_GROUPS' in zgroup:
+                            group_types.append(('RADICAL_CODE_GROUPS', 'RADICAL_CODE'))
+                        if not group_types:
+                            group_types.append(('MAKTX_S_GROUPS', 'MAKTX_S'))
+
+                        for group_key, model_key in group_types:
+                            maktx_groups = zgroup.get(group_key, [])
+                            for maktx_group in maktx_groups:
+                                model = maktx_group.get(model_key, '')
+                                radical_code_val = maktx_group.get('radical_code') or maktx_group.get('RADICAL_CODE') or model
+                                
+                                # Filter by selected mix radicals
+                                if self.selected_mix_radicals and radical_code_val not in self.selected_mix_radicals:
+                                    continue
+                                
+                                matnr_groups = maktx_group.get('MATNR_GROUPS', [])
+                                for matnr_group in matnr_groups:
+                                    group_code = matnr_group.get('matnr_hl', '')
+                                    group_name = matnr_group.get('maktx_hl', '')
+                                    components = matnr_group.get('components', [])
+                                    
+                                    for component in components:
+                                        component_code = component.get('component', '').strip().upper()
+                                        
+                                        if (component_code == part_code_upper or 
+                                            component_code == f"I{part_code_upper}" or 
+                                            component_code.lstrip('I') == part_code_upper.lstrip('I')):
+                                            
+                                            component_radical = component.get('radical_code') or component.get('RADICAL_CODE') or radical_code_val
+                                            result = {
+                                                'part_code': component_code,
+                                                'part_name': component.get('maktx_cmp', ''),
+                                                'position': component.get('posnr', ''),
+                                                'group_code': group_code,
+                                                'group_name': group_name,
+                                                'source_file': json_file.stem,
+                                                'mgroup': zgroup_code,
+                                                'model': model,
+                                                'radical_code': component_radical
+                                            }
+                                            results.append(result)
+                                            self.add_log(f"✅ Found {part_code_upper} in {json_file.name} -> MGroup: {zgroup_code}, Radical: {component_radical}")
+                
+                except Exception as e:
+                    self.add_log(f"❌ Error reading {json_file.name}: {str(e)}")
+                    continue
+        
+            self.add_log(f"🔍 Optimized search completed: {len(results)} results found for {part_code_upper}")
+            return results
+            
+        except Exception as e:
+            self.add_log(f"❌ Error in optimized search: {str(e)}")
+            return []
+
     def _trace_part_hierarchy(self, part_results: List[Dict[str, Any]], selected_mix: Optional[str] = None, selected_mgroups: Optional[List[str]] = None, selected_mixes: Optional[List[str]] = None) -> Dict[str, Any]:
         """Trace the hierarchical path: part -> model -> mgroup -> department -> mix with optional filtering
 
@@ -226,6 +384,7 @@ class WebMaterialUsageManager(WebBaseManager):
             'part_code': '',
             'models': set(),
             'mgroups': set(),
+            'radical_codes': set(),
             'nine_x_groups': set(),  # 9'lu kodlar için yeni alan
             'departments': set(),
             'mixes': set()
@@ -237,43 +396,38 @@ class WebMaterialUsageManager(WebBaseManager):
         # Get part code
         hierarchy['part_code'] = part_results[0]['part_code']
         
-        # If selected mixes are provided, precompute the set of models allowed by those mixes
-        selected_models_set: Optional[set] = None
-        if selected_mixes:
-            selected_models_set = set()
-            try:
-                for mix_code in selected_mixes:
-                    mix_info = self.mix_data.get('hierarchical_mapping', {}).get(mix_code)
-                    if mix_info:
-                        for m in mix_info.get('models', []):
-                            selected_models_set.add(m)
-            except Exception:
-                # Fail-safe: if mapping missing, treat as no restriction
-                selected_models_set = None
+        # Note: Mix filtering is already applied during search via selected_mix_radicals
+        # No additional model-based filtering needed here
 
         for result in part_results:
             model = result.get('model', '')
             mgroup = result.get('mgroup', '')
+            radical = result.get('radical_code', '')
             nine_x_code = result.get('group_code', '')  # matnr_hl verisi
+            # Debug: Log the nine_x_code value to understand where _A12, _B12 suffixes come from
+            if nine_x_code and nine_x_code.startswith('9.'):
+                import re
+                nine_x_code_clean = re.sub(r'_[A-Z]\d{2,3}$', '', nine_x_code)
+                self.add_log(f"🔍 DEBUG: 9.x code found: {nine_x_code} -> cleaned: {nine_x_code_clean} (from group_code: {result.get('group_code', '')})")
             
             # Apply mgroup filter if specified
             if selected_mgroups and mgroup not in selected_mgroups:
                 continue
-
-            # Apply selected mixes (by model) filter to hierarchy contributions
-            if selected_models_set is not None:
-                if not model or model not in selected_models_set:
-                    # Skip this occurrence for hierarchy (not part of selected mixes)
-                    continue
             
             if model:
                 hierarchy['models'].add(model)
+            # collect radical codes (prefer unique codes)
+            if radical:
+                hierarchy['radical_codes'].add(radical)
             
             if mgroup:
                 hierarchy['mgroups'].add(mgroup)
             
             if nine_x_code:
-                hierarchy['nine_x_groups'].add(nine_x_code)
+                # Remove suffixes like _A12, _B12, etc. from 9.x codes
+                import re
+                nine_x_code_clean = re.sub(r'_[A-Z]\d{2,3}$', '', nine_x_code)
+                hierarchy['nine_x_groups'].add(nine_x_code_clean)
                 
             # Find department for this mgroup
             if mgroup:
@@ -282,25 +436,20 @@ class WebMaterialUsageManager(WebBaseManager):
                         hierarchy['departments'].add(dept)
                         break
             
-            # Try to find matching MIX based on model with optional mix filter
-            if model and self.mix_data.get('hierarchical_mapping'):
-                for mix_code, mix_info in self.mix_data['hierarchical_mapping'].items():
-                    # Apply mix filter if specified (list has priority)
-                    if selected_mixes and len(selected_mixes) > 0 and mix_code not in selected_mixes:
-                        continue
-                    if (not selected_mixes) and selected_mix and mix_code != selected_mix:
-                        continue
-                        
-                    if model in mix_info.get('models', []):
+            # Try to find matching MIX based on radical code (no filtering - show all matching mixes)
+            if radical and self.mix_data.get('mix_hierarchical_mapping'):
+                for mix_code, mix_info in self.mix_data['mix_hierarchical_mapping'].items():
+                    if radical in mix_info.get('radicals', []):
                         hierarchy['mixes'].add(mix_code)
         
         # Convert sets to lists for JSON serialization
         hierarchy['models'] = list(hierarchy['models'])
+        hierarchy['radical_codes'] = list(hierarchy['radical_codes'])
         hierarchy['mgroups'] = list(hierarchy['mgroups'])
         hierarchy['nine_x_groups'] = list(hierarchy['nine_x_groups'])
         hierarchy['mixes'] = list(hierarchy['mixes'])
         hierarchy['departments'] = list(hierarchy['departments'])
-        
+
         return hierarchy
 
     def analyze_uploaded_parts(self, uploaded_parts: List[str], selected_mix: Optional[str] = None, selected_mgroups: Optional[List[str]] = None, selected_mixes: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -338,21 +487,21 @@ class WebMaterialUsageManager(WebBaseManager):
                 if self._is_cancelled:
                     self.add_log("🛑 Analysis cancelled by user")
                     break
-                
+
                 self.update_progress(
                     int((i / len(uploaded_parts)) * 100),
                     i + 1,
                     len(uploaded_parts),
                     f"Analyzing: {part_code}"
                 )
-                
+
                 # Search for part in partcodes
-                part_results = self._find_part_in_partcodes(part_code)
-                
+                part_results = self._find_part_in_partcodes(part_code, target_department=None, target_mgroups=[mg.upper().strip() for mg in selected_mgroups] if selected_mgroups else None)
+
                 if part_results:
                     # Trace hierarchy with filtering
-                    hierarchy = self._trace_part_hierarchy(part_results, selected_mix, selected_mgroups, selected_mixes)
-                    
+                    hierarchy = self._trace_part_hierarchy(part_results, selected_mix, [mg.upper().strip() for mg in selected_mgroups] if selected_mgroups else None, selected_mixes)
+
                     # Skip this part if no matches after filtering
                     if not hierarchy['mgroups'] and not hierarchy['mixes'] and (selected_mix or selected_mgroups):
                         results['not_found_parts'] += 1
@@ -364,38 +513,38 @@ class WebMaterialUsageManager(WebBaseManager):
                         }
                         self.add_log(f"❌ Filtered out: {part_code} (doesn't match selected filters)")
                         continue
-                    
+
                     results['part_analyses'][part_code] = {
                         'found': True,
                         'occurrences': len(part_results),
                         'hierarchy': hierarchy,
                         'raw_results': part_results
                     }
-                    
+
                     results['found_parts'] += 1
                     results['found_list'].append(part_code)
-                    
+
                     # Update summaries
                     for dept in hierarchy['departments']:
                         if dept not in results['department_summary']:
                             results['department_summary'][dept] = {'count': 0, 'parts': []}
                         results['department_summary'][dept]['count'] += 1
                         results['department_summary'][dept]['parts'].append(part_code)
-                    
+
                     for mg in hierarchy['mgroups']:
                         if mg not in results['mgroup_summary']:
                             results['mgroup_summary'][mg] = {'count': 0, 'parts': []}
                         results['mgroup_summary'][mg]['count'] += 1
                         results['mgroup_summary'][mg]['parts'].append(part_code)
-                    
+
                     for mix in hierarchy['mixes']:
                         if mix not in results['mix_summary']:
                             results['mix_summary'][mix] = {'count': 0, 'parts': []}
                         results['mix_summary'][mix]['count'] += 1
                         results['mix_summary'][mix]['parts'].append(part_code)
-                    
+
                     self.add_log(f"✅ Found: {part_code} -> {len(hierarchy['departments'])} dept(s)")
-                
+
                 else:
                     results['part_analyses'][part_code] = {
                         'found': False,
@@ -566,15 +715,8 @@ class WebMaterialUsageManager(WebBaseManager):
                     # But keep the filter method for backward compatibility and extra safety
                     filtered_results = self._filter_results_by_mgroups(part_results, department, mgroups)
 
-                    # Further filter by selected mixes (by model membership) if provided
-                    if selected_mixes:
-                        # Build allowed models set once per call (outside loop could be micro-optimized later)
-                        allowed_models = set()
-                        for mx in selected_mixes:
-                            mix_info = self.mix_data.get('hierarchical_mapping', {}).get(mx)
-                            if mix_info:
-                                allowed_models.update(mix_info.get('models', []))
-                        filtered_results = [r for r in filtered_results if r.get('model') in allowed_models]
+                    # Note: Mix filtering is already applied during search via radical codes
+                    # No additional model-based filtering needed
                     
                     if filtered_results:
                         # Trace hierarchy for filtered results
@@ -686,6 +828,138 @@ class WebMaterialUsageManager(WebBaseManager):
             self.set_error(f"Filtered analysis failed: {str(e)}")
             return {'error': str(e)}
 
+    def analyze_parts_with_filters(self, uploaded_parts: List[str]) -> Dict[str, Any]:
+        """Analyze parts using pre-set filters for maximum optimization"""
+        try:
+            self.clear_logs()
+            self._is_cancelled = False
+            
+            self.add_log("🔍 Starting optimized material usage analysis...")
+            self.add_log(f"🏭 Department: {self.selected_department}")
+            self.add_log(f"⚙️ MGroups: {', '.join(self.selected_mgroups)}")
+            self.add_log(f"🧪 Mixes: {', '.join(self.selected_mixes)}")
+            self.add_log(f"📄 Analyzing {len(uploaded_parts)} part codes")
+            
+            results = {
+                'total_parts': len(uploaded_parts),
+                'found_parts': 0,
+                'not_found_parts': 0,
+                'part_analyses': {},
+                'department_summary': {},
+                'mgroup_summary': {},
+                'mix_summary': {},
+                'found_list': [],
+                'not_found_list': [],
+                'filter_info': {
+                    'department': self.selected_department,
+                    'mgroups': self.selected_mgroups,
+                    'mixes': self.selected_mixes,
+                    'radicals': list(self.selected_mix_radicals)
+                }
+            }
+            
+            self.update_progress(0, 0, len(uploaded_parts), "Starting optimized analysis...")
+            
+            for i, part_code in enumerate(uploaded_parts):
+                if self._is_cancelled:
+                    self.add_log("🛑 Analysis cancelled by user")
+                    break
+                
+                self.update_progress(
+                    int((i / len(uploaded_parts)) * 100),
+                    i + 1,
+                    len(uploaded_parts),
+                    f"Analyzing: {part_code}"
+                )
+                
+                # Use optimized search
+                part_results = self._find_part_in_partcodes_optimized(part_code)
+                
+                if part_results:
+                    # Since we already filtered during search, no additional filtering needed
+                    hierarchy = self._trace_part_hierarchy(part_results, selected_mixes=self.selected_mixes)
+                    
+                    results['part_analyses'][part_code] = {
+                        'found': True,
+                        'occurrences': len(part_results),
+                        'hierarchy': hierarchy,
+                        'raw_results': part_results
+                    }
+                    
+                    results['found_parts'] += 1
+                    results['found_list'].append(part_code)
+                    
+                    # Update summaries
+                    for dept in hierarchy['departments']:
+                        if dept not in results['department_summary']:
+                            results['department_summary'][dept] = {'count': 0, 'parts': []}
+                        results['department_summary'][dept]['count'] += 1
+                        results['department_summary'][dept]['parts'].append(part_code)
+                    
+                    for mg in hierarchy['mgroups']:
+                        if mg not in results['mgroup_summary']:
+                            results['mgroup_summary'][mg] = {'count': 0, 'parts': []}
+                        results['mgroup_summary'][mg]['count'] += 1
+                        results['mgroup_summary'][mg]['parts'].append(part_code)
+                    
+                    for mix in hierarchy['mixes']:
+                        if mix not in results['mix_summary']:
+                            results['mix_summary'][mix] = {'count': 0, 'parts': []}
+                        results['mix_summary'][mix]['count'] += 1
+                        results['mix_summary'][mix]['parts'].append(part_code)
+                    
+                    self.add_log(f"✅ Found: {part_code} -> {len(part_results)} occurrence(s)")
+                
+                else:
+                    results['part_analyses'][part_code] = {
+                        'found': False,
+                        'hierarchy': {}
+                    }
+                    results['not_found_parts'] += 1
+                    results['not_found_list'].append(part_code)
+                    self.add_log(f"❌ Not found: {part_code}")
+            
+            # Generate summary
+            self.add_log("=" * 60)
+            self.add_log("📊 OPTIMIZED MATERIAL USAGE ANALYSIS SUMMARY:")
+            self.add_log(f"   🏭 Department: {self.selected_department}")
+            self.add_log(f"   ⚙️ MGroups: {', '.join(self.selected_mgroups)}")
+            self.add_log(f"   🧪 Mixes: {', '.join(self.selected_mixes)}")
+            self.add_log(f"   📄 Total parts analyzed: {results['total_parts']}")
+            self.add_log(f"   ✅ Parts found: {results['found_parts']}")
+            self.add_log(f"   ❌ Parts not found: {results['not_found_parts']}")
+            self.add_log(f"   📈 Success rate: {(results['found_parts']/results['total_parts']*100):.1f}%")
+            
+            self.add_log("=" * 60)
+            
+            # Store results
+            self.analysis_results = results
+            
+            # Create detailed report
+            report_details = {
+                "Analysis Date": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "Analysis Type": "Optimized Material Usage",
+                "Department": self.selected_department,
+                "MGroups": ', '.join(self.selected_mgroups),
+                "Mixes": ', '.join(self.selected_mixes),
+                "Total Parts": str(results['total_parts']),
+                "Found Parts": str(results['found_parts']),
+                "Not Found Parts": str(results['not_found_parts']),
+                "Success Rate": f"{(results['found_parts']/results['total_parts']*100):.1f}%"
+            }
+            
+            log_file = self.create_log_file("optimized_material_usage_analysis", report_details, self.get_full_logs())
+            
+            if log_file:
+                results['report_file'] = str(log_file.name)
+            
+            self.set_completed()
+            return results
+            
+        except Exception as e:
+            self.set_error(f"Optimized analysis failed: {str(e)}")
+            return {'error': str(e)}
+
     def _filter_results_by_mgroups(self, part_results: List[Dict[str, Any]], target_department: str, target_mgroups: List[str]) -> List[Dict[str, Any]]:
         """Filter part results to only include those in specified MGroups"""
         filtered_results = []
@@ -732,6 +1006,7 @@ class WebMaterialUsageManager(WebBaseManager):
             return result
             
         except Exception as e:
+            debug_mode = os.environ.get('DEBUG_MODE', '').lower() == 'true'
             if debug_mode:
                 print(f"❌ DEBUG: Error in get_departments_and_mgroups: {str(e)}")
             return {

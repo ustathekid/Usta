@@ -60,20 +60,22 @@
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        max-height: 100vh;
         margin: 0;
         padding: 0;
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: hidden;
     }
     
     body > main.container-fluid {
-        min-height: calc(100vh - 56px - 56px);
+        height: calc(100vh - 56px - 36px);
+        max-height: calc(100vh - 56px - 36px);
         display: flex;
         flex-direction: column;
         padding: 0;
         margin-bottom: 0;
         overflow-y: auto;
-        flex: 1 0 auto;
+        flex: 1 1 auto;
     }
 
     /* Responsive cards and content */
@@ -150,16 +152,18 @@
         .search-container {
             align-items: flex-start;
             padding-top: 5vh;
-            min-height: calc(100vh - 120px);
+            min-height: calc(100vh - 56px - 36px - env(safe-area-inset-bottom, 0));
             margin-bottom: 0;
         }
         
         /* Ensure footer stays visible on mobile */
         footer {
-            position: sticky;
+            height: calc(36px + env(safe-area-inset-bottom, 0)) !important;
+            flex-shrink: 0;
+            position: relative;
             bottom: 0;
             width: 100%;
-            padding-bottom: calc(env(safe-area-inset-bottom, 0) + 0.5rem) !important;
+            padding-bottom: env(safe-area-inset-bottom, 0) !important;
             margin-top: 0;
             z-index: 1030;
             background-color: #434347 !important;
@@ -406,12 +410,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="navbar-dark text-center py-2" style="flex-shrink: 0; position: relative; z-index: 100; background-color:#434347 !important; margin-top: -1px; border-top: 1px solid #4d4d52;">
+    <footer class="navbar-dark text-center py-1" style="flex-shrink: 0; height: 36px; position: relative; z-index: 100; background-color:#434347 !important; margin-top: 0; border-top: 1px solid #4d4d52; display: flex; align-items: center;">
         <div class="container">
-            <p class="mb-0 text-white" style="font-size: 1rem;">
-                <i class="bi bi-compass me-2"></i>
-                Powered by <span style="font-weight: 600;">Cafer T. Usta</span> - Schemini Management v1.0.0
-            </p>
+            <p class="mb-0 text-white d-flex align-items-center justify-content-center" style="font-size: rem;">
+                <i class="bi bi-compass me-2"></i>Developed by Cafer T. Usta - Schemini Management v1.1.0</p>
         </div>
     </footer>
 

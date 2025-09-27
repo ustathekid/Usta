@@ -56,7 +56,7 @@ from web_base_manager import WebBaseManager
 from web_scan_manager import WebScanManager
 from web_update_manager import WebUpdateManager
 from web_file_add_manager import WebFileAddManager
-from web_settings_manager import WebSettingsManager
+from web_settings_manager_fixed import WebSettingsManager
 from web_material_usage_manager import WebMaterialUsageManager
 
 # Production resource management
@@ -1771,7 +1771,9 @@ def _search_component_code(component_code):
                                                 'posnr': component.get('posnr', ''),
                                                 'source_file': json_file.stem,
                                                 'pdf_code': group_code,
+                                                # Prefer radical_code if available; fall back to MAKTX_S for compatibility
                                                 'model': maktx_group.get('MAKTX_S', ''),  # Model bilgisi
+                                                'radical_code': maktx_group.get('radical_code') or maktx_group.get('RADICAL_CODE') or maktx_group.get('MAKTX_S', ''),
                                                 'zgroup': zgroup.get('ZGROUP', '')  # ZGroup bilgisi
                                             }
                                             matching_groups.append(group_info)
@@ -1800,7 +1802,8 @@ def _search_component_code(component_code):
                                         'posnr': component.get('posnr', ''),
                                         'source_file': json_file.stem,
                                         'pdf_code': group_code,
-                                        'model': '',  # No model info in old format
+                                                'model': '',  # No model info in old format
+                                                'radical_code': group.get('radical_code') or group.get('RADICAL_CODE') or '',
                                         'zgroup': ''  # No zgroup info in old format
                                     }
                                     matching_groups.append(group_info)
@@ -1897,6 +1900,9 @@ def _search_component_code(component_code):
                         }
                         pdf_results.append(pdf_info)
         
+        # Thumbnail oluşturma iptal edildi - sadece indeks alımında oluşturulacak
+        # Threading ile arka plan thumbnail oluşturma kaldırıldı
+        
         return jsonify({
             'success': True,
             'search_type': 'component',
@@ -1984,6 +1990,11 @@ def api_search_code():
         
         # Create grouped PDF documents
         pdf_documents = []
+        group_codes_found = set()  # Track group codes for thumbnail caching
+        
+        # Enhanced grouping: also track part code instances across different locations
+        part_code_instances = {}  # Maps part code to list of instances in different locations
+        
         for group_key, pages in pdf_groups.items():
             base_name = pages[0]['base_name']
             # determine mix code for this group
@@ -1991,14 +2002,55 @@ def api_search_code():
             first_page_path = Path(pages[0]['path'])
             mix_code, mix_name = _extract_mix_from_path(first_page_path)
 
-            pdf_documents.append({
+            # Extract group code for thumbnail caching
+            if '9.' in base_name:
+                group_codes_found.add(base_name)
+
+            # Create document entry
+            doc_entry = {
                 'base_name': base_name,
                 'group_key': group_key,
                 'mix_code': mix_code,
                 'mix_name': mix_name,
                 'pages': [p['path'] for p in pages],
-                'page_count': len(pages)
-            })
+                'page_count': len(pages),
+                'folder_path': str(first_page_path.parent),
+                'instance_id': f"{mix_code}_{group_key}".replace('/', '_').replace('\\', '_')  # Unique identifier for this instance
+            }
+            
+            pdf_documents.append(doc_entry)
+            
+            # Track part code instances across different locations
+            # Extract part code from base_name (e.g., "I9.BX163.03.0" from base_name)
+            import re
+            part_code_match = re.search(r'(I?9\.[A-Z]+\d+\.\d+\.\d+)', base_name)
+            if part_code_match:
+                part_code = part_code_match.group(1)
+                if part_code not in part_code_instances:
+                    part_code_instances[part_code] = []
+                part_code_instances[part_code].append(doc_entry)
+
+        # Add instance information to documents that have multiple locations
+        for part_code, instances in part_code_instances.items():
+            if len(instances) > 1:
+                for i, instance in enumerate(instances):
+                    instance['has_multiple_instances'] = True
+                    instance['total_instances'] = len(instances)
+                    instance['instance_number'] = i + 1
+                    instance['all_instances'] = [
+                        {
+                            'instance_id': inst['instance_id'],
+                            'mix_code': inst['mix_code'],
+                            'mix_name': inst['mix_name'],
+                            'folder_path': inst['folder_path'],
+                            'base_name': inst['base_name'],
+                            'pages': inst['pages'],
+                            'page_count': inst['page_count']
+                        } for inst in instances
+                    ]
+
+        # Thumbnail oluşturma iptal edildi - sadece indeks alımında oluşturulacak
+        # Threading ile arka plan thumbnail oluşturma kaldırıldı
 
         return jsonify({
             'success': True,
@@ -2008,7 +2060,8 @@ def api_search_code():
             'folders': folders,
             'pdfs': pdfs,
             'pdf_details': pdf_details,
-            'pdf_documents': pdf_documents,  # New grouped documents
+            'pdf_documents': pdf_documents,  # Enhanced grouped documents with multi-instance support
+            'part_code_instances': part_code_instances,  # New field for multi-instance navigation
             'mixes': [{'code': m, 'name': material_usage_manager.mix_data.get('mix_mapping', {}).get(m)} for m in sorted(mixes_found) ],
             'count': {'folders': len(folders), 'pdfs': len(pdfs), 'documents': len(pdf_documents)}
         })
@@ -2556,6 +2609,194 @@ def api_merged_pdf():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
+# ---- PDF Thumbnail Cache System ----
+
+def _get_functional_group_from_nine_code(nine_code: str) -> Optional[str]:
+    """Get functional group number from 9.x code using functional_groups.json"""
+    try:
+        functional_groups_file = Path('databases/functional_groups.json')
+        if not functional_groups_file.exists():
+            return None
+            
+        with open(functional_groups_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # Search through all functional groups
+        for dept_name, dept_data in data.get('departments', {}).items():
+            for model in dept_data.get('models', []):
+                for fg in model.get('functional_groups', []):
+                    if nine_code in fg.get('nine_codes', []):
+                        return fg.get('code')
+        
+        return None
+    except Exception as e:
+        print(f"❌ Error getting functional group for {nine_code}: {e}")
+        return None
+
+def _get_thumbnail_cache_path(pdf_path: Path, width: int = 220) -> Path:
+    """Generate cache path for PDF thumbnail - ONLY for reading existing cache
+    
+    NO LONGER CREATES DIRECTORIES - thumbnails are only created during indexing
+    """
+    thumbnails_dir = Path('static/thumbnails')
+    
+    # Extract 9.x code from PDF filename
+    pdf_name = pdf_path.stem
+    nine_code = None
+    
+    # Look for 9.x pattern in filename
+    import re
+    nine_match = re.search(r'9\.[A-Z]+\d+\.\d+\.\d+', pdf_name)
+    if nine_match:
+        nine_code = nine_match.group()
+    
+    if not nine_code:
+        # Fallback: use original naming if no 9.x code found
+        cache_filename = f"{pdf_name}_w{width}.png"
+        return thumbnails_dir / cache_filename
+    
+    # Get functional group from 9.x code
+    functional_group = _get_functional_group_from_nine_code(nine_code)
+    
+    if not functional_group:
+        # If no functional group found, use fallback folder
+        group_dir = thumbnails_dir / nine_code
+    else:
+        # Use functional group number as folder
+        group_dir = thumbnails_dir / functional_group
+    
+    # Use original PDF filename for cache file (all PDFs in functional group)
+    cache_filename = f"{pdf_path.stem}_w{width}.png"
+    return group_dir / cache_filename
+
+def _is_thumbnail_cache_valid(cache_path: Path, pdf_path: Path) -> bool:
+    """Check if cached thumbnail is still valid (newer than PDF)"""
+    if not cache_path.exists():
+        return False
+    
+    try:
+        cache_mtime = cache_path.stat().st_mtime
+        pdf_mtime = pdf_path.stat().st_mtime
+        return cache_mtime >= pdf_mtime
+    except:
+        return False
+
+
+
+def _get_cached_thumbnail(pdf_path: Path, width: int = 220) -> Optional[Path]:
+    """Get thumbnail from cache ONLY - never generates new thumbnails"""
+    cache_path = _get_thumbnail_cache_path(pdf_path, width)
+    
+    # Return cache only if it exists - NO GENERATION
+    if cache_path.exists():
+        return cache_path
+    
+    return None
+
+def _update_thumbnails_for_group_codes(group_codes: set):
+    """DEPRECATED: Bu fonksiyon artık kullanılmaz. Thumbnaillar sadece indeks alımında oluşturulur."""
+    print("⚠️ Otomatik thumbnail oluşturma devre dışı. Thumbnaillar indeks alımında oluşturulacak.")
+    pass
+
+def _clear_thumbnails_for_functional_groups(functional_groups: set):
+    """Clear cached thumbnails for specific functional groups"""
+    try:
+        thumbnails_dir = Path('static/thumbnails')
+        if not thumbnails_dir.exists():
+            return
+            
+        cleared_count = 0
+        for fg_code in functional_groups:
+            fg_dir = thumbnails_dir / str(fg_code)
+            if fg_dir.exists() and fg_dir.is_dir():
+                try:
+                    import shutil
+                    shutil.rmtree(fg_dir)
+                    cleared_count += 1
+                    print(f"🗑️ Cleared thumbnails for functional group: {fg_code}")
+                except Exception as e:
+                    print(f"❌ Error clearing thumbnails for {fg_code}: {e}")
+                    
+        print(f"✅ Cleared thumbnails for {cleared_count} functional groups")
+        
+    except Exception as e:
+        print(f"❌ Error clearing functional group thumbnails: {e}")
+
+def _clear_thumbnails_for_group_codes(group_codes: set):
+    """Clear cached thumbnails for specific 9.x group codes"""
+    try:
+        thumbnails_dir = Path('static/thumbnails')
+        if not thumbnails_dir.exists():
+            return
+            
+        cleared_count = 0
+        # Get functional groups for each 9.x code and clear them
+        functional_groups_to_clear = set()
+        
+        for nine_code in group_codes:
+            fg_code = _get_functional_group_from_nine_code(nine_code)
+            if fg_code:
+                functional_groups_to_clear.add(fg_code)
+        
+        # Clear by functional groups
+        _clear_thumbnails_for_functional_groups(functional_groups_to_clear)
+        
+    except Exception as e:
+        print(f"❌ Error clearing group thumbnails: {e}")
+
+def _get_thumbnail_cache_stats():
+    """Get statistics about thumbnail cache organized by functional groups"""
+    try:
+        thumbnails_dir = Path('static/thumbnails')
+        if not thumbnails_dir.exists():
+            return {"total_functional_groups": 0, "total_thumbnails": 0, "total_size_mb": 0}
+            
+        stats = {
+            "total_functional_groups": 0,
+            "total_thumbnails": 0,
+            "total_size_bytes": 0,
+            "functional_groups": {}
+        }
+        
+        for item in thumbnails_dir.iterdir():
+            if item.is_dir():
+                # This is a functional group directory
+                fg_code = item.name
+                stats["total_functional_groups"] += 1
+                
+                group_thumbnails = 0
+                group_size = 0
+                pdf_files = []
+                
+                for thumb_file in item.glob("*.png"):
+                    if thumb_file.is_file():
+                        group_thumbnails += 1
+                        stats["total_thumbnails"] += 1
+                        file_size = thumb_file.stat().st_size
+                        group_size += file_size
+                        stats["total_size_bytes"] += file_size
+                        
+                        # Extract PDF name from thumbnail filename
+                        pdf_name = thumb_file.stem.replace(f'_w220', '')
+                        pdf_files.append(pdf_name)
+                
+                stats["functional_groups"][fg_code] = {
+                    "thumbnails": group_thumbnails,
+                    "size_bytes": group_size,
+                    "pdf_files": sorted(pdf_files)
+                }
+            elif item.is_file() and item.suffix == '.png':
+                # Direct thumbnail file (no functional group)
+                stats["total_thumbnails"] += 1
+                stats["total_size_bytes"] += item.stat().st_size
+        
+        stats["total_size_mb"] = round(stats["total_size_bytes"] / (1024 * 1024), 2)
+        return stats
+        
+    except Exception as e:
+        print(f"❌ Error getting thumbnail stats: {e}")
+        return {"error": str(e)}
+
 @app.route('/api/pdf-thumbnail')
 @login_required
 def api_pdf_thumbnail():
@@ -2587,7 +2828,19 @@ def api_pdf_thumbnail():
         if fitz is None:
             return jsonify({'success': False, 'message': 'PyMuPDF not available for thumbnail generation'}), 500
             
-        # Generate thumbnail
+        # Try to get cached thumbnail first
+        try:
+            cached_thumbnail_path = _get_cached_thumbnail(pdf_path, width)
+            if cached_thumbnail_path and cached_thumbnail_path.exists():
+                return send_file(
+                    str(cached_thumbnail_path),
+                    mimetype='image/png',
+                    as_attachment=False
+                )
+        except Exception as e:
+            print(f"❌ Cache error, falling back to direct generation: {e}")
+            
+        # Fallback: Generate thumbnail directly (without caching)
         try:
             doc = fitz.open(str(pdf_path))
             if len(doc) == 0:
@@ -2624,6 +2877,53 @@ def api_pdf_thumbnail():
                 doc.close()
             return jsonify({'success': False, 'message': f'Thumbnail generation error: {str(e)}'}), 500
             
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/api/thumbnail-cache-stats')
+@login_required 
+def api_thumbnail_cache_stats():
+    """Get thumbnail cache statistics"""
+    try:
+        stats = _get_thumbnail_cache_stats()
+        return jsonify({
+            'success': True,
+            'stats': stats
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/api/clear-thumbnail-cache', methods=['POST'])
+@login_required
+def api_clear_thumbnail_cache():
+    """Clear thumbnail cache for specific functional groups, 9.x codes or all"""
+    try:
+        data = request.get_json() or {}
+        functional_groups = data.get('functional_groups', [])
+        group_codes = data.get('group_codes', [])  # 9.x codes
+        
+        if functional_groups:
+            # Clear specific functional groups
+            _clear_thumbnails_for_functional_groups(set(functional_groups))
+            message = f"Cleared thumbnails for functional groups: {functional_groups}"
+        elif group_codes:
+            # Clear specific 9.x group codes
+            _clear_thumbnails_for_group_codes(set(group_codes))
+            message = f"Cleared thumbnails for 9.x codes: {group_codes}"
+        else:
+            # Clear all thumbnails
+            thumbnails_dir = Path('static/thumbnails')
+            if thumbnails_dir.exists():
+                import shutil
+                shutil.rmtree(thumbnails_dir)
+                thumbnails_dir.mkdir(exist_ok=True)
+            message = "Cleared all thumbnails"
+            
+        return jsonify({
+            'success': True,
+            'message': message
+        })
+        
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
@@ -3147,8 +3447,10 @@ def api_material_usage_analyze_filtered():
         
         # Start filtered analysis in background thread
         def filtered_analysis_thread():
-            # Pass through full selected mixes list and use filtered analysis
-            material_usage_manager.analyze_filtered_parts(department, mgroups, part_codes, selected_mixes=mixes)
+            # Set selected filters first
+            material_usage_manager.set_selected_filters(department, mixes, mgroups)
+            # Then run optimized analysis
+            material_usage_manager.analyze_parts_with_filters(part_codes)
         
         thread = threading.Thread(target=filtered_analysis_thread)
         thread.daemon = True
@@ -3827,6 +4129,14 @@ def api_get_functional_groups():
 def api_get_functional_group_pdfs(group_code):
     """API to get all PDFs for a specific functional group from the database"""
     try:
+        # Get pagination parameters
+        page = int(request.args.get('page', 1))
+        page_size = int(request.args.get('page_size', 30))  # Default to 30 PDFs per page
+        
+        # Ensure valid pagination parameters
+        page = max(1, page)
+        page_size = min(100, max(10, page_size))  # Between 10 and 100
+        
         # Load from the new database file
         db_path = Path('databases/functional_groups.json')
         if not db_path.exists():
@@ -3989,12 +4299,30 @@ def api_get_functional_group_pdfs(group_code):
                 unique_pdfs_in_dept.add(base_name)
             dept_counts[dept_name] = len(unique_pdfs_in_dept)
         
+        # Apply pagination
+        total_pdfs = len(pdfs)
+        total_pages = (total_pdfs + page_size - 1) // page_size  # Ceiling division
+        
+        # Calculate start and end indices for the current page
+        start_idx = (page - 1) * page_size
+        end_idx = min(start_idx + page_size, total_pdfs)
+        
+        # Get PDFs for the current page
+        paginated_pdfs = pdfs[start_idx:end_idx] if start_idx < total_pdfs else []
+        
         return jsonify({
             'success': True,
-            'pdfs': pdfs,
+            'pdfs': paginated_pdfs,
             'group_code': group_code,
             'group_name': fg_data.get('name', f'Functional Group {group_code}'),
-            'total_pdfs': len(pdfs),
+            'pagination': {
+                'page': page,
+                'page_size': page_size,
+                'total_pages': total_pages,
+                'total_items': total_pdfs,
+                'has_next': page < total_pages,
+                'has_prev': page > 1
+            },
             'departments': list(fg_data.get('departments', {}).keys()),
             'department_counts': dept_counts
         })

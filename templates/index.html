@@ -7,7 +7,8 @@
 /* Modern Search Container Background */
 .search-container {
     background: linear-gradient(135deg, #434347 0%, #2d2d30 100%);
-    height: calc(100vh - 56px - 38px);
+    height: calc(100vh - 56px - 36px);
+    max-height: calc(100vh - 56px - 36px);
     display: flex;
     padding-top: 10vh;
     position: relative;
@@ -151,7 +152,10 @@
 @media (max-width: 768px) {
     .search-container {
         padding-top: 6vh;
-        height: calc(100vh - 56px - 38px - env(safe-area-inset-bottom, 0));
+        height: calc(100vh - 56px - 36px - env(safe-area-inset-bottom, 0));
+        max-height: calc(100vh - 56px - 36px - env(safe-area-inset-bottom, 0));
+        /* Ensure mobile search container doesn't overflow */
+        padding-bottom: 2vh;
     }
     
     .search-box {
@@ -263,6 +267,64 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Multi-Instance Navigation Controls */
+.multi-instance-navigation {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(33, 37, 41, 0.95);
+    border-radius: 8px;
+    padding: 10px 15px;
+    z-index: 1000;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+}
+
+.multi-instance-header {
+    color: #ffd700;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.instance-item {
+    padding: 6px 10px;
+    margin: 3px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+    color: #e9ecef;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.instance-item:hover {
+    background: rgba(23, 162, 184, 0.3);
+    border-color: #17a2b8;
+}
+
+.instance-item.active {
+    background: rgba(40, 167, 69, 0.4);
+    border-color: #28a745;
+    color: #fff;
+}
+
+.instance-mix {
+    font-weight: 600;
+    color: #17a2b8;
+}
+
+.instance-folder {
+    font-size: 0.75rem;
+    color: #adb5bd;
+    margin-top: 2px;
+    word-break: break-all;
+}
+
 .page-nav-info {
     color: #e9ecef;
     font-size: 0.875rem;
@@ -293,6 +355,14 @@
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
+    .multi-instance-navigation {
+        bottom: 120px; /* Above mobile drawer */
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        padding: 8px 12px;
+    }
+    
     .page-navigation-controls {
         bottom: 60px; /* Above mobile drawer */
         right: 10px;
@@ -476,6 +546,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     let currentSelectedGroup = null; // For component search group selection
     let currentGroupPdfs = []; // PDFs in currently selected group
     
+    // Multi-instance navigation state
+    let currentInstanceIndex = 0;
+    let allInstances = [];
+    let hasMultipleInstances = false;
+    
     // Page navigation state for multi-page documents
     let currentPageIndex = 0;
     let currentPageCount = 0;
@@ -602,6 +677,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 <div class="pdf-display-area">
                                     ${hasDocuments ? 
                                         `<iframe class="pdf-viewer-frame" id="professionalPdfFrame"></iframe>
+                                         <!-- Multi-Instance Navigation Controls -->
+                                         <div class="multi-instance-navigation" id="multiInstanceNavigation" style="display: none;">
+                                             <div class="multi-instance-header">
+                                                 <i class="bi bi-collection"></i>
+                                                 <span>Multiple Locations Found</span>
+                                             </div>
+                                             <div class="instances-list" id="instancesList"></div>
+                                         </div>
                                          <!-- Page Navigation Controls -->
                                          <div class="page-navigation-controls" id="pageNavigationControls" style="display: none;">
                                              <div class="page-nav-info">
@@ -777,7 +860,28 @@ document.addEventListener('DOMContentLoaded', async function() {
         selectedMix = mixCode;
         currentMixDocs = documentsByMix[mixCode] || [];
         currentDocIndex = 0;
-        currentDocument = currentMixDocs[0] || null;
+        
+        // Check if the first document has multiple instances
+        const firstDoc = currentMixDocs[0];
+        if (firstDoc && firstDoc.has_multiple_instances) {
+            // Initialize multi-instance navigation
+            hasMultipleInstances = true;
+            allInstances = firstDoc.all_instances || [];
+            currentInstanceIndex = 0;
+            currentDocument = allInstances[0];
+            
+            // Show multi-instance navigation
+            showMultiInstanceNavigation();
+        } else {
+            // Standard single instance behavior
+            hasMultipleInstances = false;
+            allInstances = [];
+            currentDocument = firstDoc || null;
+            
+            // Hide multi-instance navigation
+            const multiNav = document.getElementById('multiInstanceNavigation');
+            if (multiNav) multiNav.style.display = 'none';
+        }
         
         // Reset page navigation when selecting new mix
         currentPageIndex = 0;
@@ -789,8 +893,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             loadDocumentInModal(currentDocument);
             showDocumentInfoInModal();
         }
-        
-        // Note: Navigation controls removed - no updateModalNavigation() needed
     }
     
     // Modal-specific document loading (now with individual page navigation)
@@ -934,6 +1036,17 @@ document.addEventListener('DOMContentLoaded', async function() {
                 ${currentDocument.group_name ? `<div><strong>Group:</strong> ${currentDocument.group_name}</div>` : ''}
             `;
             
+            // Add multi-instance information if available
+            if (hasMultipleInstances && allInstances.length > 1) {
+                infoHtml += `
+                    <hr class="my-2">
+                    <div class="multi-instance-info">
+                        <div><strong>Location:</strong> ${currentInstanceIndex + 1} of ${allInstances.length}</div>
+                        <div class="text-muted small">Use panel on left to switch between locations</div>
+                    </div>
+                `;
+            }
+            
             // Add component-specific information if available
             if (currentDocument.component_code) {
                 const posClean = (currentDocument.posnr || '').toString().replace(/^0+/, '') || currentDocument.posnr || 'Unknown';
@@ -1015,6 +1128,66 @@ document.addEventListener('DOMContentLoaded', async function() {
             updatePageNavigationDisplay();
         }
     };
+    
+    // Show multi-instance navigation panel
+    function showMultiInstanceNavigation() {
+        const multiNav = document.getElementById('multiInstanceNavigation');
+        const instancesList = document.getElementById('instancesList');
+        
+        if (!multiNav || !instancesList || !hasMultipleInstances || allInstances.length <= 1) {
+            if (multiNav) multiNav.style.display = 'none';
+            return;
+        }
+        
+        // Create instance items
+        let instancesHtml = '';
+        allInstances.forEach((instance, index) => {
+            const isActive = index === currentInstanceIndex;
+            // Truncate folder path for display
+            const folderPath = instance.folder_path || '';
+            const truncatedPath = folderPath.length > 50 ? '...' + folderPath.slice(-47) : folderPath;
+            
+            instancesHtml += `
+                <div class="instance-item ${isActive ? 'active' : ''}" data-instance-index="${index}">
+                    <div class="instance-mix">${instance.mix_name || instance.mix_code || 'Unknown MIX'}</div>
+                    <div class="instance-folder">${truncatedPath}</div>
+                </div>
+            `;
+        });
+        
+        instancesList.innerHTML = instancesHtml;
+        
+        // Add click handlers
+        instancesList.querySelectorAll('.instance-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const instanceIndex = parseInt(e.currentTarget.dataset.instanceIndex);
+                selectInstance(instanceIndex);
+            });
+        });
+        
+        multiNav.style.display = 'block';
+    }
+    
+    // Select a specific instance
+    function selectInstance(instanceIndex) {
+        if (instanceIndex < 0 || instanceIndex >= allInstances.length) return;
+        
+        currentInstanceIndex = instanceIndex;
+        currentDocument = allInstances[instanceIndex];
+        
+        // Reset page navigation for new instance
+        currentPageIndex = 0;
+        currentPageCount = currentDocument.pages ? currentDocument.pages.length : 0;
+        
+        // Load the new instance
+        loadDocumentInModal(currentDocument);
+        showDocumentInfoInModal();
+        
+        // Update visual selection in multi-instance navigation
+        showMultiInstanceNavigation();
+        
+        console.log(`Switched to instance ${instanceIndex + 1}/${allInstances.length}: ${currentDocument.mix_name || currentDocument.mix_code}`);
+    }
 
     function buildResults(code, data) {
         // Hide search panel and enter search results mode
